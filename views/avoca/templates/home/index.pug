@@ -1,0 +1,31 @@
+extends ../../layouts/frontend
+
+block content
+    .lockscreen-wrapper
+        .lockscreen-logo
+            a(href="#")
+                strong Avoca Framework
+
+        .lockscreen-name Jacky
+
+        .lockscreen-item
+            .lockscreen-image
+                img(src=avoca_static() + "/img/user1-128x128.jpg", alt="User Image")
+
+            form.lockscreen-credentials
+                .input-group
+                    input.form-control(type="password", placeholder="password")
+
+                    .input-group-btn
+                        button.btn(type="button")
+                            i.fa.fa-arrow-right.text-muted
+
+        .help-block.text-center Enter your password to retrieve your session
+
+        .text-center
+            a(href="#") Or sign in as a different user
+
+        .lockscreen-footer.text-center Copyright &copy; 2018
+            strong
+                a.text-black(href="#")= ' Avoca.io'
+            = ' All rights reserved'

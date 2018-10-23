@@ -1,0 +1,148 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset="utf-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        title= _pageTitle
+        meta(content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no", name="viewport")
+        link(rel="stylesheet", href=avoca_static() + "/bower_components/bootstrap/dist/css/bootstrap.min.css")
+        link(rel="stylesheet", href=avoca_static() + "/bower_components/font-awesome/css/font-awesome.min.css")
+        link(rel="stylesheet", href=avoca_static() + "/bower_components/Ionicons/css/ionicons.min.css")
+        link(rel="stylesheet", href=avoca_static() + "/css/AdminLTE.min.css")
+        link(rel="stylesheet", href=avoca_static() + "/css/skins/_all-skins.min.css")
+        link(rel="stylesheet", href=avoca_static() + "/bower_components/morris.js/morris.css")
+        link(rel="stylesheet", href=avoca_static() + "/bower_components/jvectormap/jquery-jvectormap.css")
+        link(rel="stylesheet", href=avoca_static() + "/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css")
+        link(rel="stylesheet", href=avoca_static() + "/bower_components/bootstrap-daterangepicker/daterangepicker.css")
+        link(rel="stylesheet", href=avoca_static() + "/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")
+        link(rel="stylesheet", href=avoca_static() + "/css/style.css")
+
+        // [if lt IE 9]
+        script(src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js")
+        script(src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js")
+        // [endif]
+
+        link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic")
+    body.hold-transition.skin-blue.sidebar-mini
+        .wrapper
+            header.main-header
+                a.logo(href=avoca_url())
+                    span.logo-mini
+                        strong A
+                        = 'VC'
+                    span.logo-lg
+                        strong Avoca
+                        = 'Framework'
+
+                nav.navbar.navbar-static-top
+                    a.sidebar-toggle(href="", data-toggle="push-menu", role="button")
+                        span.sr-only Toggle navigation
+
+                    .navbar-custom-menu
+                        ul.nav.navbar-nav
+                            li.dropdown.messages-menu
+                                a.dropdown-toggle(href="#", data-toggle="dropdown")
+                                    i.fa.fa-envelope-o
+                                    span.label.label-success 4
+                                ul.dropdown-menu
+                                    li.header You have 4 message
+                                    li
+                                        ul.menu
+                                            li
+                                                a(href="#")
+                                                    div.pull-left
+                                                        img.img-circle(src=avoca_static() + "/img/user2-160x160.jpg", alt="")
+                                                    h4 Support Team
+                                                        small
+                                                            i.fa.fa-clock-o
+                                                            = ' 5 mins'
+                                                    p Why not buy a new awesome theme?
+                                    li.footer
+                                        a(href="#") See All Message
+
+                            li.dropdown.notifications-menu
+                                a.dropdown-toggle(href="#", data-toggle="dropdown")
+                                    i.fa.fa-bell-o
+                                    span.label.label-warning 10
+                                ul.dropdown-menu
+                                    li.header You have 10 notifications
+                                    li
+                                        ul.menu
+                                            li
+                                                a(href="#")
+                                                    i.fa.fa-users.text-aqua
+                                                    = ' 5 new members joined today'
+                                    li.footer
+                                        a(href="#") View All
+
+                            li.dropdown.user.user-menu
+                                a.dropdown-toggle(href="#", data-toggle="dropdown")
+                                    img.user-image(src=avoca_static() + "/img/user2-160x160.jpg", align="")
+                                    span.hidden-xs Avoca Framework
+                                ul.dropdown-menu
+                                    li.user-header
+                                        img.img-circle(src=avoca_static() + "/img/user2-160x160.jpg", alt="User Image")
+                                        p Avoca Framework - Framework
+                                            small Member since Nov. 2018
+                                    li.user-body
+                                        .row
+                                            .col-xs-4.text-center
+                                                a(href="#") Followers
+                                            .col-xs-4.text-center
+                                                a(href="#") Sales
+                                            .col-xs-4.text-center
+                                                a(href="#") Friends
+                                    li.user-footer
+                                        .pull-left
+                                            a.btn.btn-default.btn-flat(href="#") Profile
+                                        .pull-right
+                                            a.btn.btn-default.btn-flat(href="#") Sign out
+                            li
+                                a(href="#", data-toggle="control-sidebar")
+                                    i.fa.fa-gears
+
+            aside.main-sidebar
+                section.sidebar
+                    .user-panel
+                        .pull-left.image
+                            img.img-circle(src=avoca_static() + "/img/user2-160x160.jpg", alt="User Image")
+                        .pull-left.info
+                            p Avoca Framework
+                            a(href="#")
+                                i.fa.fa-circle.text-success
+                                = ' Online'
+
+                    form.sidebar-form(action="#", method="get")
+                        .input-group
+                            input.form-control(type="text", name="q", placeholder="Search...")
+                            span.input-group-btn
+                                button#search-btn.btn.btn-flat(type="submit", name="search")
+                                    i.fa.fa-search
+
+                    ul.sidebar-menu(data-widget="tree")
+                        li.header MAIN NAVIGATION
+                        li.active.treeview
+                            a(href="#")
+                                i.fa.fa-dashboard= ' '
+                                span Dashboard
+                                span.pull-right-container
+                                    i.fa.fa-angle-left.pull-right
+                            ul.treeview-menu
+                                li.active
+                                    a(href="#")
+                                        i.fa.fa-circle-o
+                                        = ' Dashboard 1'
+                                li
+                                    a(href="#")
+                                        i.fa.fa-circle-o
+                                        = ' Dashboard 2'
+
+            .content-wrapper
+                block content
+
+            footer.main-footer
+                .pull-right.hidden-xs
+                    strong Version 1.0.0
+                strong Copyright &copy; 2018
+                    a(href="http://avoca.io") Avoca.
+                    = ' All rights reserved.'
