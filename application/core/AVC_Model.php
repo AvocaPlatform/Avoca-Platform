@@ -72,6 +72,26 @@ class AVC_Model extends CI_Model
     }
 
     /**
+     * create or update record
+     *
+     * @param $data
+     * @return bool
+     */
+    public function save($data)
+    {
+        if (!$this->table) {
+            $this->setErrors('Table name can not empty');
+            return false;
+        }
+
+        if (empty($data['id'])) {
+            return $this->create($data);
+        }
+
+        return $this->update($data);
+    }
+
+    /**
      * create a record from this table
      *
      * @param $data
@@ -163,11 +183,18 @@ class AVC_Model extends CI_Model
         }
 
         $id = $data['id'];
-        $this->db->where('id', $id);
-        $this->db->set($fields_data);
-        $this->db->update($this->table);
+        $record = $this->get($id);
 
-        if (!$this->checkErrorDB()) {
+        if ($record) {
+            $this->db->where('id', $id);
+            $this->db->set($fields_data);
+            $this->db->update($this->table);
+
+            if (!$this->checkErrorDB()) {
+                return false;
+            }
+        } else {
+            $this->setErrors('Record is not exist');
             return false;
         }
 

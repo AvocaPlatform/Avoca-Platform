@@ -28,7 +28,7 @@ function avoca_log($data, $log_name = 'debug')
         $message = json_encode($data);
     }
 
-    $str = date('Y-m-d H:i:s') . ": " . $message;
+    $str = "\n" . date('Y-m-d H:i:s') . ": " . $message;
     return write_file(APPPATH . 'logs' . DIRECTORY_SEPARATOR . $log_name . '.log', $str, 'a+');
 }
 

@@ -172,6 +172,11 @@ class AVC_Controller extends CI_Controller
         return $default;
     }
 
+    /**
+     * show json to view
+     *
+     * @return bool
+     */
     protected function jsonData()
     {
         header('Content-Type: application/json');
@@ -179,6 +184,11 @@ class AVC_Controller extends CI_Controller
         return true;
     }
 
+    /**
+     * check request method is post
+     *
+     * @return bool
+     */
     protected function isPost()
     {
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -476,6 +486,8 @@ class AVC_APIController extends AVC_Controller
     protected $view_type = 'json';
     protected $view_disable = true;
 
+    protected $errors = [];
+
     protected function init()
     {
 
@@ -499,17 +511,73 @@ class AVC_APIController extends AVC_Controller
         return parent::getModel($modelName);
     }
 
+    /**
+     * fixed when post by json
+     *
+     * @param null $name
+     * @return array|mixed|string
+     */
+    protected function getPost($name = null)
+    {
+        $post = parent::getPost($name);
+        if (empty($post)) {
+            try {
+                $post = json_decode(trim(file_get_contents('php://input')), true);
+            } catch (Exception $exception) {
+                $post = [];
+            }
+        }
+
+        return $post;
+    }
+
+    protected function jsonData()
+    {
+        $json_arr = [
+            'error' => 0,
+            'message' => '',
+            'data' => $this->data
+        ];
+
+        if (!empty($this->errors)) {
+            $json_arr['error'] = 1;
+            $json_arr['messages'] = $this->errors;
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($json_arr);
+        return true;
+    }
+
+    protected function apiErrors($messages)
+    {
+        if (is_string($messages)) {
+            $this->errors[] = $messages;
+        } else {
+            $this->errors = array_merge($this->errors, $messages);
+        }
+    }
+
     // ACTION
     public function index($id = null)
     {
+        // no param id
         if (!$id) {
+            // create when post data
+            if ($this->isPost()) {
+                return $this->create();
+            }
+
+            // get all records when get
             return $this->records();
         }
 
+        // update record when post
         if ($this->isPost()) {
             return $this->update($id);
         }
 
+        // get record when get
         return $this->record($id);
     }
 
@@ -537,6 +605,26 @@ class AVC_APIController extends AVC_Controller
     }
 
     /**
+     * post data to create a record
+     */
+    protected function create()
+    {
+        $data = $this->getPost();
+
+        $model = $this->getModel();
+        $id = $model->save($data);
+        $errors = $model->getErrors();
+
+        if (empty($errors)) {
+            $this->data['record'] = $model->get($id);
+        } else {
+            $this->apiErrors($errors);
+        }
+
+        return true;
+    }
+
+    /**
      * post data to update record
      *
      * @param $id
@@ -544,6 +632,19 @@ class AVC_APIController extends AVC_Controller
      */
     protected function update($id)
     {
+        $data = $this->getPost();
+        $data['id'] = $id;
+
+        $model = $this->getModel();
+        $model->save($data);
+        $errors = $model->getErrors();
+
+        if (empty($errors)) {
+            $this->data['record'] = $model->get($id);
+        } else {
+            $this->apiErrors($errors);
+        }
+
         return true;
     }
 }
