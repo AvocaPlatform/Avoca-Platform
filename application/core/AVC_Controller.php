@@ -52,6 +52,13 @@ class AVC_Controller extends CI_Controller
     {
         parent::__construct();
 
+        $this->controller_name = $this->router->fetch_class();
+        $this->action_name = $this->router->fetch_method();
+
+        $this->addGlobals([
+            '_start_rtime' => microtime(true),
+        ]);
+
         $this->init();
         $this->setViewType();
         $this->setViewFolderPath();
@@ -60,16 +67,12 @@ class AVC_Controller extends CI_Controller
 
     protected function init()
     {
-        $this->controller_name = $this->router->fetch_class();
-        $this->action_name = $this->router->fetch_method();
-
         $page_title = 'Avoca Framework';
         if (!empty($this->data['title'])) {
             $page_title = $this->data['title'] . ' | ' . $page_title;
         }
 
         $this->addGlobals([
-            '_start_rtime' => microtime(true),
             '_controller' => $this->controller_name,
             '_action' => $this->action_name,
             '_pageTitle' => $page_title,
@@ -103,12 +106,11 @@ class AVC_Controller extends CI_Controller
 
     protected function authenticate()
     {
-        if (!$this->isLogin()) {
-            // @TODO
-        }
+
     }
 
     protected function isLogin() {
+
         $user_id = $this->session->userdata('user_id');
         if ($user_id) {
             return true;
@@ -434,5 +436,51 @@ class AVC_AdminController extends AVC_Controller
         if ($id) {
             $this->data['record'] = $this->getModel()->get($id);
         }
+    }
+}
+
+/**
+ * Class AVC_APIController
+ */
+class AVC_APIController extends AVC_Controller
+{
+    protected $model = '';
+
+    protected $view_type = 'json';
+    protected $view_disable = true;
+
+    protected function init()
+    {
+
+    }
+
+    protected function authenticate()
+    {
+
+    }
+
+    /**
+     * @param string $modelName
+     * @return AVC_Model
+     */
+    protected function getModel($modelName = '')
+    {
+        if (empty($modelName)) {
+            $modelName = $this->model;
+        }
+
+        return parent::getModel($modelName);
+    }
+
+    // ACTION
+    public function index()
+    {
+        $this->data['records'] = $this->getModel()->getAll();
+    }
+
+    // ACTION
+    public function record($id)
+    {
+        $this->data['record'] = $this->getModel()->get($id);
     }
 }

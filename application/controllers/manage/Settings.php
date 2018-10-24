@@ -245,7 +245,7 @@ class Settings extends AVC_AdminController
     {
         $model_name = ucfirst(strtolower($model));
         $controller_name = ucfirst(strtolower($controller));
-        $controller_path = APPPATH . 'controllers/manage/' . $controller_name . '.php';
+        $controller_path = APPPATH . 'controllers/admin/' . $controller_name . '.php';
 
         if (!file_exists($controller_path)) {
             $template = file_get_contents(APPPATH . 'avoca/builders/controller.avc');
