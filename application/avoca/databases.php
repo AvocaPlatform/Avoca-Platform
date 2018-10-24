@@ -1,7 +1,7 @@
 <?php
 /**
- * Created by UP5 Tech & YouAddOn.
- * Website: https://up5.vn
+ * Created by AVOCA.IO
+ * Website: http://avoca.io
  * User: Jacky
  * Email: hungtran@up5.vn | jacky@youaddon.com
  * Person: tdhungit@gmail.com
@@ -9,20 +9,23 @@
  * Git: https://github.com/tdhungit
  */
 
-return [
-    'users' => [
-        'name' => 'users',
-        'ENGINE' => 'InnoDB',
-        'fields' => [
-            'id INT 10 unsigned:true auto_increment:true',
-            'date_created DATETIME',
-            'username VARCHAR 255',
-            'password CHAR 32',
-            'is_admin TINYINT 1 default:0',
-        ],
-        'indexes' => [
-            'PK id',
-            'UNIQUE username username'
-        ]
-    ]
-];
+return array (
+  'users' => 
+  array (
+    'name' => 'users',
+    'ENGINE' => 'InnoDB',
+    'fields' => 
+    array (
+      0 => 'id INT 10 unsigned:true auto_increment:true',
+      1 => 'date_created DATETIME',
+      2 => 'username VARCHAR 255',
+      3 => 'password CHAR 32',
+      4 => 'is_admin TINYINT 1 default:0',
+    ),
+    'indexes' => 
+    array (
+      0 => 'PK id',
+      1 => 'UNIQUE username username',
+    ),
+  ),
+);

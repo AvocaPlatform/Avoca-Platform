@@ -1,0 +1,40 @@
+extends ../../../layouts/manage
+
+block content
+    section.content-header
+        h1 All Modules
+            small Settings
+        ol.breadcrumb
+            li
+                a(href=avoca_url('/manage'))
+                    i.fa.fa-dashboard
+                    = ' Home'
+            li.active Dashboard
+
+    section.content
+        .box.box-info
+            .box-header.with-border
+                h3.box-title Module management
+
+                .box-tools.pull-right
+                    a.btn.btn-box-tool(href=avoca_url('/manage/settings/create_module'), data-widget="collapse")
+                        i.fa.fa-plus-circle
+
+            .box-body
+                table.table.table-bordered
+                    thead
+                        tr
+                            th Controller Name
+                            th Model Name
+                            th Table Name
+                            th Actions
+                    tbody
+                        each module in modules
+                            tr
+                                td
+                                    a(href=avoca_url('/manage/' + module.controller))= module.controller
+                                td= module.model
+                                td= module.table
+                                td
+                                    a(href=avoca_url('/manage/settings/create_module/' + module.controller), title="Edit")
+                                        i.fa.fa-pencil

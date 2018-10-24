@@ -1,4 +1,3 @@
-<?php
 /**
  * Created by AVOCA.IO
  * Website: http://avoca.io
@@ -8,13 +7,3 @@
  * Skype: tdhungit
  * Git: https://github.com/tdhungit
  */
-
-class Dashboard extends AVC_AdminController
-{
-    public function index()
-    {
-        $this->data = [
-            'status' => 1
-        ];
-    }
-}

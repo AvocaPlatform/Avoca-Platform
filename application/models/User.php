@@ -9,12 +9,7 @@
  * Git: https://github.com/tdhungit
  */
 
-class Dashboard extends AVC_AdminController
+class User extends AVC_Model
 {
-    public function index()
-    {
-        $this->data = [
-            'status' => 1
-        ];
-    }
+    protected $table = 'users';
 }

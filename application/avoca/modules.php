@@ -9,12 +9,11 @@
  * Git: https://github.com/tdhungit
  */
 
-class Dashboard extends AVC_AdminController
-{
-    public function index()
-    {
-        $this->data = [
-            'status' => 1
-        ];
-    }
-}
+return array (
+  'users' => 
+  array (
+    'controller' => 'users',
+    'model' => 'user',
+    'table' => 'users',
+  ),
+);

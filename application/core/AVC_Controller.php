@@ -1,7 +1,7 @@
 <?php
 /**
- * Created by UP5 Tech & YouAddOn.
- * Website: https://up5.vn
+ * Created by AVOCA.IO
+ * Website: http://avoca.io
  * User: Jacky
  * Email: hungtran@up5.vn | jacky@youaddon.com
  * Person: tdhungit@gmail.com
@@ -93,7 +93,8 @@ class AVC_Controller extends CI_Controller
     {
         try {
             $this->settings([
-                'view_path' => VIEWPATH . $this->getViewFolder()
+                'view_path' => VIEWPATH . $this->getViewFolder(),
+                'cache' => APPPATH . 'cache' . DIRECTORY_SEPARATOR . 'pug'
             ]);
         } catch (Exception $e) {
             show_error('ERROR view path: ' . VIEWPATH);

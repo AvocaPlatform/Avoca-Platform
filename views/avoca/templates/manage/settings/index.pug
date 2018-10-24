@@ -1,0 +1,25 @@
+extends ../../../layouts/manage
+
+block content
+    section.content-header
+        h1 All Settings
+            small Settings
+        ol.breadcrumb
+            li
+                a(href=avoca_url('/manage'))
+                    i.fa.fa-dashboard
+                    = ' Home'
+            li.active Dashboard
+
+    section.content
+        .box.box-info
+            .box-header.with-border
+                h3.box-title Avoca Settings
+
+            .box-body
+                a.btn.btn-app(href=avoca_url('/manage/settings/repair_database'))
+                    i.fa.fa-cog
+                    = ' Repair'
+                a.btn.btn-app(href=avoca_url('/manage/settings/create_module'))
+                    i.fa.fa-plus-square
+                    = ' Create Module'
