@@ -1,0 +1,23 @@
+extends ../../layouts/manage
+
+block content
+    section.content-header
+        h1 Edit
+            small Settings
+        ol.breadcrumb
+            li
+                a(href=avoca_url('/manage'))
+                    i.fa.fa-dashboard
+                    = ' Home'
+            li.active Dashboard
+
+    section.content
+        .box.box-info
+            .box-header.with-border
+                h3.box-title Avoca Settings
+
+                .box-tools.pull-right
+                    a.btn.btn-box-tool(href=avoca_url('/manage/' + list_link))
+                        i.fa.fa-arrow-circle-left
+
+            .box-body

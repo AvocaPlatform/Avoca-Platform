@@ -58,7 +58,7 @@ class AVC_Controller extends CI_Controller
         $this->authenticate();
     }
 
-    public function init()
+    protected function init()
     {
         $this->controller_name = $this->router->fetch_class();
         $this->action_name = $this->router->fetch_method();
@@ -117,11 +117,22 @@ class AVC_Controller extends CI_Controller
         return false;
     }
 
+    /**
+     * add variable global for view
+     *
+     * @param $name
+     * @param $value
+     */
     protected function addGlobal($name, $value)
     {
         $this->dataGlobal[$name] = $value;
     }
 
+    /**
+     * add multi global variable for view
+     *
+     * @param $data
+     */
     protected function addGlobals($data)
     {
         $this->dataGlobal = array_merge($this->dataGlobal, $data);
@@ -130,7 +141,7 @@ class AVC_Controller extends CI_Controller
 
     /**
      * @param $modelName
-     * @return CI_Model
+     * @return AVC_Model
      */
     protected function getModel($modelName)
     {
@@ -141,6 +152,22 @@ class AVC_Controller extends CI_Controller
     protected function getViewFolder()
     {
         return config_item('view_folder');
+    }
+
+    /**
+     * get option of options variable
+     *
+     * @param $name
+     * @param string $default
+     * @return mixed|string
+     */
+    protected function getOption($name, $default = '')
+    {
+        if (!empty($this->options[$name])) {
+            return $this->options[$name];
+        }
+
+        return $default;
     }
 
     protected function jsonData()
@@ -159,6 +186,12 @@ class AVC_Controller extends CI_Controller
         return false;
     }
 
+    /**
+     * get POST
+     *
+     * @param null $name
+     * @return mixed|string
+     */
     protected function getPost($name = null)
     {
         $value = $this->input->post($name);
@@ -170,6 +203,12 @@ class AVC_Controller extends CI_Controller
         return $value;
     }
 
+    /**
+     * get GET
+     *
+     * @param null $name
+     * @return mixed|string
+     */
     protected function getQuery($name = null)
     {
         $value = $this->input->get($name);
@@ -182,6 +221,8 @@ class AVC_Controller extends CI_Controller
     }
 
     /**
+     * render to view
+     *
      * @param bool $return
      * @throws Exception
      */
@@ -196,10 +237,16 @@ class AVC_Controller extends CI_Controller
         $this->view($this->fixedViewPath(), $this->data, $return);
     }
 
+    /**
+     * check custom view from folder view/<>/custom
+     *
+     * @return string
+     */
     protected function fixedViewPath()
     {
         $view_path = 'templates' . DIRECTORY_SEPARATOR . $this->view_path;
-        $custom_path = 'custom' . DIRECTORY_SEPARATOR . $this->view_path;;
+        $custom_path = 'custom' . DIRECTORY_SEPARATOR . $this->view_path;
+
         if (file_exists(VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR . $custom_path . '.pug')) {
             $view_path = $custom_path;
         }
@@ -207,6 +254,9 @@ class AVC_Controller extends CI_Controller
         return $view_path;
     }
 
+    /**
+     * some global variable. auto set when render
+     */
     protected function autoGlobals()
     {
         $this->dataGlobal['CSS'] = $this->getCss();
@@ -342,7 +392,7 @@ class AVC_AdminController extends AVC_Controller
                 $view = 'admin_templates' . DIRECTORY_SEPARATOR . strtolower($this->action_name);
 
                 if (!file_exists(VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR . $root_path . $view . '.pug')) {
-                    show_error('ERROR template: ' . VIEWPATH . $view . '.pug');
+                    show_error('ERROR template: ' . VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR . $root_path . $view . '.pug');
                 }
             }
 
@@ -354,7 +404,7 @@ class AVC_AdminController extends AVC_Controller
 
     /**
      * @param string $modelName
-     * @return CI_Model
+     * @return AVC_Model
      */
     protected function getModel($modelName = '')
     {
@@ -363,5 +413,26 @@ class AVC_AdminController extends AVC_Controller
         }
 
         return parent::getModel($modelName);
+    }
+
+    // ACTION
+    public function index()
+    {
+        // check create link. default controller/action
+        $this->data['create_link'] = $this->getOption('create_link', $this->controller_name . '/edit');
+
+        $this->data['records'] = $this->getModel()->getAll();
+    }
+
+    // ACTION
+    public function edit($id = null)
+    {
+        // check list link
+        $this->data['list_link'] = $this->getOption('list_link', $this->controller_name);
+
+        $this->data['record'] = [];
+        if ($id) {
+            $this->data['record'] = $this->getModel()->get($id);
+        }
     }
 }
