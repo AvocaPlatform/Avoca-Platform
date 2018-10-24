@@ -9,7 +9,7 @@
  * Git: https://github.com/tdhungit
  */
 
-class Settings extends AVC_AdminController
+class Settings extends AVC_ManageController
 {
     protected $model = 'Setting';
 

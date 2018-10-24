@@ -9,7 +9,7 @@
  * Git: https://github.com/tdhungit
  */
 
-class Dashboard extends AVC_AdminController
+class Dashboard extends AVC_ManageController
 {
     public function index()
     {

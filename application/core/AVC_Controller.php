@@ -365,6 +365,33 @@ class AVC_Controller extends CI_Controller
 }
 
 /**
+ * Class AVC_ManageController
+ */
+class AVC_ManageController extends AVC_Controller
+{
+    protected function authenticate()
+    {
+
+    }
+
+    /**
+     * @param bool $return
+     * @throws Exception
+     */
+    protected function display($return = false)
+    {
+        $this->autoGlobals();
+
+        if (!$this->view_path) {
+            $view = $this->router->directory . strtolower($this->controller_name) . DIRECTORY_SEPARATOR . strtolower($this->action_name);
+            $this->view_path = $view;
+        }
+
+        $this->view($this->fixedViewPath(), $this->data, $return);
+    }
+}
+
+/**
  * Class AVC_AdminController
  */
 class AVC_AdminController extends AVC_Controller
@@ -473,14 +500,50 @@ class AVC_APIController extends AVC_Controller
     }
 
     // ACTION
-    public function index()
+    public function index($id = null)
     {
-        $this->data['records'] = $this->getModel()->getAll();
+        if (!$id) {
+            return $this->records();
+        }
+
+        if ($this->isPost()) {
+            return $this->update($id);
+        }
+
+        return $this->record($id);
     }
 
-    // ACTION
-    public function record($id)
+    /**
+     * get all records
+     *
+     * @return bool
+     */
+    protected function records()
+    {
+        $this->data['records'] = $this->getModel()->getAll();
+        return true;
+    }
+
+    /**
+     * get detail record by id
+     *
+     * @param $id
+     * @return bool
+     */
+    protected function record($id)
     {
         $this->data['record'] = $this->getModel()->get($id);
+        return true;
+    }
+
+    /**
+     * post data to update record
+     *
+     * @param $id
+     * @return bool
+     */
+    protected function update($id)
+    {
+        return true;
     }
 }
