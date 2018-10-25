@@ -19,16 +19,91 @@
  * @property CI_DB_forge $dbforge
  * @property AVC_URI $uri
  */
-class AVC_Controller extends CI_Controller
+class AVC_BaseController extends CI_Controller
+{
+    protected $controller_name;
+    protected $action_name;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->controller_name = $this->router->fetch_class();
+        $this->action_name = $this->router->fetch_method();
+
+        $this->init();
+    }
+
+    protected function init()
+    {
+
+    }
+
+    /**
+     * check request method is post
+     *
+     * @return bool
+     */
+    protected function isPost()
+    {
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * get POST
+     *
+     * @param null $name
+     * @return mixed|string
+     */
+    protected function getPost($name = null)
+    {
+        $value = $this->input->post($name);
+
+        if (is_string($value)) {
+            return trim($value);
+        }
+
+        return $value;
+    }
+
+    /**
+     * get GET
+     *
+     * @param null $name
+     * @return mixed|string
+     */
+    protected function getQuery($name = null)
+    {
+        $value = $this->input->get($name);
+
+        if (is_string($value)) {
+            return trim($value);
+        }
+
+        return $value;
+    }
+
+    protected function redirect($uri, $method = 'auto', $code = null)
+    {
+        redirect($uri, $method, $code);
+        return true;
+    }
+}
+
+/**
+ * Class AVC_Controller
+ */
+class AVC_Controller extends AVC_BaseController
 {
     use CiPug;
 
     protected $view_type = 'html';
     protected $view_path = '';
     protected $view_disable = false;
-
-    protected $controller_name;
-    protected $action_name;
 
     protected $options = [];
     protected $dataGlobal = [];
@@ -48,23 +123,6 @@ class AVC_Controller extends CI_Controller
         'xml' => 'application/xml'
     ];
 
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->controller_name = $this->router->fetch_class();
-        $this->action_name = $this->router->fetch_method();
-
-        $this->addGlobals([
-            '_start_rtime' => microtime(true),
-        ]);
-
-        $this->init();
-        $this->setViewType();
-        $this->setViewFolderPath();
-        $this->authenticate();
-    }
-
     protected function init()
     {
         $page_title = 'Avoca Framework';
@@ -73,10 +131,15 @@ class AVC_Controller extends CI_Controller
         }
 
         $this->addGlobals([
+            '_start_rtime' => microtime(true),
             '_controller' => $this->controller_name,
             '_action' => $this->action_name,
             '_pageTitle' => $page_title,
         ]);
+
+        $this->setViewType();
+        $this->setViewFolderPath();
+        $this->authenticate();
     }
 
     protected function setViewType()
@@ -182,54 +245,6 @@ class AVC_Controller extends CI_Controller
         header('Content-Type: application/json');
         echo json_encode($this->data);
         return true;
-    }
-
-    /**
-     * check request method is post
-     *
-     * @return bool
-     */
-    protected function isPost()
-    {
-        if ($this->input->server('REQUEST_METHOD') == 'POST') {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * get POST
-     *
-     * @param null $name
-     * @return mixed|string
-     */
-    protected function getPost($name = null)
-    {
-        $value = $this->input->post($name);
-
-        if (is_string($value)) {
-            return trim($value);
-        }
-
-        return $value;
-    }
-
-    /**
-     * get GET
-     *
-     * @param null $name
-     * @return mixed|string
-     */
-    protected function getQuery($name = null)
-    {
-        $value = $this->input->get($name);
-
-        if (is_string($value)) {
-            return trim($value);
-        }
-
-        return $value;
     }
 
     /**
@@ -343,12 +358,6 @@ class AVC_Controller extends CI_Controller
         }
 
         return $src;
-    }
-
-    protected function redirect($uri, $method = 'auto', $code = null)
-    {
-        redirect($uri, $method, $code);
-        return true;
     }
 
     /**

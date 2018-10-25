@@ -9,7 +9,7 @@
  * Git: https://github.com/tdhungit
  */
 
-class Auth extends AVC_Controller
+class Auth extends AVC_BaseController
 {
     /** @var \Avoca\Libraries\AVC_ApiAuth */
     private $server;
@@ -28,36 +28,26 @@ class Auth extends AVC_Controller
 
     public function token()
     {
-        $this->disableView();
-
         $this->server->authorization_code();
     }
 
     public function client_credentials()
     {
-        $this->disableView();
-
         $this->server->client_credentials();
     }
 
     public function password_credentials()
     {
-        $this->disableView();
-
         $this->server->password_credentials();
     }
 
     public function refresh_token()
     {
-        $this->disableView();
-
         $this->server->refresh_token();
     }
 
     public function resource()
     {
-        $this->disableView();
-
         $this->server->require_scope("userinfo cloud file node");//you can require scope here
 
         echo json_encode(array(
