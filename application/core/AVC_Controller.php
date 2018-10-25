@@ -488,9 +488,12 @@ class AVC_APIController extends AVC_Controller
 
     protected $errors = [];
 
+    /** @var Oauth2\Server */
+    protected $authServer;
+
     protected function init()
     {
-
+        $this->authServer = new OAuth2\Server();
     }
 
     protected function authenticate()

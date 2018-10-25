@@ -25,7 +25,7 @@ class Settings extends AVC_ManageController
      */
     private function readDatabaseStructure()
     {
-        $databases = include APPPATH . 'avoca/databases.php';
+        $databases = include APPPATH . 'config/avoca/databases.php';
         $database_structures = [];
 
         foreach ($databases as $table => $options) {
@@ -101,7 +101,7 @@ class Settings extends AVC_ManageController
         return $database_structures;
     }
 
-    // ACTION - Create/Update database from avoca/databases.php
+    // ACTION - Create/Update database from config/avoca/databases.php
     public function repair_database()
     {
         $this->disableView();
@@ -166,7 +166,7 @@ class Settings extends AVC_ManageController
     public function create_module($module_name = null)
     {
         // default value to view
-        $modules = include APPPATH . 'avoca/modules.php';
+        $modules = include APPPATH . 'config/avoca/modules.php';
         $this->data['module'] = [];
         $this->data['table'] = [];
         $this->data['table_fields'] = '';
@@ -175,7 +175,7 @@ class Settings extends AVC_ManageController
         if (!empty($modules[$module_name])) {
             $this->data['module'] = $modules[$module_name];
 
-            $tables = include APPPATH . 'avoca/databases.php';
+            $tables = include APPPATH . 'config/avoca/databases.php';
             if (!empty($tables[$modules[$module_name]['table']])) {
                 $this->data['table'] = $tables[$modules[$module_name]['table']];
                 // fields to textarea value
@@ -202,9 +202,9 @@ class Settings extends AVC_ManageController
                     'table' => $table,
                 ];
 
-                // write to avoca/modules.php
+                // write to aconfig/voca/modules.php
                 $modules[$controller] = $module;
-                write_array2file('avoca/modules.php', $modules);
+                write_array2file('config/avoca/modules.php', $modules);
 
                 // write to model class in models/
                 if ($table) {
@@ -214,7 +214,7 @@ class Settings extends AVC_ManageController
                 // write to controller class in controllers/
                 $this->_createController($controller, $model);
 
-                // write data base into to avoca/databases.php
+                // write data base into to config/avoca/databases.php
                 if ($table && $table_define) {
                     $this->_createTableDefined($table, $table_define, $table_index);
                 }
@@ -231,7 +231,7 @@ class Settings extends AVC_ManageController
         $model_path = APPPATH . 'models/' . $model_name . '.php';
 
         if (!file_exists($model_path)) {
-            $template = file_get_contents(APPPATH . 'avoca/builders/model.avc');
+            $template = file_get_contents(APPPATH . 'config/avoca/builders/model.avc');
             $data = str_replace(
                 ['$$MODEL_CLASS$$', '$$TABLE_NAME$$'],
                 [$model_name, strtolower($table)],
@@ -248,7 +248,7 @@ class Settings extends AVC_ManageController
         $controller_path = APPPATH . 'controllers/admin/' . $controller_name . '.php';
 
         if (!file_exists($controller_path)) {
-            $template = file_get_contents(APPPATH . 'avoca/builders/controller.avc');
+            $template = file_get_contents(APPPATH . 'config/avoca/builders/controller.avc');
             $data = str_replace(
                 ['$$CONTROLLER_CLASS$$', '$$MODEL_NAME$$'],
                 [$controller_name, $model_name],
@@ -281,16 +281,16 @@ class Settings extends AVC_ManageController
             'indexes' => $index
         ];
 
-        $tables = include APPPATH . 'avoca/databases.php';
+        $tables = include APPPATH . 'config/avoca/databases.php';
         $tables[$table_name] = $table;
 
-        write_array2file('avoca/databases.php', $tables);
+        write_array2file('config/avoca/databases.php', $tables);
     }
 
     // ACTION
     public function modules()
     {
-        $modules = include APPPATH . 'avoca/modules.php';
+        $modules = include APPPATH . 'config/avoca/modules.php';
         $this->data['modules'] = $modules;
     }
 }

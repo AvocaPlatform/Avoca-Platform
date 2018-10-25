@@ -8,5 +8,10 @@
 	},
 	"require-dev": {
 		"mikey179/vfsStream": "1.1.*"
+	},
+	"autoload": {
+		"psr-4" : {
+			"Avoca\\Libraries\\" : "application/libraries/avoca/"
+		}
 	}
 }

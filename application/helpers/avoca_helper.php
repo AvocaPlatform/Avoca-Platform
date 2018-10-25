@@ -71,7 +71,7 @@ function write_array2file($file, $array)
 {
     $file = APPPATH . $file;
 
-    $template = file_get_contents(APPPATH . 'avoca/builders/file_header.avc');
+    $template = file_get_contents(APPPATH . 'config/avoca/builders/file_header.avc');
 
     $array_str = var_export($array, true);
     $data = "<?php\n" . $template . "\n\nreturn " . $array_str . ";\n";
