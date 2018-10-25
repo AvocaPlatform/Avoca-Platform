@@ -243,7 +243,7 @@ class AVC_Controller extends CI_Controller
         $this->autoGlobals();
 
         if (!$this->view_path) {
-            $this->view_path = strtolower($this->controller_name) . DIRECTORY_SEPARATOR . strtolower($this->action_name);
+            $this->view_path = $this->router->directory . strtolower($this->controller_name) . DIRECTORY_SEPARATOR . strtolower($this->action_name);
         }
 
         $this->view($this->fixedViewPath(), $this->data, $return);
@@ -390,14 +390,7 @@ class AVC_ManageController extends AVC_Controller
      */
     protected function display($return = false)
     {
-        $this->autoGlobals();
-
-        if (!$this->view_path) {
-            $view = $this->router->directory . strtolower($this->controller_name) . DIRECTORY_SEPARATOR . strtolower($this->action_name);
-            $this->view_path = $view;
-        }
-
-        $this->view($this->fixedViewPath(), $this->data, $return);
+        parent::display($return);
     }
 }
 
@@ -488,12 +481,9 @@ class AVC_APIController extends AVC_Controller
 
     protected $errors = [];
 
-    /** @var Oauth2\Server */
-    protected $authServer;
-
     protected function init()
     {
-        $this->authServer = new OAuth2\Server();
+
     }
 
     protected function authenticate()
