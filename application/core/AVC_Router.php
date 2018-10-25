@@ -34,8 +34,11 @@ class AVC_Router extends CI_Router
             isset($route['default_controller']) && $this->default_controller = $route['default_controller'];
             isset($route['translate_uri_dashes']) && $this->translate_uri_dashes = $route['translate_uri_dashes'];
             unset($route['default_controller'], $route['translate_uri_dashes']);
-            //$route['(:any)/(:any)\.(:any)'] = "$1/$2";
-            $route['api/(:any)/(:any)'] = "api/$1/index/$2";
+
+            // api version 1
+            $route['api/v1/(:any)'] = "api_ver1/$1/index";
+            $route['api/v1/(:any)/(:any)'] = "api_ver1/$1/index/$2";
+
             $this->routes = $route;
         }
 
