@@ -131,3 +131,21 @@ function __($str)
     $ci =& get_instance();
     return $ci->lang->line($str);
 }
+
+/**
+ * get session flash message
+ *
+ * @param $type
+ * @return string
+ */
+function get_flash($type)
+{
+    $ci = &get_instance();
+    $message = $ci->session->flashdata($type);
+
+    if ($message) {
+        return htmlentities($message);
+    }
+
+    return '';
+}

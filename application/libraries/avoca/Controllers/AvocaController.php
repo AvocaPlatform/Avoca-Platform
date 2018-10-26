@@ -217,7 +217,7 @@ class AvocaController extends AvocaBaseController
 
     protected function setFlash($message, $type = 'info')
     {
-        $this->session->set_flashdata($type, $message);
+        $this->session->set_flashdata($type, $this->lang->line($message));
     }
 
     protected function setError($message)

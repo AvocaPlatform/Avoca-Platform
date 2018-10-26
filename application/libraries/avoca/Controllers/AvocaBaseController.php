@@ -137,4 +137,14 @@ class AvocaBaseController extends \CI_Controller
         redirect($uri, $method, $code);
         return true;
     }
+
+    protected function admin_redirect($uri, $method = 'auto', $code = null)
+    {
+        return $this->redirect(avoca_admin($uri), $method, $code);
+    }
+
+    protected function manage_redirect($uri, $method = 'auto', $code = null)
+    {
+        return $this->redirect(avoca_manage($uri), $method, $code);
+    }
 }

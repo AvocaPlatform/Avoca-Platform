@@ -4,7 +4,9 @@ html(lang='en')
         meta(charset="utf-8")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         title= _pageTitle
+
         meta(content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no", name="viewport")
+
         link(rel="stylesheet", href=avoca_static() + "/bower_components/bootstrap/dist/css/bootstrap.min.css")
         link(rel="stylesheet", href=avoca_static() + "/bower_components/font-awesome/css/font-awesome.min.css")
         link(rel="stylesheet", href=avoca_static() + "/bower_components/Ionicons/css/ionicons.min.css")
@@ -23,6 +25,10 @@ html(lang='en')
         // [endif]
 
         link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic")
+
+        script(src=avoca_static() + "/bower_components/jquery/dist/jquery.min.js")
+        script(src=avoca_static() + "/bower_components/bootstrap/dist/js/bootstrap.min.js")
+
     body.hold-transition.skin-blue.sidebar-mini
         .wrapper
             header.main-header
@@ -146,3 +152,13 @@ html(lang='en')
                 strong Copyright &copy; 2018
                     a(href="http://avoca.io") Avoca.
                     = ' All rights reserved.'
+
+        script(src=avoca_static() + "/js/notify.min.js")
+        script.
+            $(document).ready(function () {
+                var notifyErrorMsg = "#{get_flash('error')}", notifyWarningMsg = "#{get_flash('warn')}", notifyInfoMsg = "#{get_flash('info')}", notifySuccessMsg = "#{get_flash('success')}";
+                if (notifyErrorMsg) $.notify(notifyErrorMsg, 'error');
+                if (notifyWarningMsg) $.notify(notifyWarningMsg, 'warn');
+                if (notifyInfoMsg) $.notify(notifyInfoMsg, 'info');
+                if (notifySuccessMsg) $.notify(notifySuccessMsg, 'success');
+            });

@@ -28,6 +28,13 @@ class AvocaApiAuth
     /** @var OAuth2\Response */
     private $response;
 
+    public static $grant_types = [
+        'password' => 'password',
+        'refresh_token' => 'refresh_token',
+        'client_credentials' => 'client_credentials',
+        'authorization_code' => 'authorization_code',
+    ];
+
     public function __construct()
     {
         $db = $this->getDBInfo();

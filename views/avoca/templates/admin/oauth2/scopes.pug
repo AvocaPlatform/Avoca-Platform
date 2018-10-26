@@ -2,7 +2,7 @@ extends ../../../layouts/manage
 
 block content
     section.content-header
-        h1= __('Clients')
+        h1= __('Scope')
             small= __('Oauth2')
         ol.breadcrumb
             li
@@ -14,30 +14,23 @@ block content
     section.content
         .box.box-info
             .box-header.with-border
-                h3.box-title= __('Oauth Clients')
+                h3.box-title= __('Oauth Scope')
                 .box-tools.pull-right
-                    a.btn.btn-box-tool(href=avoca_admin('/oauth2/edit_client'))
+                    a.btn.btn-box-tool(href=avoca_admin('/oauth2/edit_scope'))
                         i.fa.fa-plus
 
             .box-body
                 table.table.table-bordered
                     thead
                         tr
-                            th= __('Client')
-                            th= __('Secret')
-                            th= __('Grant types')
                             th= __('Scope')
+                            th= __('Is default')
                             th= __('Action')
                     tbody
                         each record in records
                             tr
-                                td
-                                    a(href=avoca_admin('/oauth2/edit_client/' + record.client_id))= record.client_id
-                                td= record.client_secret
-                                td= record.grant_types
                                 td= record.scope
+                                td= record.is_default
                                 td
-                                    a.btn.btn-xs.btn-link(href=avoca_admin('/oauth2/edit_client/' + record.client_id))
-                                        i.fa.fa-pencil
-                                    a.btn.btn-xs.btn-link(href=avoca_admin('/oauth2/delete/client/' + record.client_id))
+                                    a.btn.btn-xs.btn-link(href=avoca_admin('/oauth2/delete/scope/' + record.scope))
                                         i.fa.fa-trash
