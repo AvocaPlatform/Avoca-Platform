@@ -1,4 +1,4 @@
-extends ../../../layouts/admin
+extends ../../../layouts/manage
 
 block content
     section.content-header
@@ -6,19 +6,19 @@ block content
             small Settings
         ol.breadcrumb
             li
-                a(href=avoca_url('/admin'))
+                a(href=avoca_admin())
                     i.fa.fa-dashboard
                     = ' Home'
             li.active Dashboard
 
     section.content
-        form(action=avoca_url('/admin/settings/create_module'), method="post")
+        form(action=avoca_admin('/settings/create_module'), method="post")
             .box.box-default
                 .box-header.with-border
                     h3.box-title Module generate
 
                     .box-tools.pull-right
-                        a.btn.btn-box-tool(href=avoca_url('/admin/settings/modules'))
+                        a.btn.btn-box-tool(href=avoca_admin('/settings/modules'))
                             i.fa.fa-arrow-circle-left
 
                 .box-body

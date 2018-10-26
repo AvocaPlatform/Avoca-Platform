@@ -6,7 +6,7 @@ block content
             small Settings
         ol.breadcrumb
             li
-                a(href=avoca_url('/manage'))
+                a(href=avoca_manage())
                     i.fa.fa-dashboard
                     = ' Home'
             li.active Dashboard
@@ -17,7 +17,7 @@ block content
                 h3.box-title Avoca Settings
 
                 .box-tools.pull-right
-                    a.btn.btn-box-tool(href=avoca_url('/manage/' + create_link))
+                    a.btn.btn-box-tool(href=avoca_manage(create_link))
                         i.fa.fa-plus
 
             .box-body

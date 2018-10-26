@@ -1,4 +1,4 @@
-extends ../../../layouts/admin
+extends ../../../layouts/manage
 
 block content
     section.content-header
@@ -6,7 +6,7 @@ block content
             small Settings
         ol.breadcrumb
             li
-                a(href=avoca_url('/admin'))
+                a(href=avoca_admin())
                     i.fa.fa-dashboard
                     = ' Home'
             li.active Dashboard
@@ -17,7 +17,7 @@ block content
                 h3.box-title Module management
 
                 .box-tools.pull-right
-                    a.btn.btn-box-tool(href=avoca_url('/admin/settings/create_module'))
+                    a.btn.btn-box-tool(href=avoca_admin('/settings/create_module'))
                         i.fa.fa-plus-circle
 
             .box-body
@@ -32,9 +32,9 @@ block content
                         each module in modules
                             tr
                                 td
-                                    a(href=avoca_url('/admin/' + module.controller))= module.controller
+                                    a(href=avoca_admin(module.controller))= module.controller
                                 td= module.model
                                 td= module.table
                                 td
-                                    a(href=avoca_url('/admin/settings/create_module/' + module.controller), title="Edit")
+                                    a(href=avoca_admin('/settings/create_module/' + module.controller), title="Edit")
                                         i.fa.fa-pencil

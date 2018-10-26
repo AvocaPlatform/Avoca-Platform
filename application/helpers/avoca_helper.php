@@ -67,6 +67,47 @@ function avoca_static()
     return avoca_url('/themes/' . config_item('theme_folder'));
 }
 
+/**
+ * manage page url
+ *
+ * @param string $uri
+ * @param null $protocol
+ * @return string
+ */
+function avoca_manage($uri = '', $protocol = NULL)
+{
+    $prefix = config_item('manage_prefix');
+
+    if (substr($uri, 0, 1) == '/') {
+        $uri = $prefix . $uri;
+    } else {
+        $uri = $prefix . '/' . $uri;
+    }
+
+
+    return avoca_url($uri, $protocol);
+}
+
+/**
+ * admin page url
+ *
+ * @param string $uri
+ * @param null $protocol
+ * @return string
+ */
+function avoca_admin($uri = '', $protocol = NULL)
+{
+    $prefix = config_item('admin_prefix');
+
+    if (substr($uri, 0, 1) == '/') {
+        $uri = $prefix . $uri;
+    } else {
+        $uri = $prefix . '/' . $uri;
+    }
+
+    return avoca_url($uri, $protocol);
+}
+
 function write_array2file($file, $array)
 {
     $file = APPPATH . $file;
