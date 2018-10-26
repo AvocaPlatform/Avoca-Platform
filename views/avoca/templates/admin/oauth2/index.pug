@@ -1,0 +1,36 @@
+extends ../../../layouts/manage
+
+block content
+    section.content-header
+        h1= __('Clients')
+            small= __('Oauth2')
+        ol.breadcrumb
+            li
+                a(href=avoca_admin())
+                    i.fa.fa-dashboard
+                    = ' ' + __('Home')
+            li.active= __('Dashboard')
+
+    section.content
+        .box.box-info
+            .box-header.with-border
+                h3.box-title= __('Oauth Clients')
+                .box-tools.pull-right
+                    a.btn.btn-box-tool(href=avoca_admin('/oauth2/edit'))
+                        i.fa.fa-plus
+
+            .box-body
+                table.table.table-bordered
+                    thead
+                        tr
+                            th= __('Client')
+                            th= __('Secret')
+                            th= __('Grant types')
+                            th= __('Scope')
+                    tbody
+                        each record in records
+                            tr
+                                td= record.client_id
+                                td= record.client_secret
+                                td= record.grant_types
+                                td= record.scope

@@ -2,19 +2,19 @@ extends ../../../layouts/manage
 
 block content
     section.content-header
-        h1 All Modules
-            small Settings
+        h1= __('All Modules')
+            small= __('Settings')
         ol.breadcrumb
             li
                 a(href=avoca_admin())
                     i.fa.fa-dashboard
-                    = ' Home'
-            li.active Dashboard
+                    = ' ' + __('Home')
+            li.active= __('Dashboard')
 
     section.content
         .box.box-info
             .box-header.with-border
-                h3.box-title Module management
+                h3.box-title= __('Module management')
 
                 .box-tools.pull-right
                     a.btn.btn-box-tool(href=avoca_admin('/settings/create_module'))
@@ -24,10 +24,10 @@ block content
                 table.table.table-bordered
                     thead
                         tr
-                            th Controller Name
-                            th Model Name
-                            th Table Name
-                            th Actions
+                            th= __('Controller Name')
+                            th= __('Model Name')
+                            th= __('Table Name')
+                            th= __('Actions')
                     tbody
                         each module in modules
                             tr
@@ -36,5 +36,5 @@ block content
                                 td= module.model
                                 td= module.table
                                 td
-                                    a(href=avoca_admin('/settings/create_module/' + module.controller), title="Edit")
+                                    a(href=avoca_admin('/settings/create_module/' + module.controller), title=__('Edit'))
                                         i.fa.fa-pencil

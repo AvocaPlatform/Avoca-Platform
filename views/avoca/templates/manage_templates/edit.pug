@@ -2,19 +2,19 @@ extends ../../layouts/manage
 
 block content
     section.content-header
-        h1 Edit
-            small Settings
+        h1= __('Edit')
+            small= __('Settings')
         ol.breadcrumb
             li
                 a(href=avoca_manage())
                     i.fa.fa-dashboard
-                    = ' Home'
-            li.active Dashboard
+                    = ' ' + __('Home')
+            li.active= __('Dashboard')
 
     section.content
         .box.box-info
             .box-header.with-border
-                h3.box-title Avoca Settings
+                h3.box-title= __('Avoca Settings')
 
                 .box-tools.pull-right
                     a.btn.btn-box-tool(href=avoca_manage(list_link))

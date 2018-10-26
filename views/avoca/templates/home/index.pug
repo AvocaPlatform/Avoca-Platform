@@ -4,26 +4,26 @@ block content
     .lockscreen-wrapper
         .lockscreen-logo
             a(href="#")
-                strong Avoca Framework
+                strong= __('Avoca Framework')
 
-        .lockscreen-name Jacky
+        .lockscreen-name= __('Jacky')
 
         .lockscreen-item
             .lockscreen-image
-                img(src=avoca_static() + "/img/user1-128x128.jpg", alt="User Image")
+                img(src=avoca_static() + "/img/user1-128x128.jpg", alt=__('User Image'))
 
             form.lockscreen-credentials
                 .input-group
-                    input.form-control(type="password", placeholder="password")
+                    input.form-control(type="password", placeholder=__('password'))
 
                     .input-group-btn
                         button.btn(type="button")
                             i.fa.fa-arrow-right.text-muted
 
-        .help-block.text-center Enter your password to retrieve your session
+        .help-block.text-center= __('Enter your password to retrieve your session')
 
         .text-center
-            a(href="#") Or sign in as a different user
+            a(href="#")= __('Or sign in as a different user')
 
         .lockscreen-footer.text-center Copyright &copy; 2018
             strong

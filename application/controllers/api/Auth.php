@@ -21,34 +21,22 @@ class Auth extends AVC_BaseController
         $this->server = new \Avoca\Libraries\AvocaApiAuth();
     }
 
+    // ACTION password_credentials
     public function index()
-    {
-
-    }
-
-    public function token()
-    {
-        $this->server->authorization_code();
-    }
-
-    public function client_credentials()
-    {
-        $this->server->client_credentials();
-    }
-
-    public function password_credentials()
     {
         $this->server->password_credentials();
     }
 
+    // ACTION
     public function refresh_token()
     {
         $this->server->refresh_token();
     }
 
+    // ACTION
     public function resource()
     {
-        $this->server->require_scope("userinfo cloud file node");//you can require scope here
+        $this->server->require_scope();//you can require scope here
 
         echo json_encode(array(
             'success' => true,

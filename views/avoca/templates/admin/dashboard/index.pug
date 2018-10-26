@@ -2,11 +2,18 @@ extends ../../../layouts/manage
 
 block content
     section.content-header
-        h1 Dashboard
-            small Control panel
-    ol.breadcrumb
-        li
-            a(href="#")
-                i.fa.fa-dashboard
-                = ' Home'
-        li.active Dashboard
+        h1= __('Dashboard')
+            small= __('Control panel')
+        ol.breadcrumb
+            li
+                a(href=avoca_admin())
+                    i.fa.fa-dashboard
+                    = ' ' + __('Home')
+            li.active= ('Dashboard')
+
+    section.content
+        .box.box-info
+            .box-header.with-border
+                h3.box-title= ('Control panel')
+
+            .box-body

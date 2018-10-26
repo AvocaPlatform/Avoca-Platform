@@ -81,7 +81,7 @@ class AvocaApiAuth
     public function password_credentials()
     {
         $users = [
-            'user' => [
+            'jacky' => [
                 'password' => 'pass',
                 'first_name' => 'homeway',
                 'last_name' => 'yao'

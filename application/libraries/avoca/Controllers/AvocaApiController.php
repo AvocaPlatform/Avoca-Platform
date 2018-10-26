@@ -97,6 +97,11 @@ class AvocaApiController extends AvocaController
         return $post;
     }
 
+    /**
+     * API return json data
+     *
+     * @return bool
+     */
     protected function jsonData()
     {
         $json_arr = [

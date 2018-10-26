@@ -119,3 +119,15 @@ function write_array2file($file, $array)
 
     return write_file($file, $data, 'w');
 }
+
+/**
+ * translate
+ *
+ * @param $str
+ * @return mixed
+ */
+function __($str)
+{
+    $ci =& get_instance();
+    return $ci->lang->line($str);
+}

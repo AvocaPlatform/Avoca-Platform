@@ -24,11 +24,15 @@ namespace Avoca\Libraries\Controllers;
  * @property \CI_Session $session
  * @property \CI_DB_forge $dbforge
  * @property \AVC_URI $uri
+ * @property \AVC_Lang $lang
  */
 class AvocaBaseController extends \CI_Controller
 {
     protected $controller_name;
     protected $action_name;
+
+    protected $language = 'english';
+    protected $lang_files = [];
 
     public function __construct()
     {
@@ -37,12 +41,25 @@ class AvocaBaseController extends \CI_Controller
         $this->controller_name = $this->router->fetch_class();
         $this->action_name = $this->router->fetch_method();
 
+        // load language
+        $this->loadLanguage();
+        // init
         $this->init();
     }
 
     protected function init()
     {
 
+    }
+
+    protected function loadLanguage()
+    {
+        $this->lang->load('app_strings', $this->language);
+        $this->lang->load($this->controller_name, $this->language);
+
+        foreach ($this->lang_files as $lang) {
+            $this->lang->load($lang, $this->language);
+        }
     }
 
     /**

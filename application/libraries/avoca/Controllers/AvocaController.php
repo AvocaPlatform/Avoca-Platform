@@ -29,6 +29,8 @@ class AvocaController extends AvocaBaseController
     protected $css = [];
     protected $js = [];
 
+    protected $isCacheView = false;
+
     protected $_supported_formats = [
         'json' => 'application/json',
         'array' => 'application/json',
@@ -77,8 +79,14 @@ class AvocaController extends AvocaBaseController
         try {
             $this->settings([
                 'view_path' => VIEWPATH . $this->getViewFolder(),
-                'cache' => APPPATH . 'cache' . DIRECTORY_SEPARATOR . 'pug'
+                //'cache' => APPPATH . 'cache' . DIRECTORY_SEPARATOR . 'pug'
             ]);
+
+            if ($this->isCacheView) {
+                $this->settings([
+                    'cache' => APPPATH . 'cache' . DIRECTORY_SEPARATOR . 'pug'
+                ]);
+            }
         } catch (Exception $e) {
             show_error('ERROR view path: ' . VIEWPATH);
         }
