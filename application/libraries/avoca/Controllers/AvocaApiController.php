@@ -50,6 +50,34 @@ class AvocaApiController extends AvocaController
     }
 
     /**
+     * detect PUT request
+     *
+     * @return bool
+     */
+    protected function isPut()
+    {
+        if ($this->detectMethod() == 'put') {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * detect DELETE request
+     *
+     * @return bool
+     */
+    protected function isDelete()
+    {
+        if ($this->detectMethod() == 'delete') {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * fixed when post by json
      *
      * @param null $name
@@ -61,7 +89,7 @@ class AvocaApiController extends AvocaController
         if (empty($post)) {
             try {
                 $post = json_decode(trim(file_get_contents('php://input')), true);
-            } catch (Exception $exception) {
+            } catch (\Exception $exception) {
                 $post = [];
             }
         }

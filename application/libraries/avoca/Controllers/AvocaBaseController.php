@@ -46,13 +46,35 @@ class AvocaBaseController extends \CI_Controller
     }
 
     /**
+     * detect request method (POST, PUT, GET, DELETE)
+     * @return string
+     */
+    protected function detectMethod() {
+        $method = strtolower($this->input->server('REQUEST_METHOD'));
+
+        if (config_item('enable_emulate_request')) {
+            if ($this->input->post('_method')) {
+                $method = strtolower($this->input->post('_method'));
+            } else if ($this->input->server('HTTP_X_HTTP_METHOD_OVERRIDE')) {
+                $method = strtolower($this->input->server('HTTP_X_HTTP_METHOD_OVERRIDE'));
+            }
+        }
+
+        if (in_array($method, array('get', 'delete', 'post', 'put'))) {
+            return $method;
+        }
+
+        return 'get';
+    }
+
+    /**
      * check request method is post
      *
      * @return bool
      */
     protected function isPost()
     {
-        if ($this->input->server('REQUEST_METHOD') == 'POST') {
+        if ($this->detectMethod() == 'post') {
             return true;
         }
 
