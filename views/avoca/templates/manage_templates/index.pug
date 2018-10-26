@@ -1,8 +1,8 @@
-extends ../../../layouts/manage
+extends ../../layouts/manage
 
 block content
     section.content-header
-        h1 All Settings
+        h1 List
             small Settings
         ol.breadcrumb
             li
@@ -16,10 +16,8 @@ block content
             .box-header.with-border
                 h3.box-title Avoca Settings
 
+                .box-tools.pull-right
+                    a.btn.btn-box-tool(href=avoca_url('/manage/' + create_link))
+                        i.fa.fa-plus
+
             .box-body
-                a.btn.btn-app(href=avoca_url('/manage/settings/repair_database'))
-                    i.fa.fa-cog
-                    = ' Repair'
-                a.btn.btn-app(href=avoca_url('/manage/settings/create_module'))
-                    i.fa.fa-plus-square
-                    = ' Create Module'

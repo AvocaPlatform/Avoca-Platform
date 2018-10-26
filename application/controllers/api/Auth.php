@@ -11,14 +11,14 @@
 
 class Auth extends AVC_BaseController
 {
-    /** @var \Avoca\Libraries\AVC_ApiAuth */
+    /** @var \Avoca\Libraries\AvocaApiAuth */
     private $server;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->server = new \Avoca\Libraries\AVC_ApiAuth();
+        $this->server = new \Avoca\Libraries\AvocaApiAuth();
     }
 
     public function index()

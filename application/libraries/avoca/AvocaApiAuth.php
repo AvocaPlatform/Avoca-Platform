@@ -14,7 +14,7 @@ namespace Avoca\Libraries;
 
 use OAuth2;
 
-class AVC_ApiAuth
+class AvocaApiAuth
 {
     /** @var OAuth2\Server */
     private $server;

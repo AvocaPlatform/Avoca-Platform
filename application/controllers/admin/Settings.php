@@ -9,7 +9,7 @@
  * Git: https://github.com/tdhungit
  */
 
-class Settings extends AVC_ManageController
+class Settings extends AVC_AdminController
 {
     protected $model = 'Setting';
 
@@ -245,7 +245,7 @@ class Settings extends AVC_ManageController
     {
         $model_name = ucfirst(strtolower($model));
         $controller_name = ucfirst(strtolower($controller));
-        $controller_path = APPPATH . 'controllers/admin/' . $controller_name . '.php';
+        $controller_path = APPPATH . 'controllers/manage/' . $controller_name . '.php';
 
         if (!file_exists($controller_path)) {
             $template = file_get_contents(APPPATH . 'config/avoca/builders/controller.avc');
