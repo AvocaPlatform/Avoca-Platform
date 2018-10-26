@@ -1,0 +1,9 @@
+script(src=avoca_static() + "/js/notify.min.js")
+    script.
+        $(document).ready(function () {
+            var notifyErrorMsg = "#{get_flash('error')}", notifyWarningMsg = "#{get_flash('warn')}", notifyInfoMsg = "#{get_flash('info')}", notifySuccessMsg = "#{get_flash('success')}";
+            if (notifyErrorMsg) $.notify(notifyErrorMsg, 'error');
+            if (notifyWarningMsg) $.notify(notifyWarningMsg, 'warn');
+            if (notifyInfoMsg) $.notify(notifyInfoMsg, 'info');
+            if (notifySuccessMsg) $.notify(notifySuccessMsg, 'success');
+        });

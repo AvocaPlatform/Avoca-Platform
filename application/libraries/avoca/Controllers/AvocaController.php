@@ -42,6 +42,15 @@ class AvocaController extends AvocaBaseController
         'xml' => 'application/xml'
     ];
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->addGlobals([
+            '_start_rtime' => microtime(true)
+        ]);
+    }
+
     protected function init()
     {
         $page_title = 'Avoca Framework';
@@ -50,7 +59,6 @@ class AvocaController extends AvocaBaseController
         }
 
         $this->addGlobals([
-            '_start_rtime' => microtime(true),
             '_controller' => $this->controller_name,
             '_action' => $this->action_name,
             '_pageTitle' => $page_title,
