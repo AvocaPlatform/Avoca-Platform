@@ -18,7 +18,22 @@ class AvocaAdminController extends AvocaController
 {
     protected function authenticate()
     {
+        if (!$this->isLogin()) {
+            return false;
+        }
+
+        $user_idadmin = $this->getSession('user_isadmin');
+        if ($user_idadmin != 2) {
+            return false;
+        }
+
         return true;
+    }
+
+    protected function authenticateError()
+    {
+        $this->setError('Only admin must access this page');
+        return $this->redirect('/');
     }
 
     /**

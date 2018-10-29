@@ -44,16 +44,10 @@ class AvocaController extends AvocaBaseController
 
     protected function init()
     {
-        $page_title = 'Avoca Framework';
-        if (!empty($this->data['title'])) {
-            $page_title = $this->data['title'] . ' | ' . $page_title;
-        }
-
         $this->addGlobals([
             '_start_rtime' => microtime(true),
             '_controller' => $this->controller_name,
             '_action' => $this->action_name,
-            '_pageTitle' => $page_title,
         ]);
 
         $this->setViewType();
@@ -188,9 +182,17 @@ class AvocaController extends AvocaBaseController
      */
     protected function autoGlobals()
     {
-        $this->dataGlobal['_ERRORS'] = $this->errors;
-        $this->dataGlobal['_CSS'] = $this->getCss();
-        $this->dataGlobal['_JS'] = $this->getJs();
+        $page_title = 'Avoca Framework';
+        if (!empty($this->data['title'])) {
+            $page_title = $this->data['title'] . ' | ' . $page_title;
+        }
+
+        $this->addGlobals([
+            '_pageTitle' => $page_title,
+            '_ERRORS' => $this->errors,
+            '_CSS' => $this->getCss(),
+            '_JS' => $this->getJs(),
+        ]);
     }
 
     protected function setFlash($message, $type = 'info')
@@ -261,6 +263,24 @@ class AvocaController extends AvocaBaseController
         }
 
         return $src;
+    }
+
+    /**
+     * redirect to return url
+     *
+     * @param $url string url
+     * @param string $uri_default
+     * @return bool
+     */
+    protected function redirect_return($url, $uri_default = '/')
+    {
+        if ($url) {
+            if (strpos($url, 'http') !== false) {
+                return $this->redirect($url);
+            }
+        }
+
+        return $this->redirect($uri_default);
     }
 
     /**

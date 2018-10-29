@@ -20,7 +20,17 @@ class AvocaManageController extends AvocaController
 
     protected function authenticate()
     {
+        if (!$this->isLogin()) {
+            return false;
+        }
+
         return true;
+    }
+
+    protected function authenticateError()
+    {
+        $this->setError('You must login to access this page');
+        return $this->redirect('/auth?r=' . current_url());
     }
 
     /**

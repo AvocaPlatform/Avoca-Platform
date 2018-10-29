@@ -191,6 +191,23 @@ class AvocaBaseController extends \CI_Controller
     }
 
     /**
+     * get post or get
+     *
+     * @param null $name
+     * @return mixed|string
+     */
+    protected function getRequest($name = null)
+    {
+        $value = $this->input->post_get($name);
+
+        if (is_string($value)) {
+            return trim($value);
+        }
+
+        return $value;
+    }
+
+    /**
      * redirect to uri or url
      *
      * @param $uri

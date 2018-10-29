@@ -32,6 +32,8 @@ html(lang='en')
                 p.login-box-msg Sign in to start your session
 
                 form(method="post", action=avoca_url('/auth'))
+                    input(type="hidden", name="r", value=return_url)
+
                     .form-group.has-feedback
                         input.form-control(name="username", type="text", placeholder="Username")
                         span.glyphicon.glyphicon-envelope.form-control-feedback

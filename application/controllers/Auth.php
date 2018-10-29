@@ -17,7 +17,16 @@ class Auth extends AVC_Controller
     // Action login
     public function index()
     {
+        if ($this->isLogin()) {
+            return $this->redirect_return($this->getRequest('r'));
+        }
+
+        $this->data['title'] = __('Login');
+        $this->data['return_url'] = $this->getQuery('r');
+
         if ($this->isPost()) {
+
+            $this->disableView();
 
             /** @var User $userModel */
             $userModel = $this->getModel('user');
@@ -30,17 +39,21 @@ class Auth extends AVC_Controller
 
                 if ($user) {
                     $this->setSession([
-                        'user_id' => $user->id,
-                        'user_username' => $user->username
+                        'user_id' => $user['id'],
+                        'user_username' => $user['username'],
+                        'user_isadmin' => $user['is_admin'],
                     ]);
 
                     $this->setSuccess('Login successful');
-                    return $this->redirect('/');
+                    return $this->redirect_return($this->getRequest('r'));
                 }
 
                 $this->setError('Login error');
-                return $this->redirect('/auth');
+                return $this->redirect('/auth?r=' . $this->getRequest('r'));
             }
+
+            $this->setError(\Avoca\Libraries\AvocaRequestStatus::$InvalidParams);
+            return $this->redirect('/auth?r=' . $this->getRequest('r'));
         }
     }
 
