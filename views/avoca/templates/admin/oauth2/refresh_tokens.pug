@@ -15,6 +15,9 @@ block content
         .box.box-info
             .box-header.with-border
                 h3.box-title= __('Oauth Refresh Tokens')
+                .box-tools.pull-right
+                    a.btn.btn-box-tool(href=avoca_admin('/oauth2/remove_expire_refresh_token'))
+                        i.fa.fa-trash
 
             .box-body
                 table.table.table-bordered

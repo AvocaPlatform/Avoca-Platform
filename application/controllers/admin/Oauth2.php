@@ -204,4 +204,24 @@ class Oauth2 extends AVC_AdminController
 
         $this->admin_redirect('/oauth2');
     }
+
+    // Action
+    public function remove_expire_tokens()
+    {
+        $this->db->where('expires <', date('Y-m-d H:i:s'));
+        $this->db->delete('oauth_access_tokens');
+
+        $this->setSuccess('Remove expire tokens successful');
+        return $this->admin_redirect('/oauth2/tokens');
+    }
+
+    // Action
+    public function remove_expire_refresh_token()
+    {
+        $this->db->where('expires <', date('Y-m-d H:i:s'));
+        $this->db->delete('oauth_refresh_tokens');
+
+        $this->setSuccess('Remove expire refresh tokens successful');
+        return $this->admin_redirect('/oauth2/refresh_tokens');
+    }
 }
