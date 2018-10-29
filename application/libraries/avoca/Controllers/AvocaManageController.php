@@ -17,6 +17,7 @@ namespace Avoca\Libraries\Controllers;
 class AvocaManageController extends AvocaController
 {
     protected $model = '';
+    protected $require_auth = true;
 
     protected function authenticate()
     {

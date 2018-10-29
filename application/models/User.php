@@ -13,6 +13,9 @@ class User extends AVC_Model
 {
     protected $table = 'users';
 
+    public static $ADMIN_TYPE = 9;
+    public static $MANAGER_TYPE = 1;
+
     /**
      * hash user passoword
      *

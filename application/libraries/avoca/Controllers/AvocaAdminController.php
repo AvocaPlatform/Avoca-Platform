@@ -16,6 +16,8 @@ namespace Avoca\Libraries\Controllers;
 
 class AvocaAdminController extends AvocaController
 {
+    protected $require_auth = true;
+
     protected function authenticate()
     {
         if (!$this->isLogin()) {
@@ -23,11 +25,11 @@ class AvocaAdminController extends AvocaController
         }
 
         $user_idadmin = $this->getSession('user_isadmin');
-        if ($user_idadmin != 2) {
-            return false;
+        if ($user_idadmin == \User::$ADMIN_TYPE) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     protected function authenticateError()
@@ -43,5 +45,20 @@ class AvocaAdminController extends AvocaController
     protected function display($return = false)
     {
         parent::display($return);
+    }
+
+    /**
+     * check is user admin of manage page
+     *
+     * @return bool
+     */
+    public function isManager()
+    {
+        $user_idadmin = $this->getSession('user_isadmin');
+        if ($user_idadmin == \User::$MANAGER_TYPE) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -206,6 +206,32 @@ class AvocaModel extends \CI_Model
     }
 
     /**
+     * delete record in database by id or array id
+     *
+     * @param $data
+     */
+    public function delete($data)
+    {
+        $ids = [];
+
+        if (is_numeric($data)) {
+            $ids = [$data];
+        }
+
+        if (is_array($data)) {
+            $ids = $data;
+        }
+
+        foreach ($ids as $id) {
+            $this->db->delete($this->table, array('id' => $id));
+            $error = $this->db->error();
+            if ($error['code']) {
+                $this->setErrors(['Error delete ' . $id . ' in table: ' . $this->table]);
+            }
+        }
+    }
+
+    /**
      * valid fields in table
      *
      * @param $data

@@ -20,6 +20,7 @@ namespace Avoca\Libraries\Controllers;
 class AvocaApiV1Controller extends AvocaController
 {
     protected $model = '';
+    protected $require_auth = true;
 
     /**
      * @var \Avoca\Libraries\AvocaApiAuth
@@ -284,6 +285,12 @@ class AvocaApiV1Controller extends AvocaController
      */
     protected function deleteRecord($id)
     {
+        $model = $this->getModel();
+        $model->delete($id);
 
+        $errors = $model->getErrors();
+        if (!empty($errors)) {
+            $this->setErrors($errors);
+        }
     }
 }

@@ -29,6 +29,27 @@ class AVC_Router extends CI_Router
             include(APPPATH . 'config/' . ENVIRONMENT . '/routes.php');
         }
 
+        // API
+        # Authenticate
+        $route['api/v(:num)/auth'] = "api_ver$1/auth/index";
+        $route['api/v(:num)/auth/(:any)'] = "api_ver$1/auth/$1";
+
+        # GET --> list records
+        # POST --> create record
+        # example: /api/v1/users --> api_ver1/Users/records
+        $route['api/v(:num)/(:any)'] = "api_ver$1/$2/records";
+
+        # GET --> detail record
+        # PUT --> edit record
+        # DELETE --> delete record
+        # example: /api/v1/users/1 --> api_ver1/Users/record
+        $route['api/v(:num)/(:any)/(:num)'] = "api_ver$1/$2/record/$3";
+
+        // Controllers
+        $route['api/v(:num)/(:any)/(:any)'] = "api_ver$1/$2/$3";
+        $route['api/v(:num)/(:any)/(:any)/(.+)'] = "api_ver$1/$2/$3/$4";
+        ##################################################
+
         // Validate & get reserved routes
         if (isset($route) && is_array($route)) {
             isset($route['default_controller']) && $this->default_controller = $route['default_controller'];

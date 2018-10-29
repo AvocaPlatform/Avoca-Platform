@@ -39,7 +39,7 @@ class AvocaBaseController extends \CI_Controller
     protected $httpCode = 200;
     protected $httpCodeText = 'Ok';
 
-    protected $require_auth = true;
+    protected $require_auth = false;
 
     protected $errors = [];
 

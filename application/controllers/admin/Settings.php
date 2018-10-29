@@ -11,7 +11,7 @@
 
 class Settings extends AVC_AdminController
 {
-    protected $model = 'Setting';
+    protected $model = 'setting';
 
     // ACTION
     public function index()

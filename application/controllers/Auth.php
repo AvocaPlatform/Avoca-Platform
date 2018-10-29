@@ -12,8 +12,6 @@
 
 class Auth extends AVC_Controller
 {
-    protected $require_auth = false;
-
     // Action login
     public function index()
     {

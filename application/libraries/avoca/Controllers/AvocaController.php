@@ -31,6 +31,8 @@ class AvocaController extends AvocaBaseController
 
     protected $isCacheView = false;
 
+    protected $require_auth = false;
+
     protected $_supported_formats = [
         'json' => 'application/json',
         'array' => 'application/json',
