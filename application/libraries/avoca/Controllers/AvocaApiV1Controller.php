@@ -184,6 +184,11 @@ class AvocaApiV1Controller extends AvocaController
             return $this->update($id);
         }
 
+        // delete a record
+        if ($this->isDelete()) {
+            $this->delete($id);
+        }
+
         // get record when get
         return $this->record($id);
     }
@@ -253,5 +258,10 @@ class AvocaApiV1Controller extends AvocaController
         }
 
         return true;
+    }
+
+    protected function delete($id)
+    {
+
     }
 }
