@@ -28,7 +28,7 @@ namespace Avoca\Libraries\Controllers;
  */
 class AvocaBaseController extends \CI_Controller
 {
-    protected $version = '1.0';
+    protected $version = '1.1';
 
     protected $controller_name;
     protected $action_name;
@@ -38,6 +38,8 @@ class AvocaBaseController extends \CI_Controller
 
     protected $httpCode = 200;
     protected $httpCodeText = 'Ok';
+
+    protected $require_auth = true;
 
     protected $errors = [];
 
@@ -55,9 +57,11 @@ class AvocaBaseController extends \CI_Controller
         $this->init();
 
         // check authenticate
-        if ($this->authenticate() === false) {
-            $this->authenticateError();
-            die();
+        if ($this->require_auth) {
+            if ($this->authenticate() === false) {
+                $this->authenticateError();
+                die();
+            }
         }
     }
 
@@ -232,5 +236,15 @@ class AvocaBaseController extends \CI_Controller
         } else {
             $this->errors = array_merge($this->errors, $messages);
         }
+    }
+
+    /**
+     * @param $modelName
+     * @return \AVC_Model
+     */
+    protected function getModel($modelName)
+    {
+        $this->load->model($modelName);
+        return $this->$modelName;
     }
 }

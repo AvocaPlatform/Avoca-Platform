@@ -113,16 +113,6 @@ class AvocaController extends AvocaBaseController
         $this->data = array_merge($this->dataGlobal, $this->data);
     }
 
-    /**
-     * @param $modelName
-     * @return \AVC_Model
-     */
-    protected function getModel($modelName)
-    {
-        $this->load->model($modelName);
-        return $this->$modelName;
-    }
-
     protected function getViewFolder()
     {
         return config_item('view_folder');

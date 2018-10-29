@@ -85,16 +85,13 @@ class AvocaApiAuth
         $this->server->handleTokenRequest($this->request)->send();
     }
 
-    public function password_credentials()
+    /**
+     * @param $users
+     * example
+     * [jacky => [password => 'pass', first_name => 'Jacky', last_name => 'Tran']]
+     */
+    public function password_credentials($users)
     {
-        $users = [
-            'jacky' => [
-                'password' => 'pass',
-                'first_name' => 'homeway',
-                'last_name' => 'yao'
-            ]
-        ];
-
         $storage = new OAuth2\Storage\Memory(array('user_credentials' => $users));
         $this->server->addGrantType(new OAuth2\GrantType\UserCredentials($storage));
         $this->server->handleTokenRequest($this->request)->send();

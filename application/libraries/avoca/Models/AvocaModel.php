@@ -286,7 +286,7 @@ class AvocaModel extends \CI_Model
 
     /**
      * get data from where. return record array when row == true and array object when row == false
-     * @param $where
+     * @param $where string | array
      * @param bool $row
      * @param string $table
      * @param int $offset
@@ -307,7 +307,7 @@ class AvocaModel extends \CI_Model
         $query = $this->db->get($table);
 
         if ($query->num_rows() > 0) {
-            if ($row == 0) {
+            if ($row >= 0) {
                 return $this->displayRecord($query->row_array());
             }
 
@@ -324,6 +324,10 @@ class AvocaModel extends \CI_Model
             }
 
             return $data;
+        }
+
+        if ($row >= 0) {
+            return null;
         }
 
         return [

@@ -25,6 +25,19 @@ class AvocaApiV1Controller extends AvocaController
      * @var \Avoca\Libraries\AvocaApiAuth
      */
     protected $auth;
+
+    /**
+     * scope access this controller
+     *
+     * @var string
+     */
+    protected $scope = '';
+
+    /**
+     * list action no need authenticate
+     *
+     * @var array
+     */
     protected $action_no_auth = [];
 
     protected $view_type = 'json';
@@ -39,10 +52,16 @@ class AvocaApiV1Controller extends AvocaController
         ]);
     }
 
+    /**
+     * check authenticate auto load if $require_auth = true.
+     * $require_auth = false you must manual use for action
+     *
+     * @return bool
+     */
     protected function authenticate()
     {
         if (!in_array($this->action_name, $this->action_no_auth)) {
-            $result = $this->auth->require_scope();
+            $result = $this->auth->require_scope($this->scope);
 
             if (empty($result) || $result['status'] != 200) {
 
@@ -56,11 +75,6 @@ class AvocaApiV1Controller extends AvocaController
         }
 
         return true;
-    }
-
-    protected function authenticateError()
-    {
-        return false;
     }
 
     /**

@@ -21,22 +21,56 @@ class Auth extends AVC_BaseController
         $this->server = new \Avoca\Libraries\AvocaApiAuth();
     }
 
-    // ACTION password_credentials
+    /**
+     * ACTION password_credentials
+     * post form-data: {client_id: '<client_id>', client_secret:'<client_secret>', grant_type:'password', username: '<username>', password: '<password>'}
+     * return: {"access_token":"<access_token>","expires_in":3600,"token_type":"Bearer","scope":"<scope>","refresh_token":"<refresh_token>"}
+     */
     public function index()
     {
-        $this->server->password_credentials();
+        $userAuth = [];
+
+        /** @var User $userModel */
+        $userModel = $this->getModel('user');
+
+        $username = $this->getPost('username');
+        $password = $this->getPost('password');
+
+        if ($username && $password) {
+            $user = $userModel->userLogin($username, $password);
+
+            if ($user) {
+                $userAuth = [
+                    $username => [
+                        'password' => $password,
+                        'first_name' => 'Avoca',
+                        'last_name' => 'Avoca',
+                    ]
+                ];
+            }
+        }
+
+        $this->server->password_credentials($userAuth);
     }
 
-    // ACTION
+    /**
+     * ACTION refresh_token
+     * post form-data: {refresh_token: "<refresh_token>", client_id: '<client_id>', client_secret:'<client_secret>', grant_type:'refresh_token'}
+     * return: {"access_token":"<access_token>","expires_in":3600,"token_type":"Bearer","scope":"<scope>","refresh_token":"<refresh_token>"}
+     */
     public function refresh_token()
     {
         $this->server->refresh_token();
     }
 
-    // ACTION
+    /**
+     * ACTION check access_token
+     * request: ?access_token
+     */
     public function resource()
     {
-        $result = $this->server->require_scope();
+        $scope = !empty($_REQUEST['scope']) ? $_REQUEST['scope'] : '';
+        $result = $this->server->require_scope($scope);
 
         header('Content-Type: application/json');
 
@@ -44,7 +78,7 @@ class Auth extends AVC_BaseController
 
             echo json_encode([
                 'success' => false,
-                'message' => $result['params']
+                'message' => $result['params'],
             ]);
 
             die();
@@ -52,7 +86,7 @@ class Auth extends AVC_BaseController
 
         echo json_encode(array(
             'success' => true,
-            'message' => 'You accessed my APIs!'
+            'message' => 'You accessed my APIs!',
         ));
     }
 }
