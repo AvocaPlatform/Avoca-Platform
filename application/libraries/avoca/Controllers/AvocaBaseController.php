@@ -104,9 +104,15 @@ class AvocaBaseController extends \CI_Controller
         $this->redirect('/login');
     }
 
+    /**
+     * check login or not by session
+     *
+     * @return bool
+     */
     protected function isLogin()
     {
-        $user_id = $this->session->userdata('user_id');
+        $user_id = $this->getSession('user_id');
+
         if ($user_id) {
             return true;
         }
@@ -246,5 +252,30 @@ class AvocaBaseController extends \CI_Controller
     {
         $this->load->model($modelName);
         return $this->$modelName;
+    }
+
+    /**
+     * set session from data [name => value]
+     *
+     * @param $data array
+     */
+    protected function setSession($data)
+    {
+        $this->session->set_userdata($data);
+    }
+
+    /**
+     * get session data
+     *
+     * @param $name
+     * @return mixed|null
+     */
+    protected function getSession($name)
+    {
+        if ($this->session->has_userdata($name)) {
+            return $this->session->userdata($name);
+        }
+
+        return null;
     }
 }
