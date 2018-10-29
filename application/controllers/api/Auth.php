@@ -36,7 +36,19 @@ class Auth extends AVC_BaseController
     // ACTION
     public function resource()
     {
-        $this->server->require_scope();//you can require scope here
+        $result = $this->server->require_scope();
+
+        header('Content-Type: application/json');
+
+        if (empty($result) || $result['status'] != 200) {
+
+            echo json_encode([
+                'success' => false,
+                'message' => $result['params']
+            ]);
+
+            die();
+        }
 
         echo json_encode(array(
             'success' => true,

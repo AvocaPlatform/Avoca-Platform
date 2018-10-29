@@ -9,7 +9,7 @@
  * Git: https://github.com/tdhungit
  */
 
-class Users extends AVC_APIController
+class Users extends AVC_APIV1Controller
 {
     protected $model = 'user';
 }

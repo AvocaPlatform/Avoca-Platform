@@ -32,4 +32,4 @@ class AVC_AdminController extends Avoca\Libraries\Controllers\AvocaAdminControll
 /**
  * Class AVC_APIController
  */
-class AVC_APIController extends Avoca\Libraries\Controllers\AvocaApiController {}
+class AVC_APIV1Controller extends Avoca\Libraries\Controllers\AvocaApiV1Controller {}

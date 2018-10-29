@@ -28,11 +28,18 @@ namespace Avoca\Libraries\Controllers;
  */
 class AvocaBaseController extends \CI_Controller
 {
+    protected $version = '1.0';
+
     protected $controller_name;
     protected $action_name;
 
     protected $language = 'english';
     protected $lang_files = [];
+
+    protected $httpCode = 200;
+    protected $httpCodeText = 'Ok';
+
+    protected $errors = [];
 
     public function __construct()
     {
@@ -43,15 +50,28 @@ class AvocaBaseController extends \CI_Controller
 
         // load language
         $this->loadLanguage();
+
         // init
         $this->init();
+
+        // check authenticate
+        if ($this->authenticate() === false) {
+            $this->authenticateError();
+            die();
+        }
     }
 
+    /**
+     * init controller class
+     */
     protected function init()
     {
 
     }
 
+    /**
+     * load language file
+     */
     protected function loadLanguage()
     {
         $this->lang->load('app_strings', $this->language);
@@ -60,6 +80,34 @@ class AvocaBaseController extends \CI_Controller
         foreach ($this->lang_files as $lang) {
             $this->lang->load($lang, $this->language);
         }
+    }
+
+    /**
+     * check authenticate
+     *
+     * @return bool
+     */
+    protected function authenticate()
+    {
+        return true;
+    }
+
+    /**
+     * if authenticate error
+     */
+    protected function authenticateError()
+    {
+        $this->redirect('/login');
+    }
+
+    protected function isLogin()
+    {
+        $user_id = $this->session->userdata('user_id');
+        if ($user_id) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -132,19 +180,57 @@ class AvocaBaseController extends \CI_Controller
         return $value;
     }
 
+    /**
+     * redirect to uri or url
+     *
+     * @param $uri
+     * @param string $method
+     * @param null $code
+     * @return bool
+     */
     protected function redirect($uri, $method = 'auto', $code = null)
     {
         redirect($uri, $method, $code);
         return true;
     }
 
+    /**
+     * redirect to admin page
+     *
+     * @param $uri
+     * @param string $method
+     * @param null $code
+     * @return bool
+     */
     protected function admin_redirect($uri, $method = 'auto', $code = null)
     {
         return $this->redirect(avoca_admin($uri), $method, $code);
     }
 
+    /**
+     * redirect to manage page
+     *
+     * @param $uri
+     * @param string $method
+     * @param null $code
+     * @return bool
+     */
     protected function manage_redirect($uri, $method = 'auto', $code = null)
     {
         return $this->redirect(avoca_manage($uri), $method, $code);
+    }
+
+    /**
+     * set error message
+     *
+     * @param $messages
+     */
+    protected function setErrors($messages)
+    {
+        if (is_string($messages)) {
+            $this->errors[] = $messages;
+        } else {
+            $this->errors = array_merge($this->errors, $messages);
+        }
     }
 }

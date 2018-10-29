@@ -17,23 +17,50 @@ namespace Avoca\Libraries\Controllers;
 /**
  * Class AVC_APIController
  */
-class AvocaApiController extends AvocaController
+class AvocaApiV1Controller extends AvocaController
 {
     protected $model = '';
+
+    /**
+     * @var \Avoca\Libraries\AvocaApiAuth
+     */
+    protected $auth;
+    protected $action_no_auth = [];
 
     protected $view_type = 'json';
     protected $view_disable = true;
 
-    protected $errors = [];
-
     protected function init()
     {
+        $this->auth = new \Avoca\Libraries\AvocaApiAuth();
 
+        $this->addGlobals([
+            '_start_rtime' => microtime(true),
+        ]);
     }
 
     protected function authenticate()
     {
+        if (!in_array($this->action_name, $this->action_no_auth)) {
+            $result = $this->auth->require_scope();
 
+            if (empty($result) || $result['status'] != 200) {
+
+                $this->data = [];
+                $this->httpCode = $result['status'];
+                $this->httpCodeText = $result['statusText'];
+                $this->errors = $result['params'];
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    protected function authenticateError()
+    {
+        return false;
     }
 
     /**
@@ -106,27 +133,22 @@ class AvocaApiController extends AvocaController
     {
         $json_arr = [
             'error' => 0,
-            'message' => '',
-            'data' => $this->data
+            'status' => $this->httpCode,
+            'statusText' => $this->httpCodeText,
+            'message' => [],
+            'data' => $this->data,
         ];
 
-        if (!empty($this->errors)) {
+        if ($this->httpCode != 200 || !empty($this->errors)) {
             $json_arr['error'] = 1;
-            $json_arr['messages'] = $this->errors;
+            $json_arr['message'] = $this->errors;
         }
 
+        header(sprintf('HTTP/%s %s %s', $this->version, $this->httpCode, $this->httpCodeText));
         header('Content-Type: application/json');
+
         echo json_encode($json_arr);
         return true;
-    }
-
-    protected function apiErrors($messages)
-    {
-        if (is_string($messages)) {
-            $this->errors[] = $messages;
-        } else {
-            $this->errors = array_merge($this->errors, $messages);
-        }
     }
 
     // ACTION
@@ -189,7 +211,7 @@ class AvocaApiController extends AvocaController
         if (empty($errors)) {
             $this->data['record'] = $model->get($id);
         } else {
-            $this->apiErrors($errors);
+            $this->setError($errors);
         }
 
         return true;
@@ -213,7 +235,7 @@ class AvocaApiController extends AvocaController
         if (empty($errors)) {
             $this->data['record'] = $model->get($id);
         } else {
-            $this->apiErrors($errors);
+            $this->setErrors($errors);
         }
 
         return true;

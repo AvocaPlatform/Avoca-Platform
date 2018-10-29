@@ -42,15 +42,6 @@ class AvocaController extends AvocaBaseController
         'xml' => 'application/xml'
     ];
 
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->addGlobals([
-            '_start_rtime' => microtime(true)
-        ]);
-    }
-
     protected function init()
     {
         $page_title = 'Avoca Framework';
@@ -59,6 +50,7 @@ class AvocaController extends AvocaBaseController
         }
 
         $this->addGlobals([
+            '_start_rtime' => microtime(true),
             '_controller' => $this->controller_name,
             '_action' => $this->action_name,
             '_pageTitle' => $page_title,
@@ -66,7 +58,6 @@ class AvocaController extends AvocaBaseController
 
         $this->setViewType();
         $this->setViewFolderPath();
-        $this->authenticate();
     }
 
     protected function setViewType()
@@ -98,21 +89,6 @@ class AvocaController extends AvocaBaseController
         } catch (Exception $e) {
             show_error('ERROR view path: ' . VIEWPATH);
         }
-    }
-
-    protected function authenticate()
-    {
-
-    }
-
-    protected function isLogin() {
-
-        $user_id = $this->session->userdata('user_id');
-        if ($user_id) {
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -175,7 +151,10 @@ class AvocaController extends AvocaBaseController
      */
     protected function jsonData()
     {
+        // status
+        header(sprintf('HTTP/%s %s %s', $this->version, $this->httpCode, $this->httpCodeText));
         header('Content-Type: application/json');
+
         echo json_encode($this->data);
         return true;
     }
@@ -219,8 +198,9 @@ class AvocaController extends AvocaBaseController
      */
     protected function autoGlobals()
     {
-        $this->dataGlobal['CSS'] = $this->getCss();
-        $this->dataGlobal['JS'] = $this->getJs();
+        $this->dataGlobal['_ERRORS'] = $this->errors;
+        $this->dataGlobal['_CSS'] = $this->getCss();
+        $this->dataGlobal['_JS'] = $this->getJs();
     }
 
     protected function setFlash($message, $type = 'info')

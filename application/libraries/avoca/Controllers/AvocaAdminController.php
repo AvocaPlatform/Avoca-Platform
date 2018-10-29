@@ -18,7 +18,7 @@ class AvocaAdminController extends AvocaController
 {
     protected function authenticate()
     {
-
+        return true;
     }
 
     /**

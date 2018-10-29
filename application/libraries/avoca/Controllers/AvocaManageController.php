@@ -20,7 +20,7 @@ class AvocaManageController extends AvocaController
 
     protected function authenticate()
     {
-
+        return true;
     }
 
     /**

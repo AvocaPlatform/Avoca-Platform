@@ -114,35 +114,17 @@ class AvocaApiAuth
     public function require_scope($scope = "")
     {
         if (!$this->server->verifyResourceRequest($this->request, $this->response, $scope)) {
-            $this->server->getResponse()->send();
-            die;
-        }
-    }
 
-    public function check_client_id()
-    {
-        if (!$this->server->validateAuthorizeRequest($this->request, $this->response)) {
-            $this->response->send();
-            die;
-        }
-    }
+            /** @var Oauth2\Response $response */
+            $response =  $this->server->getResponse();
 
-    public function authorize($is_authorized)
-    {
-        $this->server->addGrantType(new OAuth2\GrantType\AuthorizationCode($this->storage));
-        $this->server->handleAuthorizeRequest($this->request, $this->response, $is_authorized);
-
-        if ($is_authorized) {
-            $code = substr($this->response->getHttpHeader('Location'), strpos($this->response->getHttpHeader('Location'), 'code=') + 5, 40);
-            header("Location: " . $this->response->getHttpHeader('Location'));
+            return [
+                'status' => $response->getStatusCode(),
+                'statusText' => $response->getStatusText(),
+                'params' => $response->getParameters(),
+            ];
         }
 
-        $this->response->send();
-    }
-
-    public function authorization_code()
-    {
-        $this->server->addGrantType(new OAuth2\GrantType\AuthorizationCode($this->storage));
-        $this->server->handleTokenRequest($this->request)->send();
+        return ['status' => 200];
     }
 }
