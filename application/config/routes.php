@@ -54,4 +54,23 @@ $route['default_controller'] = 'home';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+// api version 1
+# Authenticate
+$route['api/v(:num)/auth'] = "api_ver$1/auth/index";
+$route['api/v(:num)/auth/(:any)'] = "api_ver$1/auth/$1";
+
+// Controllers
+$route['api/v(:num)/(:any)/(:any)'] = "api_ver$1/$2/$3";
+
+# GET --> list records
+# POST --> create record
+# example: /api/v1/users --> api_ver1/Users/records
+$route['api/v(:num)/(:any)'] = "api_ver$1/$2/records";
+
+# GET --> detail record
+# PUT --> edit record
+# DELETE --> delete record
+# example: /api/v1/users/1 --> api_ver1/Users/record
+$route['api/v(:num)/(:any)/(:num)'] = "api_ver$1/$2/record";
+
 $route['admin'] = 'admin/dashboard';

@@ -165,61 +165,78 @@ class AvocaApiV1Controller extends AvocaController
         return true;
     }
 
-    // ACTION
-    public function index($id = null)
+    /**
+     * Action
+     *
+     * GET --> get list records
+     * POST --> create new record
+     *
+     * @return bool
+     */
+    public function records()
     {
-        // no param id
-        if (!$id) {
-            // create when post data
-            if ($this->isPost()) {
-                return $this->create();
-            }
-
-            // get all records when get
-            return $this->records();
+        // create when post data
+        if ($this->isPost()) {
+            return $this->createRecord();
         }
 
+        // get all records when get
+        return $this->listRecords();
+    }
+
+    /**
+     * Action
+     *
+     * GET --> get detail record
+     * PUT --> update record
+     * DELETE --> delete record
+     *
+     * @param $id
+     * @return bool
+     */
+    public function record($id)
+    {
         // update record when post
         if ($this->isPost()) {
-            return $this->update($id);
+            return $this->updateRecord($id);
         }
 
         // delete a record
         if ($this->isDelete()) {
-            $this->delete($id);
+            $this->deleteRecord($id);
         }
 
         // get record when get
-        return $this->record($id);
+        return $this->getRecord($id);
     }
 
     /**
-     * get all records
+     * GET all records
      *
      * @return bool
      */
-    protected function records()
+    protected function listRecords()
     {
         $this->data['records'] = $this->getModel()->getAll();
         return true;
     }
 
     /**
-     * get detail record by id
+     * GET detail record by id
      *
      * @param $id
      * @return bool
      */
-    protected function record($id)
+    protected function getRecord($id)
     {
         $this->data['record'] = $this->getModel()->get($id);
         return true;
     }
 
     /**
-     * post data to create a record
+     * POST data to create a record
      */
-    protected function create()
+    protected function createRecord()
     {
         $data = $this->getPost();
 
@@ -237,12 +254,12 @@ class AvocaApiV1Controller extends AvocaController
     }
 
     /**
-     * post data to update record
+     * PUT data to update record
      *
      * @param $id
      * @return bool
      */
-    protected function update($id)
+    protected function updateRecord($id)
     {
         $data = $this->getPost();
         $data['id'] = $id;
@@ -260,7 +277,12 @@ class AvocaApiV1Controller extends AvocaController
         return true;
     }
 
-    protected function delete($id)
+    /**
+     * DELETE to delete record
+     *
+     * @param $id
+     */
+    protected function deleteRecord($id)
     {
 
     }
