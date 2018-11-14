@@ -101,7 +101,7 @@ class AvocaBaseController extends \CI_Controller
      */
     protected function authenticateError()
     {
-        $this->redirect('/login');
+        $this->redirect('/auth');
     }
 
     /**

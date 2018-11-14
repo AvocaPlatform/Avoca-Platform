@@ -34,8 +34,13 @@ class AvocaAdminController extends AvocaController
 
     protected function authenticateError()
     {
-        $this->setError('Only admin must access this page');
-        return $this->redirect('/');
+        if ($this->isLogin()) {
+            $this->setError('Only admin must access this page');
+            return $this->redirect('/');
+        }
+
+        $this->setError('Please login!');
+        return $this->redirect('/auth');
     }
 
     /**
