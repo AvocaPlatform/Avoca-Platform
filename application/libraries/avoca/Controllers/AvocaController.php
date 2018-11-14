@@ -290,6 +290,10 @@ class AvocaController extends AvocaBaseController
      */
     public function __destruct()
     {
+        if ($this->detectMethod() == 'options') {
+            return true;
+        }
+
         $this->addGlobals([
             '_end_rtime' => microtime(true),
         ]);

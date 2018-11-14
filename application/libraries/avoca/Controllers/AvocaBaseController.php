@@ -46,12 +46,19 @@ class AvocaBaseController extends \CI_Controller
     public function __construct()
     {
         header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Headers: *');
         header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 
         parent::__construct();
 
         $this->controller_name = $this->router->fetch_class();
         $this->action_name = $this->router->fetch_method();
+
+        // check request api
+        if ($this->detectMethod() == 'options') {
+            // exit return code 200
+            exit(200);
+        }
 
         // load language
         $this->loadLanguage();
@@ -138,7 +145,7 @@ class AvocaBaseController extends \CI_Controller
             }
         }
 
-        if (in_array($method, array('get', 'delete', 'post', 'put'))) {
+        if (in_array($method, array('get', 'delete', 'post', 'put', 'options'))) {
             return $method;
         }
 
