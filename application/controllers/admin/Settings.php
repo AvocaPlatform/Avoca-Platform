@@ -57,7 +57,18 @@ class Settings extends AVC_AdminController
                             } else if ($i > 2) {
                                 if (strpos($op, ':') !== false) {
                                     $arr = explode(':', $op);
-                                    $fields[$field][$arr[0]] = $arr[1];
+
+                                    $value = strtolower(trim($arr[1]));
+
+                                    if ($value == 'true') {
+                                        $value = true;
+                                    }
+
+                                    if ($value == 'false') {
+                                        $value = false;
+                                    }
+
+                                    $fields[$field][$arr[0]] = $value;
                                 }
                             }
 
