@@ -32,7 +32,7 @@ class AVC_Router extends CI_Router
         // API
         # Authenticate
         $route['api/v(:num)/auth'] = "api_ver$1/auth/index";
-        $route['api/v(:num)/auth/(:any)'] = "api_ver$1/auth/$1";
+        $route['api/v(:num)/auth/(:any)'] = "api_ver$1/auth/$2";
 
         # GET --> list records
         # POST --> create record

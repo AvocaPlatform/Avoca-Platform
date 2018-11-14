@@ -333,7 +333,7 @@ class AvocaModel extends \CI_Model
         $query = $this->db->get($table);
 
         if ($query->num_rows() > 0) {
-            if ($row >= 0) {
+            if ($row) {
                 return $this->displayRecord($query->row_array());
             }
 

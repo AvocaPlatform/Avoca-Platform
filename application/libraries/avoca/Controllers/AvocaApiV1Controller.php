@@ -218,7 +218,7 @@ class AvocaApiV1Controller extends AvocaController
      */
     protected function listRecords()
     {
-        $this->data['records'] = $this->getModel()->getAll();
+        $this->data['list'] = $this->getModel()->getAll();
         return true;
     }
 
