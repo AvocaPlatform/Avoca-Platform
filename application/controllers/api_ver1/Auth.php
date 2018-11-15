@@ -38,13 +38,14 @@ class Auth extends AVC_BaseController
 
         if ($username && $password) {
             $user = $userModel->userLogin($username, $password);
+            avoca_log($user);
 
             if ($user) {
                 $userAuth = [
-                    $username => [
+                    $user['username'] => [
                         'password' => $password,
                         'first_name' => 'Avoca',
-                        'last_name' => 'Avoca',
+                        'last_name' => 'Platform',
                     ]
                 ];
             }

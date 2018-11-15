@@ -311,6 +311,24 @@ class AvocaModel extends \CI_Model
     }
 
     /**
+     * count num rows
+     *
+     * @param $where
+     * @param string $table
+     * @return int
+     */
+    public function numRows($where, $table = '')
+    {
+        $table = ($table) ? $table : $this->table;
+
+        if (!empty($where)) {
+            $this->db->where($where);
+        }
+
+        return $this->db->get($table)->num_rows();
+    }
+
+    /**
      * get data from where. return record array when row == true and array object when row == false
      * @param $where string | array
      * @param bool $row
@@ -321,13 +339,12 @@ class AvocaModel extends \CI_Model
      */
     public function get_where($where = '', $row = true, $table = '', $offset = 0, $limit = 0)
     {
-        if ($where) {
+        $table = ($table) ? $table : $this->table;
+        $total_records = $this->numRows($where, $table);
+
+        if (!empty($where)) {
             $this->db->where($where);
         }
-
-        $table = ($table) ? $table : $this->table;
-
-        $total_records = $this->db->get($table)->num_rows();
 
         $this->setDBLimit($limit, $offset);
         $query = $this->db->get($table);
@@ -352,7 +369,7 @@ class AvocaModel extends \CI_Model
             return $data;
         }
 
-        if ($row >= 0) {
+        if ($row) {
             return null;
         }
 
