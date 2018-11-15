@@ -47,4 +47,16 @@ class User extends AVC_Model
 
         return $user;
     }
+
+    public function create($data)
+    {
+        $data['password'] = $this->hashPassword($data['password']);
+        return parent::create($data);
+    }
+
+    public function update($data)
+    {
+        unset($data['password']);
+        return parent::update($data);
+    }
 }
