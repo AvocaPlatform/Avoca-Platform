@@ -59,4 +59,9 @@ class User extends AVC_Model
         unset($data['password']);
         return parent::update($data);
     }
+
+    public function getByUsername($username)
+    {
+        return $this->get_where(['username' => $username]);
+    }
 }
