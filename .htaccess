@@ -1,0 +1,9 @@
+Options +FollowSymLinks
+RewriteEngine On
+
+RewriteBase /
+
+#RewriteRule ^$ /AvocaFramework/public
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^$ /AvocaFramework/public [QSA,L]
