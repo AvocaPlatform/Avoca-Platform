@@ -35,10 +35,10 @@ class AvocaManageController extends AvocaController
     }
 
     /**
-     * @param bool $return
-     * @throws \Exception
+     * @param null $template
+     * @return string
      */
-    protected function display($return = false)
+    protected function fetch_display($template = null)
     {
         $this->autoGlobals();
 
@@ -47,19 +47,19 @@ class AvocaManageController extends AvocaController
             $root_path = 'templates' . DIRECTORY_SEPARATOR;
             $view = $this->router->directory . strtolower($this->controller_name) . DIRECTORY_SEPARATOR . strtolower($this->action_name);
 
-            if (!file_exists(VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR . $root_path . $view . '.pug')) {
+            if (!file_exists(VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR . $root_path . $view . '.twig')) {
 
                 $view = 'manage_templates' . DIRECTORY_SEPARATOR . strtolower($this->action_name);
 
-                if (!file_exists(VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR . $root_path . $view . '.pug')) {
-                    show_error('ERROR template: ' . VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR . $root_path . $view . '.pug');
+                if (!file_exists(VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR . $root_path . $view . '.twig')) {
+                    show_error('ERROR template: ' . VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR . $root_path . $view . '.twig');
                 }
             }
 
             $this->view_path = $view;
         }
 
-        $this->view($this->fixedViewPath(), $this->data, $return);
+        return parent::fetch_display($template);
     }
 
     /**

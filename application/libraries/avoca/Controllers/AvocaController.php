@@ -14,16 +14,18 @@
 namespace Avoca\Libraries\Controllers;
 
 
+/**
+ * Class AvocaController
+ * @package Avoca\Libraries\Controllers
+ * @property \Twig $twig
+ */
 class AvocaController extends AvocaBaseController
 {
-    use \CiPug;
-
     protected $view_type = 'html';
     protected $view_path = '';
     protected $view_disable = false;
 
     protected $options = [];
-    protected $dataGlobal = [];
     protected $data = [];
 
     protected $css = [];
@@ -46,6 +48,7 @@ class AvocaController extends AvocaBaseController
 
     protected function init()
     {
+        $this->loadTwig();
         $this->addGlobals([
             '_start_rtime' => microtime(true),
             '_controller' => $this->controller_name,
@@ -53,7 +56,6 @@ class AvocaController extends AvocaBaseController
         ]);
 
         $this->setViewType();
-        $this->setViewFolderPath();
     }
 
     protected function setViewType()
@@ -69,22 +71,18 @@ class AvocaController extends AvocaBaseController
         $this->view_disable = true;
     }
 
-    protected function setViewFolderPath()
+    protected function loadTwig()
     {
-        try {
-            $this->settings([
-                'view_path' => VIEWPATH . $this->getViewFolder(),
-                //'cache' => APPPATH . 'cache' . DIRECTORY_SEPARATOR . 'pug'
-            ]);
+        $this->load->config('twig');
+        $twig = config_item('twig');
 
-            if ($this->isCacheView) {
-                $this->settings([
-                    'cache' => APPPATH . 'cache' . DIRECTORY_SEPARATOR . 'pug'
-                ]);
-            }
-        } catch (Exception $e) {
-            show_error('ERROR view path: ' . VIEWPATH);
-        }
+        $config = [
+            'paths' => [VIEWPATH . $this->getViewFolder()],
+            'functions' => $twig['functions'],
+            'functions_safe' => $twig['functions_safe'],
+        ];
+
+        $this->load->library('twig', $config);
     }
 
     /**
@@ -95,18 +93,19 @@ class AvocaController extends AvocaBaseController
      */
     protected function addGlobal($name, $value)
     {
-        $this->dataGlobal[$name] = $value;
+        $this->twig->addGlobal($name, $value);
     }
 
     /**
      * add multi global variable for view
      *
-     * @param $data
+     * @param $vars
      */
-    protected function addGlobals($data)
+    protected function addGlobals($vars)
     {
-        $this->dataGlobal = array_merge($this->dataGlobal, $data);
-        $this->data = array_merge($this->dataGlobal, $this->data);
+        foreach ($vars as $var => $val) {
+            $this->twig->addGlobal($var, $val);
+        }
     }
 
     protected function getViewFolder()
@@ -145,13 +144,7 @@ class AvocaController extends AvocaBaseController
         return true;
     }
 
-    /**
-     * render to view
-     *
-     * @param bool $return
-     * @throws \Exception
-     */
-    protected function display($return = false)
+    protected function fetch_display($template = null)
     {
         $this->autoGlobals();
 
@@ -159,20 +152,39 @@ class AvocaController extends AvocaBaseController
             $this->view_path = $this->router->directory . strtolower($this->controller_name) . DIRECTORY_SEPARATOR . strtolower($this->action_name);
         }
 
-        $this->view($this->fixedViewPath(), $this->data, $return);
+        return $this->twig->render($this->fixedViewPath($template), $this->data);
+    }
+
+    /**
+     * render to view
+     *
+     * @param bool $return
+     * @return string
+     */
+    protected function display($return = false)
+    {
+        if ($return) {
+            return $this->fetch_display();
+        }
+
+        echo $this->fetch_display();
+        exit(0);
     }
 
     /**
      * check custom view from folder view/<>/custom
      *
+     * @param null $template
      * @return string
      */
-    protected function fixedViewPath()
+    protected function fixedViewPath($template = null)
     {
-        $view_path = 'templates' . DIRECTORY_SEPARATOR . $this->view_path;
-        $custom_path = 'custom' . DIRECTORY_SEPARATOR . $this->view_path;
+        $template = $template ? $template : $this->view_path;
 
-        if (file_exists(VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR . $custom_path . '.pug')) {
+        $view_path = 'templates' . DIRECTORY_SEPARATOR . $template;
+        $custom_path = 'custom' . DIRECTORY_SEPARATOR . $template;
+
+        if (file_exists(VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR . $custom_path . '.twig')) {
             $view_path = $custom_path;
         }
 

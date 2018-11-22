@@ -3,12 +3,18 @@
 	"require": {
 		"php": ">=5.4.0",
 		"codeigniter/framework": "3.1.*",
-		"ci-pug/ci-pug": "^2.0",
+		"kenjis/codeigniter-ss-twig": "dev-master",
 		"bshaffer/oauth2-server-php": "^1.10"
 	},
 	"require-dev": {
 		"mikey179/vfsStream": "1.1.*"
 	},
+	"repositories": [
+		{
+			"type": "git",
+			"url": "https://github.com/tdhungit/codeigniter-ss-twig.git"
+		}
+	],
 	"autoload": {
 		"psr-4" : {
 			"Avoca\\Libraries\\" : "application/libraries/avoca/"

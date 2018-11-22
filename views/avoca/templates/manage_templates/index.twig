@@ -1,0 +1,19 @@
+{% extends 'templates/layouts/manage.twig' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    {{ __('Modules') }}
+
+                    <div class="card-header-actions">
+                        <a class="card-header-action btn-setting" href="{{ avoca_admin('/') }}">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

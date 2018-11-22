@@ -1,0 +1,51 @@
+{% extends 'templates/layouts/admin.twig' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    {{ __('Module management') }}
+
+                    <div class="card-header-actions">
+                        <a class="card-header-action btn-setting" href="{{ avoca_admin('/settings/create_module') }}">
+                            <i class="fa fa-plus-circle"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-responsive-sm">
+                        <thead>
+                        <tr>
+                            <th>{{ __('Controller Name') }}</th>
+                            <th>{{ __('Model Name') }}</th>
+                            <th>{{ __('Table Name') }}</th>
+                            <th>{{ __('Action') }}</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for module in modules %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ avoca_admin(module.controller) }}">
+                                            {{ module.controller }}
+                                        </a>
+                                    </td>
+                                    <td>{{ module.model }}</td>
+                                    <td>{{ module.table }}</td>
+                                    <td>
+                                        <a href="{{ avoca_admin('/settings/create_module/' ~ module.controller) }}">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
