@@ -69,6 +69,7 @@
                                     {% endfor %}
                                 </tbody>
                             </table>
+                            <nav>{{ pagination|raw }}</nav>
                         {{ form_close() }}
                     {% else %}
                         <div class="alert alert-warning">{{ 'No config layout'|lang }}</div>

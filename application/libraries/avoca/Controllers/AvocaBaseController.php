@@ -25,6 +25,7 @@ namespace Avoca\Libraries\Controllers;
  * @property \CI_DB_forge $dbforge
  * @property \AVC_URI $uri
  * @property \AVC_Lang $lang
+ * @property \CI_Pagination $pagination
  */
 class AvocaBaseController extends \CI_Controller
 {

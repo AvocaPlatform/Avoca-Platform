@@ -48,7 +48,7 @@ class AvocaField
         }
 
         if (!empty($option['controller'])) {
-            return '<a href="' . avoca_manage('/' . $option['controller'] . '/detail/' . recordFVal($record, 'id')) . '">' . $value . '</a>';
+            return '<a href="' . avoca_manage('/' . $option['controller'] . '/record/' . recordFVal($record, 'id')) . '">' . $value . '</a>';
         }
 
         return $value;

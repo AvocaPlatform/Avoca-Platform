@@ -47,12 +47,22 @@ class AvocaManageController extends AvocaController
             $root_path = 'templates' . DIRECTORY_SEPARATOR;
             $view = $this->router->directory . strtolower($this->controller_name) . DIRECTORY_SEPARATOR . strtolower($this->action_name);
 
-            if (!file_exists(VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR . $root_path . $view . '.twig')) {
-
+            if (!file_exists($this->getViewPath() . $root_path . $view . '.twig')) {
                 $view = 'manage_templates' . DIRECTORY_SEPARATOR . strtolower($this->action_name);
+                if (!file_exists($this->getViewPath() . $root_path . $view . '.twig')) {
+                    show_error('ERROR template: ' . $this->getViewPath() . $root_path . $view . '.twig');
+                }
+            }
 
-                if (!file_exists(VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR . $root_path . $view . '.twig')) {
-                    show_error('ERROR template: ' . VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR . $root_path . $view . '.twig');
+            $this->view_path = $view;
+        } else {
+            $root_path = 'templates' . DIRECTORY_SEPARATOR;
+            $view = $this->router->directory . $this->view_path;
+
+            if (!file_exists($this->getViewPath() . $root_path . $view . '.twig')) {
+                $view = 'manage_templates' . DIRECTORY_SEPARATOR . $this->view_path;
+                if (!file_exists($this->getViewPath() . $root_path . $view . '.twig')) {
+                    show_error('ERROR template: ' . $this->getViewPath() . $root_path . $view . '.twig');
                 }
             }
 
@@ -100,16 +110,25 @@ class AvocaManageController extends AvocaController
         return [];
     }
 
-    // ACTION list
+    /**
+     * ACTION module dashboard
+     */
     public function index()
+    {
+        $this->view_path = 'records';
+        $this->records();
+    }
+
+    // ACTION list
+    public function records()
     {
         $this->load->library('pagination');
 
         // check create link. default controller/action
-        $this->data['list_link'] = $this->getOption('list_link', $this->controller_name);
+        $this->data['list_link'] = $this->getOption('list_link', $this->controller_name . '/records');
         $this->data['create_link'] = $this->getOption('create_link', $this->controller_name . '/edit');
-        $this->data['view_link'] = $this->getOption('create_link', $this->controller_name . '/detail/{ID}');
-        $this->data['edit_link'] = $this->getOption('create_link', $this->controller_name . '/edit/{ID}');
+        $this->data['view_link'] = $this->getOption('view_link', $this->controller_name . '/record/{ID}');
+        $this->data['edit_link'] = $this->getOption('edit_link', $this->controller_name . '/edit/{ID}');
         $this->data['delete_link'] = $this->getOption('delete_link', $this->controller_name . '/delete/{ID}');
 
         // sort
@@ -146,6 +165,19 @@ class AvocaManageController extends AvocaController
         }
 
         // pagination
+        $pagination_config = include APPPATH . 'config/avoca/pagination.php';
+        $pagination_config['base_url'] = avoca_manage($this->data['list_link']);
+        $pagination_config['uri_segment'] = 4;
+        $pagination_config['total_rows'] = $list['total'];
+        $pagination_config['per_page'] = 5;
+        $this->pagination->initialize($pagination_config);
+        $this->data['pagination'] = $this->pagination->create_links();
+    }
+
+    // ACTION view detail record
+    public function record($id)
+    {
+
     }
 
     // ACTION create/edit
@@ -158,5 +190,12 @@ class AvocaManageController extends AvocaController
         if ($id) {
             $this->data['record'] = $this->getModel()->get($id);
         }
+    }
+
+    // ACTION delete
+    public function delete($id = null)
+    {
+        $this->disableView();
+        return $this->manage_redirect('/' . $this->controller_name);
     }
 }

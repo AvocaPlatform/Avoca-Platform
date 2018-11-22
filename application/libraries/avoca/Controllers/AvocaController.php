@@ -77,7 +77,7 @@ class AvocaController extends AvocaBaseController
         $twig = config_item('twig');
 
         $config = [
-            'paths' => [VIEWPATH . $this->getViewFolder()],
+            'paths' => [$this->getViewPath()],
             'functions' => $twig['functions'],
             'functions_safe' => $twig['functions_safe'],
         ];
@@ -111,6 +111,11 @@ class AvocaController extends AvocaBaseController
     protected function getViewFolder()
     {
         return config_item('view_folder');
+    }
+
+    protected function getViewPath()
+    {
+        return VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR;
     }
 
     /**
