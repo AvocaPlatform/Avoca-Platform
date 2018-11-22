@@ -5,13 +5,74 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    {{ __('Modules') }}
+                    {{ 'Modules'|lang }}
 
                     <div class="card-header-actions">
-                        <a class="card-header-action btn-setting" href="{{ avoca_admin('/') }}">
+                        <a class="card-header-action btn-setting" href="{{ avoca_manage(create_link) }}">
                             <i class="fa fa-plus"></i>
                         </a>
                     </div>
+                </div>
+
+                <div class="card-body">
+                    {% if listdefs %}
+                        {{ form_open('', {method: 'get'}) }}
+                            <table class="table table-responsive-sm table-sortable">
+                                <thead>
+                                    <tr>
+                                        {% for field, option in listdefs %}
+                                            {% set order = 'asc' %}
+                                            {% if field == sort.order %}
+                                                order = sort.order;
+                                            {% endif %}
+
+                                            <th class="{% if option.nosort %}no{% endif %}{% if sort.field == field %}{{ sort.order }}{% endif %}"
+                                                onclick="location.href='{{ avoca_manage(list_link ~ '?order_by=' ~ field ~ '&order=' ~ order) }}'">
+                                                {% if option.label %}
+                                                    {{ option.label|lang }}
+                                                {% else %}
+                                                    {{ field|capitalize|lang }}
+                                                {% endif %}
+                                            </th>
+                                        {% endfor %}
+                                        <th class="no">{{ 'Actions'|lang }}</th>
+                                    </tr>
+                                    {#Search#}
+                                    {% include search_form %}
+                                </thead>
+                                <tbody>
+                                    {% for record in records %}
+                                        <tr>
+                                            {% for field, option in listdefs %}
+                                                <td>{{ recordVal(record, field, option) }}</td>
+                                            {% endfor %}
+                                            <td>
+                                                {% if not viewdefs.disabled_view %}
+                                                    <a href="{{ recordLink(view_link, record) }}" class="btn btn-sm btn-info">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                {% endif %}
+
+                                                {% if not viewdefs.disabled_edit %}
+                                                    <a href="{{ recordLink(edit_link, record) }}" class="btn btn-sm btn-warning">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </a>
+                                                {% endif %}
+
+                                                {% if not viewdefs.disabled_delete %}
+                                                    <a href="{{ recordLink(delete_link, record) }}" class="btn btn-sm btn-danger">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {{ form_close() }}
+                    {% else %}
+                        <div class="alert alert-warning">{{ 'No config layout'|lang }}</div>
+                    {% endif %}
                 </div>
             </div>
         </div>

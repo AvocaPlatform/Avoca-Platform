@@ -205,6 +205,7 @@ if (is_dir($application_folder)) {
 }
 
 define('APPPATH', $application_folder . DIRECTORY_SEPARATOR);
+define('CUSTOMPATH', APPPATH . '../custom' . DIRECTORY_SEPARATOR);
 
 // The path to the "themes" directory
 $view_folder = APPPATH . '..' . DIRECTORY_SEPARATOR . 'views';

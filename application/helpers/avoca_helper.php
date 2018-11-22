@@ -121,18 +121,6 @@ function write_array2file($file, $array)
 }
 
 /**
- * translate
- *
- * @param $str
- * @return mixed
- */
-function __($str)
-{
-    $ci =& get_instance();
-    return $ci->lang->line($str);
-}
-
-/**
  * get session flash message
  *
  * @param $type
@@ -148,4 +136,64 @@ function get_flash($type)
     }
 
     return '';
+}
+
+/**
+ * translate
+ *
+ * @param $str
+ * @return mixed
+ */
+function __($str)
+{
+    $ci =& get_instance();
+    return $ci->lang->line($str);
+}
+
+/**
+ * get value in object|array
+ *
+ * @param $record
+ * @param $field
+ * @return string
+ */
+function recordFVal($record, $field)
+{
+    $value = '';
+    if (isset($record->$field)) {
+        $value = $record->$field;
+    } else if (isset($record[$field])) {
+        $value = $record[$field];
+    }
+
+    return $value;
+}
+
+/**
+ * format field in record
+ *
+ * @param $record
+ * @param $field
+ * @param string $option
+ * @param string $default
+ * @return mixed
+ */
+function recordVal($record, $field, $option = '', $default = '')
+{
+    $value = recordFVal($record, $field);
+
+    if ($value == '') {
+        return $default;
+    }
+
+    $fieldModel = new \Avoca\Libraries\AvocaField();
+    return $fieldModel->format($value, $record, $option);
+}
+
+function recordLink($uri, $record)
+{
+    $id = recordFVal($record, 'id');
+    $uri = str_replace('{ID}', $id, $uri);
+
+    return avoca_manage($uri);
 }

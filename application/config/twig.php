@@ -16,6 +16,7 @@ $config['twig'] = [
         '__',
         'avoca_admin',
         'avoca_manage',
+        'recordLink',
     ],
     'functions_safe' => [
         'form_input',
@@ -23,5 +24,6 @@ $config['twig'] = [
         'form_password',
         'form_multiselect',
         'form_textarea',
+        'recordVal',
     ]
 ];
