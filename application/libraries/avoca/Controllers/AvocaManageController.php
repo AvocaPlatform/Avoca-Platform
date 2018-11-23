@@ -282,16 +282,33 @@ class AvocaManageController extends AvocaController
     }
 
     // ACTION delete
-    public function delete($id = null, $ajax = null)
+    public function delete($id = null)
     {
         $this->disableView();
         if ($this->isPost()) {
+            $ids = $this->getPost('ids');
 
+            $model = $this->getModel();
+            $model->delete($ids);
+            $errors = $model->getErrors();
+            if (empty($errors)) {
+                $this->setSuccess('Deleted records successful');
+            } else {
+                $this->setError($errors);
+            }
+
+            $return_url = $this->getPost('r');
+            if (!$return_url) {
+                $return_url = $this->getOption('list_link', '/' . $this->controller_name);
+                return $this->manage_redirect($return_url);
+            }
+
+            return $this->redirect($return_url);
         }
 
         if ($id) {
             $model = $this->getModel();
-            $model->delete(['id' => $id]);
+            $model->delete($id);
             $errors = $model->getErrors();
             if (empty($errors)) {
                 $this->setSuccess('Deleted record successful');

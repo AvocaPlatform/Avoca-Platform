@@ -17,6 +17,7 @@
                 <div class="card-body">
                     {% if listdefs %}
                         {{ form_open('', {method: 'get', id: 'ListViewForm'}) }}
+                            <input type="hidden" name="r" value="{{ avoca_currentUrl() }}">
                             <table class="table table-responsive-sm table-sortable">
                                 <thead>
                                     <tr>
@@ -51,7 +52,7 @@
                                 <tbody>
                                     {% for record in records %}
                                         <tr>
-                                            <td><input type="checkbox" name="ids[{{ recordFVal(record, 'id') }}]" class="input-check" value="1"></td>
+                                            <td><input type="checkbox" name="ids[]" class="input-check" value="{{ recordFVal(record, 'id') }}"></td>
                                             {% for field, option in listdefs %}
                                                 <td>{{ recordVal(record, field, option) }}</td>
                                             {% endfor %}
@@ -92,6 +93,7 @@
         $(function () {
             $('#DeleteRecords').click(function () {
                 $('#ListViewForm').attr('action', '{{ avoca_manage(delete_batch_link) }}');
+                $('#ListViewForm').attr('method', 'post');
                 $('#ListViewForm').submit();
             });
             $('a.DeleteRecord').click(function (e) {
