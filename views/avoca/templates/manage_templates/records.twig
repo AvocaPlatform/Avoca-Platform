@@ -28,11 +28,7 @@
 
                                             <th class="{% if option.nosort %}no{% endif %}{% if sort.field == field %}{{ sort.order }}{% endif %}"
                                                 onclick="location.href='{{ avoca_manage(list_link ~ '?order_by=' ~ field ~ '&order=' ~ order) }}'">
-                                                {% if option.label %}
-                                                    {{ option.label|lang }}
-                                                {% else %}
-                                                    {{ field|capitalize|lang }}
-                                                {% endif %}
+                                                {{ fieldLabel(field, option)|lang }}
                                             </th>
                                         {% endfor %}
                                         <th class="no">{{ 'Actions'|lang }}</th>

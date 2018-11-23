@@ -190,10 +190,53 @@ function recordVal($record, $field, $option = '', $default = '')
     return $fieldModel->format($value, $record, $option);
 }
 
+/**
+ * update link, get data from record
+ *
+ * @param $uri
+ * @param $record
+ * @return string
+ */
 function recordLink($uri, $record)
 {
     $id = recordFVal($record, 'id');
     $uri = str_replace('{ID}', $id, $uri);
 
     return avoca_manage($uri);
+}
+
+/**
+ * get field label from viewdefs
+ *
+ * @param $field
+ * @param array $option
+ * @return mixed|string
+ */
+function fieldLabel($field, $option = [])
+{
+    if (!empty($option['label'])) {
+        return $option['label'];
+    }
+
+    return ucfirst($field);
+}
+
+/**
+ * generate form input from viewdefs
+ *
+ * @param $field
+ * @param $value
+ * @param array $option
+ * @return string
+ */
+function avoca_form($field, $value, $option = [])
+{
+    $fieldModel = new \Avoca\Libraries\AvocaField();
+    if (empty($option['class'])) {
+        $option['class'] = 'form-control';
+    } else {
+        $option['class'] = 'form-control ' . $option['class'];
+    }
+
+    return $fieldModel->form($field, $value, $option);
 }

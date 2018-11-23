@@ -96,12 +96,7 @@ class AvocaManageController extends AvocaController
         $model = $model ? $model : $this->model;
         $uri_viewdef = 'config/models/' . $model . '/viewdefs.php';
 
-        $layout_path_c = CUSTOMPATH . $uri_viewdef;
-        $layout_path = APPPATH . $uri_viewdef;
-
-        if (file_exists($layout_path_c)) {
-            return include $layout_path_c;
-        }
+        $layout_path = $this->getFilePath($uri_viewdef);
 
         if (file_exists($layout_path)) {
             return include $layout_path;
@@ -115,13 +110,13 @@ class AvocaManageController extends AvocaController
      */
     public function index()
     {
-        $this->view_path = 'records';
         $this->records();
     }
 
     // ACTION list
     public function records()
     {
+        $this->view_path = 'records';
         $this->load->library('pagination');
 
         // check create link. default controller/action
@@ -177,19 +172,62 @@ class AvocaManageController extends AvocaController
     // ACTION view detail record
     public function record($id)
     {
+        $this->view_path = 'record';
 
+        // check create link. default controller/action
+        $this->data['list_link'] = $this->getOption('list_link', $this->controller_name . '/records');
+        $this->data['edit_link'] = $this->getOption('edit_link', $this->controller_name . '/edit/{ID}');
+        $this->data['delete_link'] = $this->getOption('delete_link', $this->controller_name . '/delete/{ID}');
+
+        // get record
+        $model = $this->getModel();
+        $record = $model->get($id);
+
+        if (!$record) {
+            $this->setError('Can not found this record');
+            return $this->manage_redirect('/' . $this->controller_name);
+        }
+
+        $this->data['record'] = $record;
+
+        // viewdefs
+        $viewdefs = $this->getViewDefs();
+        $this->data['viewdefs'] = $viewdefs;
+
+        if (!empty($viewdefs['record'])) {
+            $this->data['recorddefs'] = $viewdefs['record'];
+        }
+
+        $this->setTitle(recordVal($record, $viewdefs['title']));
     }
 
     // ACTION create/edit
     public function edit($id = null)
     {
-        // check list link
-        $this->data['list_link'] = $this->getOption('list_link', $this->controller_name);
+        $this->view_path = 'edit';
+
+        // check create link. default controller/action
+        $this->data['list_link'] = $this->getOption('list_link', $this->controller_name . '/records');
+        $this->data['view_link'] = $this->getOption('view_link', $this->controller_name . '/record/{ID}');
+        $this->data['delete_link'] = $this->getOption('delete_link', $this->controller_name . '/delete/{ID}');
 
         $this->data['record'] = [];
         if ($id) {
             $this->data['record'] = $this->getModel()->get($id);
         }
+
+        // viewdefs
+        $viewdefs = $this->getViewDefs();
+        $this->data['viewdefs'] = $viewdefs;
+
+        if (!empty($viewdefs['record'])) {
+            $this->data['recorddefs'] = $viewdefs['record'];
+        }
+    }
+
+    public function save()
+    {
+
     }
 
     // ACTION delete

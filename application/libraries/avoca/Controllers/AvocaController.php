@@ -86,6 +86,21 @@ class AvocaController extends AvocaBaseController
     }
 
     /**
+     * set page title
+     *
+     * @param $title
+     * @param bool $translate
+     */
+    protected function setTitle($title, $translate = false)
+    {
+        if ($translate) {
+            $this->data['__pageTitle'] = $this->lang->line($title);
+        } else {
+            $this->data['__pageTitle'] = $title;
+        }
+    }
+
+    /**
      * add variable global for view
      *
      * @param $name
@@ -116,6 +131,17 @@ class AvocaController extends AvocaBaseController
     protected function getViewPath()
     {
         return VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR;
+    }
+
+    protected function getFilePath($uri_path)
+    {
+        // check custom folder
+        $custom = CUSTOMPATH . $uri_path;
+        if (file_exists($custom)) {
+            return $custom;
+        }
+
+        return APPPATH . $uri_path;
     }
 
     /**
@@ -149,6 +175,10 @@ class AvocaController extends AvocaBaseController
         return true;
     }
 
+    /**
+     * @param null $template
+     * @return string
+     */
     protected function fetch_display($template = null)
     {
         $this->autoGlobals();
@@ -202,8 +232,8 @@ class AvocaController extends AvocaBaseController
     protected function autoGlobals()
     {
         $page_title = 'Avoca Framework';
-        if (!empty($this->data['title'])) {
-            $page_title = $this->data['title'] . ' | ' . $page_title;
+        if (!empty($this->data['__pageTitle'])) {
+            $page_title = $this->data['__pageTitle'] . ' | ' . $page_title;
         }
 
         $this->addGlobals([

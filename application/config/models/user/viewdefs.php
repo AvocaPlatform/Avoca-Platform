@@ -14,6 +14,7 @@ return [
     //'disabled_view' => true,
     //'disabled_edit' => true,
     //'disabled_delete' => true,
+    'title' => 'username',
     'list' => [
         'id' => [
             'type' => 'int',

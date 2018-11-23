@@ -13,10 +13,16 @@
 namespace Avoca\Libraries;
 
 
-$field_helper_path_c = CUSTOMPATH . 'helpers/field_helper.php';
+$field_helper_path_c = CUSTOMPATH . 'helpers/field_func.php';
 if (file_exists($field_helper_path_c)) {
     include_once $field_helper_path_c;
+} else {
+    $field_helper_path = APPPATH . 'helpers/field_func.php';
+    if (file_exists($field_helper_path)) {
+        include_once $field_helper_path;
+    }
 }
+
 
 class AvocaField
 {
@@ -33,20 +39,63 @@ class AvocaField
         }
 
         $type = strtolower($type);
+        $function_name = 'fieldFormat_' . $type;
+        if (function_exists($function_name)) {
+            return $function_name($value, $record, $option);
+        }
 
-        if (method_exists($this, $type)) {
-            return $this->$type($value, $record, $option);
+        $method_name = 'format_' . $type;
+        if (method_exists($this, $method_name)) {
+            return $this->$method_name($value, $record, $option);
         }
 
         return $value;
     }
 
-    protected function link($value, $record, $option)
+    public function form($field, $value, $option = [])
     {
-        if (function_exists('field_link')) {
-            return field_link($value, $record, $option);
-        }
+        $type = (empty($option['type'])) ? 'text' : $option['type'];
+        $type = strtolower($type);
+        $extra = [
+            'class' => (!empty($option['class'])) ? $option['class'] : '',
+        ];
 
+        switch ($type) {
+            case 'number':
+            case 'text':
+                return form_input($field, $value, $extra);
+
+            case 'select':
+                $options = (!empty($option['options'])) ? $option['options'] : [];
+                return form_dropdown($field, $options, $value, $extra);
+
+            case 'multiselect':
+                $options = (!empty($option['options'])) ? $option['options'] : [];
+                return form_multiselect($field, $options, $value, $extra);
+
+            case 'textarea':
+                return form_textarea($field, $value, $extra);
+
+            case 'password':
+                return form_password($field, $value, $extra);
+
+            default:
+                $function_name = 'fieldForm_' . $type;
+                if (function_exists($function_name)) {
+                    return $function_name($field, $value, $option);
+                }
+
+                $method_name = 'form_' . $type;
+                if (method_exists($this, $method_name)) {
+                    return $this->$method_name($value, $value, $option);
+                }
+
+                return form_input($field, $value, $extra);
+        }
+    }
+
+    protected function format_link($value, $record, $option)
+    {
         if (!empty($option['controller'])) {
             return '<a href="' . avoca_manage('/' . $option['controller'] . '/record/' . recordFVal($record, 'id')) . '">' . $value . '</a>';
         }

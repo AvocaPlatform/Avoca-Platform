@@ -22,6 +22,8 @@ class Auth extends AVC_Controller
         $this->data['title'] = __('Login');
         $this->data['return_url'] = $this->getQuery('r');
 
+        $this->setTitle($this->data['title']);
+
         if ($this->isPost()) {
 
             $this->disableView();

@@ -18,6 +18,8 @@ class Install extends AVC_Controller
     // action install
     public function index()
     {
+        $this->setTitle('Install Avoca Framework');
+
         if ($this->isPost()) {
             if ($this->installed) {
                 $this->InstallAvoca();

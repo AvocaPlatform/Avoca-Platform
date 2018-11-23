@@ -3,17 +3,52 @@
 {% block content %}
     <div class="row">
         <div class="col-sm-12">
-            <div class="card">
-                <div class="card-header">
-                    {{ __('Create') }}
+            {{ form_open(avoca_manage('/' ~ _controller ~ '/save')) }}
+                <input type="hidden" name="id" value="{{ recordFVal(record, 'id') }}">
+                <div class="card">
+                    <div class="card-header">
+                        {{ __('Create') }}
 
-                    <div class="card-header-actions">
-                        <a class="card-header-action btn-setting" href="{{ avoca_admin('/') }}">
-                            <i class="fa fa-list"></i>
-                        </a>
+                        <div class="card-header-actions">
+                            <a class="card-header-action btn-setting" href="{{ avoca_manage(list_link) }}">
+                                <i class="fa fa-list"></i>
+                            </a>
+                            {% if record %}
+                                <a class="card-header-action btn-setting" href="{{ recordLink(view_link, record) }}">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {% if recorddefs %}
+                            {% for group in recorddefs %}
+                                <div class="row">
+                                    {% set colclass = 'col-md-6' %}
+                                    {% if group|length == 1 %}
+                                        {% set colclass = 'col-md-12' %}
+                                    {% endif %}
+
+                                    {% for field, option in group %}
+                                        <div class="{{ colclass }}">
+                                            <div class="form-group">
+                                                <label>{{ fieldLabel(field, option)|lang }}</label>
+                                                {{ avoca_form(field, recordFVal(record, field), option) }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="alert alert-warning">{{ 'No config layout'|lang }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">{{ 'Save'|lang }}</button>
+                        <a href="{{ avoca_manage(list_link) }}" class="btn">{{ 'Cancel'|lang }}</a>
                     </div>
                 </div>
-            </div>
+            {{ form_close() }}
         </div>
     </div>
 {% endblock %}
