@@ -63,3 +63,7 @@
     border-bottom: 5px solid transparent;
 }
 /* !Descending */
+
+.list-action a.btn-sm {
+    padding: 0 7px;
+}

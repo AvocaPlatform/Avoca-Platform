@@ -16,6 +16,7 @@ $config['twig'] = [
         '__',
         'avoca_admin',
         'avoca_manage',
+        'avoca_currentUrl',
         'recordLink',
         'fieldLabel',
     ],

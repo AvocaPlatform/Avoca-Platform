@@ -1,7 +1,7 @@
 {% extends 'templates/layouts/manage.twig' %}
 
 {% block content %}
-    <div class="row">
+    <div class="row ListView">
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
@@ -16,10 +16,22 @@
 
                 <div class="card-body">
                     {% if listdefs %}
-                        {{ form_open('', {method: 'get'}) }}
+                        {{ form_open('', {method: 'get', id: 'ListViewForm'}) }}
                             <table class="table table-responsive-sm table-sortable">
                                 <thead>
                                     <tr>
+                                        <th width="1%" class="no">
+                                            <div class="dropdown">
+                                                    <a href="javascript:;" class="dropdown-toggle"
+                                                          id="dropdownMenuButton"
+                                                          data-toggle="dropdown"
+                                                          aria-haspopup="true"
+                                                          aria-expanded="false"></a>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a class="dropdown-item" id="DeleteRecords" href="javascript:;">{{ 'Delete'|lang }}</a>
+                                                </div>
+                                            </div>
+                                        </th>
                                         {% for field, option in listdefs %}
                                             {% set order = 'asc' %}
                                             {% if field == sort.order %}
@@ -39,10 +51,11 @@
                                 <tbody>
                                     {% for record in records %}
                                         <tr>
+                                            <td><input type="checkbox" name="ids[{{ recordFVal(record, 'id') }}]" class="input-check" value="1"></td>
                                             {% for field, option in listdefs %}
                                                 <td>{{ recordVal(record, field, option) }}</td>
                                             {% endfor %}
-                                            <td>
+                                            <td class="list-action">
                                                 {% if not viewdefs.disabled_view %}
                                                     <a href="{{ recordLink(view_link, record) }}" class="btn btn-sm btn-info">
                                                         <i class="fa fa-eye"></i>
@@ -56,7 +69,7 @@
                                                 {% endif %}
 
                                                 {% if not viewdefs.disabled_delete %}
-                                                    <a href="{{ recordLink(delete_link, record) }}" class="btn btn-sm btn-danger">
+                                                    <a href="{{ recordLink(delete_link, record) }}" class="btn btn-sm btn-danger DeleteRecord">
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 {% endif %}
@@ -74,4 +87,32 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(function () {
+            $('#DeleteRecords').click(function () {
+                $('#ListViewForm').attr('action', '{{ avoca_manage(delete_batch_link) }}');
+                $('#ListViewForm').submit();
+            });
+            $('a.DeleteRecord').click(function (e) {
+                e.preventDefault();
+                var href = $(this).attr('href');
+                $.confirm({
+                    title: 'Confirm!',
+                    content: 'Simple confirm!',
+                    buttons: {
+                        confirm: {
+                            text: '{{ 'Ok'|lang }}',
+                            action: function () {
+                                location.href = href + '?r={{ avoca_currentUrl()|url_encode }}';
+                            }
+                        },
+                        cancel: {
+                            text: '{{ 'Cancel'|lang }}',
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}

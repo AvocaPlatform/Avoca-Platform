@@ -125,6 +125,7 @@ class AvocaManageController extends AvocaController
         $this->data['view_link'] = $this->getOption('view_link', $this->controller_name . '/record/{ID}');
         $this->data['edit_link'] = $this->getOption('edit_link', $this->controller_name . '/edit/{ID}');
         $this->data['delete_link'] = $this->getOption('delete_link', $this->controller_name . '/delete/{ID}');
+        $this->data['delete_batch_link'] = $this->getOption('delete_batch_link', $this->controller_name . '/delete');
 
         // sort
         $this->data['sort'] = [
@@ -281,9 +282,30 @@ class AvocaManageController extends AvocaController
     }
 
     // ACTION delete
-    public function delete($id = null)
+    public function delete($id = null, $ajax = null)
     {
         $this->disableView();
-        return $this->manage_redirect('/' . $this->controller_name);
+        if ($this->isPost()) {
+
+        }
+
+        if ($id) {
+            $model = $this->getModel();
+            $model->delete(['id' => $id]);
+            $errors = $model->getErrors();
+            if (empty($errors)) {
+                $this->setSuccess('Deleted record successful');
+            } else {
+                $this->setError($errors);
+            }
+        }
+
+        $return_url = $this->getQuery('r');
+        if (!$return_url) {
+            $return_url = $this->getOption('list_link', '/' . $this->controller_name);
+            return $this->manage_redirect($return_url);
+        }
+
+        return $this->redirect($return_url);
     }
 }

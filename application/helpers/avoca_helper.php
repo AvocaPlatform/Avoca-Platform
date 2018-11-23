@@ -108,6 +108,13 @@ function avoca_admin($uri = '', $protocol = NULL)
     return avoca_url($uri, $protocol);
 }
 
+function avoca_currentUrl()
+{
+    $CI =& get_instance();
+    $url = $CI->config->site_url($CI->uri->uri_string());
+    return $_SERVER['QUERY_STRING'] ? $url . '?' . $_SERVER['QUERY_STRING'] : $url;
+}
+
 function write_array2file($file, $array)
 {
     $file = APPPATH . $file;
