@@ -304,4 +304,32 @@ class Settings extends AVC_AdminController
         $modules = include APPPATH . 'config/avoca/modules.php';
         $this->data['modules'] = $modules;
     }
+
+    // ACTION
+    public function mail_setting()
+    {
+        if ($this->isPost()) {
+            $mail_from = $this->getPost('mail_from');
+
+            $mail = $this->getPost('mail');
+            $mail['protocol'] = 'smtp';
+            $mail['wordwrap'] = true;
+            if(empty($mail['charset'])) {
+                $mail['charset'] = 'utf-8';
+            }
+
+            $handle = fopen(APPPATH . 'config/mail.php', 'w');
+            fwrite($handle, "<?php\n\n");
+            fwrite($handle, "\$config['mail_from'] = '$mail_from';\n");
+            fwrite($handle, "\$config['mail'] = " . var_export($mail, true) . ";\n");
+            fclose($handle);
+
+            $this->setSuccess('Save mail setting successful!');
+            return $this->admin_redirect('/settings/mail_setting');
+        }
+
+        $this->load->config('mail');
+        $this->data['mail'] = config_item('mail');
+        $this->data['mail_from'] = config_item('mail_from');
+    }
 }
