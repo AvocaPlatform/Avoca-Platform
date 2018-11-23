@@ -26,6 +26,7 @@ return [
             //'label' => 'Username',
             //'nosort' => true,
             'search' => true,
+            'operator' => 'like', // option
         ],
     ],
     'record' => [

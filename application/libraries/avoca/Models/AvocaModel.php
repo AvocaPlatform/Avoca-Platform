@@ -20,7 +20,7 @@ namespace Avoca\Libraries\Models;
 class AvocaModel extends \CI_Model
 {
     protected $table = '';
-
+    protected $limit = 0;
     protected $errors = [];
 
     public function __construct()
@@ -276,18 +276,36 @@ class AvocaModel extends \CI_Model
     /**
      * set this->db->limit
      *
+     * * @param int $offset
      * @param int $limit
-     * @param int $offset
+     * @return void
      */
-    protected function setDBLimit($limit = 0, $offset = 0)
+    protected function setDBLimit($offset = 0, $limit = 0)
     {
         if ($limit >= 0) {
-            if ($limit == 0) {
-                $limit = config_item('records_per_page');
+            if ($limit > 0) {
+                $this->limit = $limit;
             }
-
-            $this->db->limit($limit, $offset);
         }
+
+        $final_limit = $this->getLimit();
+        if ($final_limit > 0) {
+            $this->db->limit($this->getLimit(), $offset);
+        }
+    }
+
+    public function setLimit($limit)
+    {
+        $this->limit = $limit;
+    }
+
+    public function getLimit()
+    {
+        if ($this->limit == 0) {
+            $this->limit = config_item('records_per_page');
+        }
+
+        return $this->limit;
     }
 
     /**
@@ -336,18 +354,25 @@ class AvocaModel extends \CI_Model
      * @param string $table
      * @param int $offset
      * @param int $limit ==-1 will show all records
+     * @param array $orders
      * @return array|mixed|null
      */
-    public function get_where($where = '', $row = true, $table = '', $offset = 0, $limit = 0)
+    public function get_where($where = '', $row = true, $table = '', $offset = 0, $limit = 0, $orders = [])
     {
         $table = ($table) ? $table : $this->table;
+        // count all records
         $total_records = $this->numRows($where, $table);
-
+        // set where
         if (!empty($where)) {
             $this->db->where($where);
         }
-
-        $this->setDBLimit($limit, $offset);
+        // limit
+        $this->setDBLimit($offset, $limit);
+        // order by
+        foreach ($orders as $order_by => $order_type) {
+            $this->db->order_by($order_by, $order_type);
+        }
+        // query
         $query = $this->db->get($table);
 
         if ($query->num_rows() > 0) {
@@ -385,11 +410,24 @@ class AvocaModel extends \CI_Model
      * get all records in table
      *
      * @param string $table
-     * @param int $offset
+     * @param array $orders
      * @return array|mixed|null
      */
-    public function getAll($table = '', $offset = 0)
+    public function getAll($table = '', $orders = [])
     {
-        return $this->get_where('', false, $table, $offset);
+        return $this->get_where('', false, $table, 0, -1, $orders);
+    }
+
+    /**
+     * get records with conditions
+     *
+     * @param string $where
+     * @param int $offset
+     * @param array $orders
+     * @return array|mixed|null
+     */
+    public function getRecords($where = '', $offset = 0, $orders = [])
+    {
+        return $this->get_where($where, false, '', $offset, 0, $orders);
     }
 }

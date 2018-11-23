@@ -247,3 +247,19 @@ function avoca_form($field, $value, $option = [])
 
     return $fieldModel->form($field, $value, $option);
 }
+
+/**
+ * $_GET
+ *
+ * @param $name
+ * @return string
+ */
+function avoca_GET($name)
+{
+    if ($name) {
+        $CI =& get_instance();
+        return $CI->input->get($name);
+    }
+
+    return '';
+}

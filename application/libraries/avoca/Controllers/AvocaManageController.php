@@ -106,6 +106,74 @@ class AvocaManageController extends AvocaController
     }
 
     /**
+     * get search fields from list view defs
+     *
+     * @param array $listdefs
+     * @return array
+     */
+    protected function getSearchFields($listdefs)
+    {
+        $fields = [];
+
+        if (!is_array($listdefs) || empty($listdefs)) {
+            return $fields;
+        }
+
+       foreach ($listdefs as $field => $option) {
+           if (!empty($option['search'])) {
+               $operator = '';
+               if (!empty($option['operator'])) {
+                   $operator = $option['operator'];
+               }
+
+               $fields[$field] = $operator;
+           }
+       }
+
+       return $fields;
+    }
+
+    /**
+     * get array where search
+     *
+     * @param $searchFields
+     * @param $get
+     * @param string $where
+     * @return array|string
+     */
+    protected function whereSearch($searchFields, $get, $where = '')
+    {
+        $whereSearch = [];
+        foreach ($searchFields as $field => $operator) {
+            if (isset($get[$field]) && $get[$field] != '') {
+                $field_where = $field;
+                if ($operator) {
+                    $field_where = $field . ' ' . $operator;
+                }
+
+                $value = $get[$field];
+                if ($operator == 'like') {
+                    $value = '%' . $value . '%';
+                }
+
+                $whereSearch[$field_where] = $value;
+            }
+        }
+
+        if (!empty($whereSearch)) {
+            if (!$where) {
+                return $whereSearch;
+            }
+
+            if (is_array($where)) {
+                return array_merge($whereSearch, $where);
+            }
+        }
+
+        return $where;
+    }
+
+    /**
      * ACTION module dashboard
      */
     public function index()
@@ -127,31 +195,8 @@ class AvocaManageController extends AvocaController
         $this->data['delete_link'] = $this->getOption('delete_link', $this->controller_name . '/delete/{ID}');
         $this->data['delete_batch_link'] = $this->getOption('delete_batch_link', $this->controller_name . '/delete');
 
-        // sort
-        $this->data['sort'] = [
-            'field' => '',
-            'order' => 'asc'
-        ];
-
-        // search
-        $search_form = '/manage_templates/search_form.twig';
-        $this->data['search_form'] = 'templates' . $search_form;
-        if (file_exists(VIEWPATH . $this->getViewFolder() . '/custom' . $search_form)) {
-            $this->data['search_form'] = 'custom' . $search_form;
-        }
-
-        // get records
-        $list = $this->getModel()->getAll();
-        $this->data['list'] = $list;
-
-        $this->data['records'] = [];
-        if ($list && !empty($list['records'])) {
-            $this->data['records'] = $list['records'];
-        }
-
         // get layout
         $viewdefs = $this->getViewDefs();
-
         if (!empty($viewdefs)) {
             $this->data['viewdefs'] = $viewdefs;
         }
@@ -160,14 +205,63 @@ class AvocaManageController extends AvocaController
             $this->data['listdefs'] = $viewdefs['list'];
         }
 
+        // sort
+        $orders = [];
+        $order_by = $this->getQuery('order_by');
+        if ($order_by) {
+            $order_type = $this->getQuery('order');
+            if (!$order_type || !in_array($order_type, ['asc', 'desc'])) {
+                $order_type = 'asc';
+            }
+            // get orders
+            $orders = [$order_by => $order_type];
+            $this->data['sort'] = [
+                'field' => $order_by,
+                'order' => $order_type
+            ];
+        }
+
+        // default where
+        $where = $this->getOption('list_where', '');
+
+        // search
+        $search_form = '/manage_templates/search_form.twig';
+        $this->data['search_form'] = 'templates' . $search_form;
+        if (file_exists(VIEWPATH . $this->getViewFolder() . '/custom' . $search_form)) {
+            $this->data['search_form'] = 'custom' . $search_form;
+        }
+        // query search
+        $searchFields = $this->getSearchFields($viewdefs['list']);
+        $where = $this->whereSearch($searchFields, $this->getQuery(), $where);
+
+        // get records
+        $model = $this->getModel();
+
+        $offset = $this->uri->segment(4);
+        $list = $model->getRecords($where, $offset, $orders);
+
+        $this->data['list'] = $list;
+
+        $this->data['records'] = [];
+        if ($list && !empty($list['records'])) {
+            $this->data['records'] = $list['records'];
+        }
+
         // pagination
         $pagination_config = include APPPATH . 'config/avoca/pagination.php';
         $pagination_config['base_url'] = avoca_manage($this->data['list_link']);
         $pagination_config['uri_segment'] = 4;
         $pagination_config['total_rows'] = $list['total'];
-        $pagination_config['per_page'] = config_item('records_per_page');
+        $pagination_config['per_page'] = $model->getLimit();
         $this->pagination->initialize($pagination_config);
         $this->data['pagination'] = $this->pagination->create_links();
+
+        $return_url = $this->getQuery('r');
+        if (!$return_url) {
+            $return_url = avoca_currentUrl();
+        }
+
+        $this->data['return_url'] = $return_url;
     }
 
     // ACTION view detail record

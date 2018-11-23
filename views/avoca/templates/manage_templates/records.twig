@@ -17,8 +17,9 @@
                 <div class="card-body">
                     {% if listdefs %}
                         {{ form_open('', {method: 'get', id: 'ListViewForm'}) }}
-                            <input type="hidden" name="r" value="{{ avoca_currentUrl() }}">
-                            <table class="table table-responsive-sm table-sortable">
+                            <input type="hidden" name="order_by" value="{{ sort.field }}" id="FormOrderBy">
+                            <input type="hidden" name="order" value="{{ sort.order }}" id="FormOrder">
+                            <table class="table table-responsive-sm table-bordered table-striped table-sortable">
                                 <thead>
                                     <tr>
                                         <th width="1%" class="no">
@@ -35,12 +36,15 @@
                                         </th>
                                         {% for field, option in listdefs %}
                                             {% set order = 'asc' %}
-                                            {% if field == sort.order %}
-                                                order = sort.order;
+                                            {% if field == sort.field %}
+                                                {% if sort.order == 'asc' %}
+                                                    {% set order = 'desc' %}
+                                                {% endif %}
                                             {% endif %}
 
-                                            <th class="{% if option.nosort %}no{% endif %}{% if sort.field == field %}{{ sort.order }}{% endif %}"
-                                                onclick="location.href='{{ avoca_manage(list_link ~ '?order_by=' ~ field ~ '&order=' ~ order) }}'">
+                                            <th class="{% if option.nosort %}no{% else %}sortListView{% endif %}{% if sort.field == field %} {{ sort.order }}{% endif %}"
+                                                order_by="{{ field }}"
+                                                order_type="{{ order }}">
                                                 {{ fieldLabel(field, option)|lang }}
                                             </th>
                                         {% endfor %}
@@ -80,6 +84,7 @@
                                 </tbody>
                             </table>
                             <nav>{{ pagination|raw }}</nav>
+                            <input type="hidden" name="r" value="{{ return_url }}">
                         {{ form_close() }}
                     {% else %}
                         <div class="alert alert-warning">{{ 'No config layout'|lang }}</div>
@@ -106,7 +111,7 @@
                         confirm: {
                             text: '{{ 'Ok'|lang }}',
                             action: function () {
-                                location.href = href + '?r={{ avoca_currentUrl()|url_encode }}';
+                                location.href = href + '?r={{ return_url|url_encode }}';
                             }
                         },
                         cancel: {
@@ -114,6 +119,13 @@
                         }
                     }
                 });
+            });
+            $('th.sortListView').click(function () {
+                var order_by = $(this).attr('order_by');
+                var order = $(this).attr('order_type');
+                $('#FormOrderBy').val(order_by);
+                $('#FormOrder').val(order);
+                $('#ListViewForm').submit();
             });
         });
     </script>

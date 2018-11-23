@@ -12,6 +12,7 @@
 class User extends AVC_Model
 {
     protected $table = 'users';
+    protected $limit = 7;
 
     public static $ADMIN_TYPE = 9;
     public static $MANAGER_TYPE = 1;

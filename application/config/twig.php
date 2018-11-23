@@ -19,6 +19,7 @@ $config['twig'] = [
         'avoca_currentUrl',
         'recordLink',
         'fieldLabel',
+        'avoca_GET',
     ],
     'functions_safe' => [
         'form_input',
