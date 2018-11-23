@@ -31,7 +31,7 @@ return [
     'record' => [
         [
             'id' => [
-                'type' => 'readonly'
+                'type' => 'disabled'
             ],
             'username' => [],
         ]

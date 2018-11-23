@@ -50,7 +50,12 @@ class User extends AVC_Model
 
     public function create($data)
     {
-        $data['password'] = $this->hashPassword($data['password']);
+        if (!empty($data['password'])) {
+            $data['password'] = $this->hashPassword($data['password']);
+        } else {
+            $data['password'] = $this->hashPassword('avoca.io');
+        }
+
         return parent::create($data);
     }
 

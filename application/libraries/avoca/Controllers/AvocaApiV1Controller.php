@@ -142,9 +142,10 @@ class AvocaApiV1Controller extends AvocaController
     /**
      * API return json data
      *
+     * @param null $data
      * @return bool
      */
-    protected function jsonData()
+    protected function jsonData($data = null)
     {
         $json_arr = [
             'error' => 0,

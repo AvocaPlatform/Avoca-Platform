@@ -57,7 +57,7 @@ class AvocaModel extends \CI_Model
     /**
      * check and set error when query database
      *
-     * @return bool
+     * @return bool true ==> error
      */
     public function checkErrorDB()
     {
@@ -135,13 +135,14 @@ class AvocaModel extends \CI_Model
 
         $this->db->set($fields_data);
         $this->db->insert($this->table);
+        $id = $this->db->insert_id();
 
-        if (!$this->checkErrorDB()) {
+        if ($this->checkErrorDB()) {
             return false;
         }
 
         // return record id
-        return $this->db->insert_id();
+        return $id;
     }
 
     /**
@@ -194,7 +195,7 @@ class AvocaModel extends \CI_Model
             $this->db->set($fields_data);
             $this->db->update($this->table);
 
-            if (!$this->checkErrorDB()) {
+            if ($this->checkErrorDB()) {
                 return false;
             }
         } else {

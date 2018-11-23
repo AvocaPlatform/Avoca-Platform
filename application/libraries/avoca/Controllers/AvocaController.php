@@ -163,15 +163,21 @@ class AvocaController extends AvocaBaseController
     /**
      * show json to view
      *
+     * @param null $data
      * @return bool
      */
-    protected function jsonData()
+    protected function jsonData($data = null)
     {
         // status
         header(sprintf('HTTP/%s %s %s', $this->version, $this->httpCode, $this->httpCodeText));
         header('Content-Type: application/json');
 
-        echo json_encode($this->data);
+        if ($data) {
+            echo json_encode($data);
+        } else {
+            echo json_encode($this->data);
+        }
+
         return true;
     }
 
@@ -246,7 +252,14 @@ class AvocaController extends AvocaBaseController
 
     protected function setFlash($message, $type = 'info')
     {
-        $this->session->set_flashdata($type, $this->lang->line($message));
+        if (is_array($message)) {
+            $mes = '';
+            foreach ($message as $m) {
+                $mes .= $this->lang->line($m) . ' / ';
+            }
+        } else {
+            $this->session->set_flashdata($type, $this->lang->line($message));
+        }
     }
 
     protected function setError($message)

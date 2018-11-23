@@ -225,9 +225,59 @@ class AvocaManageController extends AvocaController
         }
     }
 
-    public function save()
+    // ACTION save
+    public function save($ajax = null)
     {
+        $this->disableView();
 
+        if ($this->isPost()) {
+            $post = $this->getPost();
+
+            $model_name = $this->model;
+            if (!empty($post['model'])) {
+                $model_name = $post['model'];
+            }
+
+            $model = $this->getModel($model_name);
+            $id = $model->save($post);
+
+            // AJAX
+            if ($ajax == '1') {
+                if ($id) {
+                    return $this->jsonData([
+                        'error' => 0,
+                        'id' => $id
+                    ]);
+                }
+
+                return $this->jsonData([
+                    'error' => 1,
+                    'errors' => $model->getErrors(),
+                ]);
+            }
+
+            // VIEW
+            if ($id) {
+                $this->setSuccess('Save record success!');
+                $return_url = $this->getPost('return_url');
+                if (!$return_url) {
+                    $return_url = '/' . $this->controller_name . '/record/' . $id;
+                }
+            } else {
+                $this->setError($model->getErrors());
+
+                if (!empty($post['id'])) {
+                    $return_url = '/' . $this->controller_name . '/edit/' . $post['id'];
+                } else {
+                    $return_url = '/' . $this->controller_name . '/edit';
+                }
+            }
+
+            return $this->manage_redirect($return_url);
+        }
+
+        $return_url = $this->getOption('list_link', '/' . $this->controller_name);
+        return $this->manage_redirect($return_url);
     }
 
     // ACTION delete
