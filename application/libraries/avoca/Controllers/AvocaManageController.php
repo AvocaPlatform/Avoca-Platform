@@ -165,7 +165,7 @@ class AvocaManageController extends AvocaController
         $pagination_config['base_url'] = avoca_manage($this->data['list_link']);
         $pagination_config['uri_segment'] = 4;
         $pagination_config['total_rows'] = $list['total'];
-        $pagination_config['per_page'] = 5;
+        $pagination_config['per_page'] = config_item('records_per_page');
         $this->pagination->initialize($pagination_config);
         $this->data['pagination'] = $this->pagination->create_links();
     }
