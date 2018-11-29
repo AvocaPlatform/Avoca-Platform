@@ -42,6 +42,7 @@ class AvocaBaseController extends \CI_Controller
 
     protected $require_auth = false;
 
+    protected $is_error = false;
     protected $errors = [];
 
     public function __construct()
@@ -70,6 +71,7 @@ class AvocaBaseController extends \CI_Controller
         // check authenticate
         if ($this->require_auth) {
             if ($this->authenticate() === false) {
+                $this->is_error = true;
                 $this->authenticateError();
                 die();
             }

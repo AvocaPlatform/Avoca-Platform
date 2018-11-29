@@ -354,6 +354,10 @@ class AvocaController extends AvocaBaseController
             return true;
         }
 
+        if ($this->is_error) {
+            return false;
+        }
+
         $this->addGlobals([
             '_end_rtime' => microtime(true),
         ]);
