@@ -37,6 +37,7 @@ class Settings extends AVC_AdminController
 
                 try {
 
+                    $fields_option = preg_replace('/\s+/', ' ', $fields_option);
                     $options_arr = explode(' ', $fields_option);
 
                     $length = count($options_arr);
@@ -60,11 +61,9 @@ class Settings extends AVC_AdminController
 
                                     $value = strtolower(trim($arr[1]));
 
-                                    if ($value == 'true') {
+                                    if ($value === 'true') {
                                         $value = true;
-                                    }
-
-                                    if ($value == 'false') {
+                                    } else if ($value === 'false') {
                                         $value = false;
                                     }
 
@@ -119,7 +118,6 @@ class Settings extends AVC_AdminController
         $this->load->dbforge();
 
         $db_structure = $this->readDatabaseStructure();
-
         foreach ($db_structure as $table => $info) {
 
             if ($this->db->table_exists($table)) {
@@ -170,7 +168,7 @@ class Settings extends AVC_AdminController
         }
 
         $this->setSuccess('Repair database success!');
-        return $this->redirect('/manage/settings');
+        return $this->admin_redirect('/settings');
     }
 
     // ACTION
@@ -205,6 +203,7 @@ class Settings extends AVC_AdminController
             $controller = $this->getPost('controller');
             $table_define = $this->getPost('table_define');
             $table_index = $this->getPost('table_index');
+            $folder = $this->getPost('folder');
 
             if ($model && $controller) {
                 $module = [
@@ -219,11 +218,11 @@ class Settings extends AVC_AdminController
 
                 // write to model class in models/
                 if ($table) {
-                    $this->_createModel($model, $table);
+                    $this->_createModel($model, $table, $folder);
                 }
 
                 // write to controller class in controllers/
-                $this->_createController($controller, $model);
+                $this->_createController($controller, $model, $folder);
 
                 // write data base into to config/avoca/databases.php
                 if ($table && $table_define) {
@@ -232,14 +231,18 @@ class Settings extends AVC_AdminController
             }
 
             $this->setSuccess('Create/update module success!');
-            return $this->redirect('/manage/settings');
+            return $this->admin_redirect('/settings');
         }
     }
 
-    private function _createModel($model, $table)
+    private function _createModel($model, $table, $folder = 'custom')
     {
         $model_name = ucfirst(strtolower($model));
-        $model_path = APPPATH . 'models/' . $model_name . '.php';
+        if ($folder == 'core') {
+            $model_path = APPPATH . 'models/' . $model_name . '.php';
+        } else {
+            $model_path = CUSTOMPATH . 'models/' . $model_name . '.php';
+        }
 
         if (!file_exists($model_path)) {
             $template = file_get_contents(APPPATH . 'config/avoca/builders/model.avc');
@@ -252,17 +255,21 @@ class Settings extends AVC_AdminController
         }
     }
 
-    private function _createController($controller, $model)
+    private function _createController($controller, $model, $folder = 'custom')
     {
         $model_name = ucfirst(strtolower($model));
         $controller_name = ucfirst(strtolower($controller));
-        $controller_path = APPPATH . 'controllers/manage/' . $controller_name . '.php';
+        if ($folder == 'core') {
+            $controller_path = APPPATH . 'controllers/manage/' . $controller_name . '.php';
+        } else {
+            $controller_path = CUSTOMPATH . 'controllers/manage/' . $controller_name . '.php';
+        }
 
         if (!file_exists($controller_path)) {
             $template = file_get_contents(APPPATH . 'config/avoca/builders/controller.avc');
             $data = str_replace(
                 ['$$CONTROLLER_CLASS$$', '$$MODEL_NAME$$'],
-                [$controller_name, $model_name],
+                [$controller_name, strtolower($model_name)],
                 $template);
 
             write_file($controller_path, $data, 'w');

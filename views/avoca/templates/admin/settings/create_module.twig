@@ -42,6 +42,12 @@
                             {{ form_textarea('table_index', table_indexes, {class: 'form-control'}) }}
                             <span class="form-text text-muted">{{ __('1 field/1 line') }}</span>
                         </div>
+
+                        <div class="form-group">
+                            <label>{{ 'Module folder' }}</label>
+                            {{ form_dropdown('folder', {custom: 'custom', core: 'core'}, ['custom'], {class: 'form-control'}) }}
+                            <span class="form-text text-muted">{{ 'Create model in custom or core' }}</span>
+                        </div>
                     </div>
 
                     <div class="card-footer">

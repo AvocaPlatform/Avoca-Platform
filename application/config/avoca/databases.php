@@ -28,4 +28,23 @@ return array (
       1 => 'UNIQUE username username',
     ),
   ),
+  'emails' => 
+  array (
+    'name' => 'emails',
+    'ENGINE' => 'InnoDB',
+    'fields' => 
+    array (
+      0 => 'id INT 10 unsigned:true auto_increment:true',
+      1 => 'date_created DATETIME',
+      2 => 'from  VARCHAR 255',
+      3 => 'to  VARCHAR 255',
+      4 => 'subject VARCHAR 255',
+      5 => 'message TEXT',
+      6 => 'attachments TEXT',
+    ),
+    'indexes' => 
+    array (
+      0 => 'PK id',
+    ),
+  ),
 );

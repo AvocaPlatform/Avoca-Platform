@@ -16,4 +16,10 @@ return array (
     'model' => 'user',
     'table' => 'users',
   ),
+  'emails' => 
+  array (
+    'controller' => 'emails',
+    'model' => 'email',
+    'table' => 'emails',
+  ),
 );

@@ -9,7 +9,7 @@
  * Git: https://github.com/tdhungit
  */
 
-class $$CONTROLLER_CLASS$$ extends AVC_ManageController
+class Emails extends AVC_ManageController
 {
-    protected $model = '$$MODEL_NAME$$';
+    protected $model = 'email';
 }
