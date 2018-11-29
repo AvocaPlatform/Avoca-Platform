@@ -9,7 +9,7 @@
  * Git: https://github.com/tdhungit
  */
 
-class Email extends AVC_Model
+class Mailsend extends AVC_Model
 {
     protected $table = 'emails';
 }

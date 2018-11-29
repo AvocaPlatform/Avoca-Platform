@@ -231,8 +231,10 @@ class AvocaManageController extends AvocaController
             $this->data['search_form'] = 'custom' . $search_form;
         }
         // query search
-        $searchFields = $this->getSearchFields($viewdefs['list']);
-        $where = $this->whereSearch($searchFields, $this->getQuery(), $where);
+        if (!empty($viewdefs['list'])) {
+            $searchFields = $this->getSearchFields($viewdefs['list']);
+            $where = $this->whereSearch($searchFields, $this->getQuery(), $where);
+        }
 
         // get records
         $model = $this->getModel();

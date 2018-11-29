@@ -19,7 +19,7 @@ return array (
   'emails' => 
   array (
     'controller' => 'emails',
-    'model' => 'email',
+    'model' => 'mailsend',
     'table' => 'emails',
   ),
 );

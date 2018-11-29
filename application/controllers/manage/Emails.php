@@ -11,5 +11,5 @@
 
 class Emails extends AVC_ManageController
 {
-    protected $model = 'email';
+    protected $model = 'mailsend';
 }
