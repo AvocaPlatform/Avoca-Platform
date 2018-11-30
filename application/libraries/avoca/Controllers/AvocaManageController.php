@@ -187,6 +187,10 @@ class AvocaManageController extends AvocaController
         $this->view_path = 'records';
         $this->load->library('pagination');
 
+        if (!$this->page_title) {
+            $this->setTitle(ucfirst($this->controller_name), true);
+        }
+
         // check create link. default controller/action
         $this->data['list_link'] = $this->getOption('list_link', $this->controller_name . '/records');
         $this->data['create_link'] = $this->getOption('create_link', $this->controller_name . '/edit');
@@ -243,6 +247,7 @@ class AvocaManageController extends AvocaController
         $list = $model->getRecords($where, $offset, $orders);
 
         $this->data['list'] = $list;
+        $this->data['model_name'] = $this->model;
 
         $this->data['records'] = [];
         if ($list && !empty($list['records'])) {
@@ -302,16 +307,12 @@ class AvocaManageController extends AvocaController
     public function edit($id = null)
     {
         $this->view_path = 'edit';
+        $page_title = $this->lang->line('Create new') . ' ' . $this->lang->line(ucfirst($this->controller_name));
 
         // check create link. default controller/action
         $this->data['list_link'] = $this->getOption('list_link', $this->controller_name . '/records');
         $this->data['view_link'] = $this->getOption('view_link', $this->controller_name . '/record/{ID}');
         $this->data['delete_link'] = $this->getOption('delete_link', $this->controller_name . '/delete/{ID}');
-
-        $this->data['record'] = [];
-        if ($id) {
-            $this->data['record'] = $this->getModel()->get($id);
-        }
 
         // viewdefs
         $viewdefs = $this->getViewDefs();
@@ -320,6 +321,18 @@ class AvocaManageController extends AvocaController
         if (!empty($viewdefs['record'])) {
             $this->data['recorddefs'] = $viewdefs['record'];
         }
+
+        $this->data['record'] = [];
+        if ($id) {
+            $record = $this->getModel()->get($id);
+            $this->data['record'] = $record;
+            if (!$this->page_title) {
+                $key_title = (!empty($viewdefs['title'])) ? $viewdefs['title'] : 'id';
+                $page_title = $this->lang->line('Edit') . ': ' . $record[$key_title];
+            }
+        }
+
+        $this->setTitle($page_title);
     }
 
     // ACTION save

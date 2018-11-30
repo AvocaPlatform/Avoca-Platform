@@ -87,7 +87,10 @@
                             <input type="hidden" name="r" value="{{ return_url }}">
                         {{ form_close() }}
                     {% else %}
-                        <div class="alert alert-warning">{{ 'No config layout'|lang }}</div>
+                        <div class="alert alert-warning">
+                            {{ 'No config layout'|lang }}:
+                            <code>application/config/models/{{ model_name }}/viewdefs.php</code>
+                        </div>
                     {% endif %}
                 </div>
             </div>
