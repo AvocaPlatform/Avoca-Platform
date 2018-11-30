@@ -23,11 +23,11 @@ return [
     'record' => [
         'fields' => [
             [
-                'from' => [],
-                'to' => [],
+                'from' => true,
+                'to' => true,
             ],
             [
-                'subject' => [],
+                'subject' => true,
             ],
             [
                 'message' => [
@@ -39,6 +39,12 @@ return [
                     'type' => 'files'
                 ]
             ],
-        ]
+        ],
+        'buttons' => [
+            'save' => [
+                'label' => 'Send'
+            ],
+            'cancel' => true
+        ],
     ],
 ];

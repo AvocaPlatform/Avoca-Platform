@@ -44,8 +44,30 @@
                         {% endif %}
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">{{ 'Save'|lang }}</button>
-                        <a href="{{ avoca_manage(list_link) }}" class="btn">{{ 'Cancel'|lang }}</a>
+                        {% set buttons = false %}
+                        {% if recorddefs.buttons %}
+                            {% set buttons = recorddefs.buttons %}
+                        {% endif %}
+
+                        {% if not buttons or buttons.save is null or buttons.save != false %}
+                            <button type="submit" class="btn btn-primary">
+                                {% if buttons.save and buttons.save.label %}
+                                    {{ buttons.save.label|lang }}
+                                {% else %}
+                                    {{ 'Save'|lang }}
+                                {% endif %}
+                            </button>
+                        {% endif %}
+
+                        {% if not buttons or buttons.cancel is null or buttons.cancel != false %}
+                            <a href="{{ avoca_manage(list_link) }}" class="btn">
+                                {% if buttons.cancel and buttons.cancel.label %}
+                                    {{ buttons.cancel.label|lang }}
+                                {% else %}
+                                    {{ 'Cancel'|lang }}
+                                {% endif %}
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             {{ form_close() }}

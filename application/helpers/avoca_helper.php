@@ -239,12 +239,6 @@ function fieldLabel($field, $option = [])
 function avoca_form($field, $value, $option = [])
 {
     $fieldModel = new \Avoca\Libraries\AvocaField();
-    if (empty($option['class'])) {
-        $option['class'] = 'form-control';
-    } else {
-        $option['class'] = 'form-control ' . $option['class'];
-    }
-
     return $fieldModel->form($field, $value, $option);
 }
 

@@ -54,11 +54,25 @@ class AvocaField
 
     public function form($field, $value, $option = [])
     {
-        $type = (empty($option['type'])) ? 'text' : $option['type'];
-        $type = strtolower($type);
-        $extra = [
-            'class' => (!empty($option['class'])) ? $option['class'] : '',
-        ];
+        if ($option) {
+            if (!is_array($option)) {
+                $type = 'text';
+                $extra = [
+                    'class' => 'form-control',
+                ];
+            } else {
+                $type = (empty($option['type'])) ? 'text' : $option['type'];
+                $type = strtolower($type);
+                $extra = [
+                    'class' => (!empty($option['class'])) ? $option['class'] : 'form-control',
+                ];
+            }
+        } else {
+            $type = 'disabled';
+            $option = $extra = [
+                'class' => 'form-control',
+            ];
+        }
 
         switch ($type) {
             case 'number':

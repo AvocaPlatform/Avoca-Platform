@@ -37,8 +37,14 @@ return [
                 'id' => [
                     'type' => 'disabled'
                 ],
-                'username' => [],
+                'username' => true,
             ],
-        ]
+        ],
+//        'buttons' => [
+//            'save' => [
+//                'label' => 'Save'
+//            ],
+//            'cancel' => true
+//        ],
     ],
 ];
