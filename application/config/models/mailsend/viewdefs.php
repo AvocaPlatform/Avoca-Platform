@@ -44,7 +44,25 @@ return [
             'save' => [
                 'label' => 'Send'
             ],
-            'cancel' => true
+            'cancel' => true,
+            'more' => [
+                [
+                    'type' => 'button',
+                    'label' => 'CC',
+                    'color' => 'info',
+                    'icon' => 'fa fa-cogs',
+                    'click' => "alert('123')"
+                ],
+                [
+                    'label' => 'BC'
+                ]
+            ]
         ],
+    ],
+    'js' => [
+        //''
+    ],
+    'css' => [
+        //''
     ],
 ];

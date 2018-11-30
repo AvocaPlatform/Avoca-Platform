@@ -174,6 +174,22 @@ class AvocaManageController extends AvocaController
     }
 
     /**
+     * add js and css from viewdefs
+     */
+    protected function addStatic()
+    {
+        $viewdefs = $this->getViewDefs();
+
+        if (!empty($viewdefs['js'])) {
+            $this->addJs($viewdefs['js']);
+        }
+
+        if (!empty($viewdefs['css'])) {
+            $this->addCss($viewdefs['css']);
+        }
+    }
+
+    /**
      * ACTION module dashboard
      */
     public function index()
@@ -190,6 +206,8 @@ class AvocaManageController extends AvocaController
         if (!$this->page_title) {
             $this->setTitle(ucfirst($this->controller_name), true);
         }
+
+        $this->addStatic();
 
         // check create link. default controller/action
         $this->data['list_link'] = $this->getOption('list_link', $this->controller_name . '/records');
@@ -301,6 +319,7 @@ class AvocaManageController extends AvocaController
         }
 
         $this->setTitle(recordVal($record, $viewdefs['title']));
+        $this->addStatic();
     }
 
     // ACTION create/edit
@@ -333,6 +352,7 @@ class AvocaManageController extends AvocaController
         }
 
         $this->setTitle($page_title);
+        $this->addStatic();
     }
 
     // ACTION save

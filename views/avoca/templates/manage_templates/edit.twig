@@ -51,6 +51,12 @@
 
                         {% if not buttons or buttons.save is null or buttons.save != false %}
                             <button type="submit" class="btn btn-primary">
+                                {% if buttons.save and buttons.save.icon %}
+                                    <i class="{{ buttons.save.icon }}"></i>
+                                {% else %}
+                                    <i class="fa fa-save"></i>
+                                {% endif %}
+                                {{ ' ' }}
                                 {% if buttons.save and buttons.save.label %}
                                     {{ buttons.save.label|lang }}
                                 {% else %}
@@ -67,6 +73,26 @@
                                     {{ 'Cancel'|lang }}
                                 {% endif %}
                             </a>
+                        {% endif %}
+
+                        {% if buttons and buttons.more %}
+                            <div class="pull-right">
+                                {% for b in buttons.more %}
+                                    {% set bclass = 'secondary' %}
+                                    {% if b.color %}
+                                        {% set bclass = b.color %}
+                                    {% endif %}
+                                    <button type="{{ b.type ?: 'button' }}"
+                                            onclick="{{ b.click ?: 'javascript:;' }}"
+                                            class="btn btn-{{ bclass }}">
+                                        {% if b.icon %}
+                                            <i class="{{ b.icon }}"></i>
+                                        {% endif %}
+                                        {{ ' ' }}
+                                        {{ b.label|lang }}
+                                    </button>
+                                {% endfor %}
+                            </div>
                         {% endif %}
                     </div>
                 </div>
