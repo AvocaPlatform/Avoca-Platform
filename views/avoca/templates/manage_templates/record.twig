@@ -18,9 +18,9 @@
                 </div>
                 <div class="card-body">
                     {% if recorddefs %}
-                        <table class="table">
+                        <table class="table table-responsive-sm table-striped">
                             <tbody>
-                                {% for group in recorddefs %}
+                                {% for group in recorddefs.fields %}
                                     <tr>
                                         {% for field, option in group %}
                                             <td>{{ fieldLabel(field, option) }}</td>

@@ -34,7 +34,7 @@
                                                 </div>
                                             </div>
                                         </th>
-                                        {% for field, option in listdefs %}
+                                        {% for field, option in listdefs.fields %}
                                             {% set order = 'asc' %}
                                             {% if field == sort.field %}
                                                 {% if sort.order == 'asc' %}
@@ -57,7 +57,7 @@
                                     {% for record in records %}
                                         <tr>
                                             <td><input type="checkbox" name="ids[]" class="input-check" value="{{ recordFVal(record, 'id') }}"></td>
-                                            {% for field, option in listdefs %}
+                                            {% for field, option in listdefs.fields %}
                                                 <td>{{ recordVal(record, field, option) }}</td>
                                             {% endfor %}
                                             <td class="list-action">

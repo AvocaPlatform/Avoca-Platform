@@ -22,7 +22,7 @@
                     </div>
                     <div class="card-body">
                         {% if recorddefs %}
-                            {% for group in recorddefs %}
+                            {% for group in recorddefs.fields %}
                                 <div class="row">
                                     {% set colclass = 'col-md-6' %}
                                     {% if group|length == 1 %}

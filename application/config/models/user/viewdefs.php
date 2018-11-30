@@ -16,25 +16,29 @@ return [
     //'disabled_delete' => true,
     'title' => 'username',
     'list' => [
-        'id' => [
-            'type' => 'int',
-            'label' => 'ID',
-        ],
-        'username' => [
-            'type' => 'link',
-            'controller' => 'users',
-            //'label' => 'Username',
-            //'nosort' => true,
-            'search' => true,
-            'operator' => 'like', // option
-        ],
+        'fields' => [
+            'id' => [
+                'type' => 'int',
+                'label' => 'ID',
+            ],
+            'username' => [
+                'type' => 'link',
+                'controller' => 'users',
+                //'label' => 'Username',
+                //'nosort' => true,
+                'search' => true,
+                'operator' => 'like', // option
+            ],
+        ]
     ],
     'record' => [
-        [
-            'id' => [
-                'type' => 'disabled'
+        'fields' => [
+            [
+                'id' => [
+                    'type' => 'disabled'
+                ],
+                'username' => [],
             ],
-            'username' => [],
         ]
     ],
 ];

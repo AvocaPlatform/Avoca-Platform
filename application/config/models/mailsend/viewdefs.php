@@ -14,27 +14,31 @@ return [
     'disabled_delete' => true,
     'title' => 'subject',
     'list' => [
-        'subject' => [],
-        'from' => [],
-        'to' => [],
-    ],
-    'record' => [
-        [
+        'fields' => [
+            'subject' => [],
             'from' => [],
             'to' => [],
-        ],
-        [
-            'subject' => [],
-        ],
-        [
-            'message' => [
-                'type' => 'textarea'
-            ]
-        ],
-        [
-            'attachments' => [
-                'type' => 'files'
-            ]
+        ]
+    ],
+    'record' => [
+        'fields' => [
+            [
+                'from' => [],
+                'to' => [],
+            ],
+            [
+                'subject' => [],
+            ],
+            [
+                'message' => [
+                    'type' => 'textarea'
+                ]
+            ],
+            [
+                'attachments' => [
+                    'type' => 'files'
+                ]
+            ],
         ]
     ],
 ];

@@ -1,7 +1,7 @@
 {% if not viewdefs.disabled_search %}
     <tr>
         <td></td>
-        {% for field, option in listdefs %}
+        {% for field, option in listdefs.fields %}
             <td>
                 {% if option.search %}
                     <input type="text" name="{{ field }}" value="{{ avoca_GET(field) }}" class="form-control">
