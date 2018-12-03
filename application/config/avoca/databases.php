@@ -9,42 +9,37 @@
  * Git: https://github.com/tdhungit
  */
 
-return array (
-  'users' => 
-  array (
-    'name' => 'users',
-    'ENGINE' => 'InnoDB',
-    'fields' => 
-    array (
-      0 => 'id INT 10 unsigned:true auto_increment:true',
-      1 => 'date_created DATETIME',
-      2 => 'username VARCHAR 255',
-      3 => 'password CHAR 32',
-      4 => 'is_admin TINYINT 1 default:0',
+return array(
+    'users' => array(
+        'name' => 'users',
+        'ENGINE' => 'InnoDB',
+        'fields' => array(
+            'id INT 10 unsigned:true auto_increment:true',
+            'date_created DATETIME',
+            'username VARCHAR 255',
+            'password CHAR 32',
+            'is_admin TINYINT 1 default:0',
+        ),
+        'indexes' => array(
+            'PK id',
+            'UNIQUE username username',
+        ),
     ),
-    'indexes' => 
-    array (
-      0 => 'PK id',
-      1 => 'UNIQUE username username',
+    'emails' => array(
+        'name' => 'emails',
+        'ENGINE' => 'InnoDB',
+        'fields' => array(
+            'id INT 10 unsigned:true auto_increment:true',
+            'date_created DATETIME',
+            'from VARCHAR 255',
+            'to VARCHAR 255',
+            'status TINYINT 1',
+            'subject VARCHAR 255',
+            'message TEXT',
+            'attachments TEXT',
+        ),
+        'indexes' => array(
+            'PK id',
+        ),
     ),
-  ),
-  'emails' => 
-  array (
-    'name' => 'emails',
-    'ENGINE' => 'InnoDB',
-    'fields' => 
-    array (
-      0 => 'id INT 10 unsigned:true auto_increment:true',
-      1 => 'date_created DATETIME',
-      2 => 'from  VARCHAR 255',
-      3 => 'to  VARCHAR 255',
-      4 => 'subject VARCHAR 255',
-      5 => 'message TEXT',
-      6 => 'attachments TEXT',
-    ),
-    'indexes' => 
-    array (
-      0 => 'PK id',
-    ),
-  ),
 );

@@ -12,4 +12,36 @@
 class Emails extends AVC_ManageController
 {
     protected $model = 'mailsend';
+
+    public function save($ajax = null)
+    {
+        $this->disableView();
+
+        if ($this->isPost()) {
+            $post = $this->getPost();
+
+            if ($post['to'] && $post['subject'] && $post['message']) {
+                /** @var Mailsend $mailModel */
+                $mailModel = $this->getModel();
+                $status = $mailModel->sendMail($post['to'], $post['subject'], $post['message']);
+                if ($status['mail_id']) {
+                    if ($status['error']) {
+                        $this->setError($mailModel->getErrors());
+                    } else {
+                        $this->setSuccess('Send mail is successful');
+                    }
+
+                    $this->manage_redirect('/emails/record/' . $status['mail_id']);
+                } else {
+                    $this->setError('Invalid parameters');
+                    $this->manage_redirect('/emails');
+                }
+            }
+        }
+    }
+
+    public function popup_mail()
+    {
+
+    }
 }

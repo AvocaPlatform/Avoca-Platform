@@ -16,6 +16,7 @@ namespace Avoca\Libraries\Models;
 /**
  * Class AvocaModel
  * @property \CI_DB_query_builder $db
+ * @property \AVC_Loader $load
  */
 class AvocaModel extends \CI_Model
 {

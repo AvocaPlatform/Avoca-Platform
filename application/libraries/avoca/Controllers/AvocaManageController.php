@@ -210,12 +210,12 @@ class AvocaManageController extends AvocaController
         $this->addStatic();
 
         // check create link. default controller/action
-        $this->data['list_link'] = $this->getOption('list_link', $this->controller_name . '/records');
-        $this->data['create_link'] = $this->getOption('create_link', $this->controller_name . '/edit');
-        $this->data['view_link'] = $this->getOption('view_link', $this->controller_name . '/record/{ID}');
-        $this->data['edit_link'] = $this->getOption('edit_link', $this->controller_name . '/edit/{ID}');
-        $this->data['delete_link'] = $this->getOption('delete_link', $this->controller_name . '/delete/{ID}');
-        $this->data['delete_batch_link'] = $this->getOption('delete_batch_link', $this->controller_name . '/delete');
+        $this->data['list_link'] = $this->getOption(\ControllerOptions::LIST_LINK, $this->controller_name . '/records');
+        $this->data['create_link'] = $this->getOption(\ControllerOptions::CREATE_LINK, $this->controller_name . '/edit');
+        $this->data['view_link'] = $this->getOption(\ControllerOptions::VIEW_LINK, $this->controller_name . '/record/{ID}');
+        $this->data['edit_link'] = $this->getOption(\ControllerOptions::EDIT_LINK, $this->controller_name . '/edit/{ID}');
+        $this->data['delete_link'] = $this->getOption(\ControllerOptions::DELETE_LINK, $this->controller_name . '/delete/{ID}');
+        $this->data['delete_batch_link'] = $this->getOption(\ControllerOptions::DELETE_BATCH_LINK, $this->controller_name . '/delete');
 
         // get layout
         $viewdefs = $this->getViewDefs();
@@ -244,7 +244,7 @@ class AvocaManageController extends AvocaController
         }
 
         // default where
-        $where = $this->getOption('list_where', '');
+        $where = $this->getOption(\ControllerOptions::LIST_WHERE, '');
 
         // search
         $search_form = '/manage_templates/search_form.twig';
@@ -295,9 +295,9 @@ class AvocaManageController extends AvocaController
         $this->view_path = 'record';
 
         // check create link. default controller/action
-        $this->data['list_link'] = $this->getOption('list_link', $this->controller_name . '/records');
-        $this->data['edit_link'] = $this->getOption('edit_link', $this->controller_name . '/edit/{ID}');
-        $this->data['delete_link'] = $this->getOption('delete_link', $this->controller_name . '/delete/{ID}');
+        $this->data['list_link'] = $this->getOption(\ControllerOptions::LIST_LINK, $this->controller_name . '/records');
+        $this->data['edit_link'] = $this->getOption(\ControllerOptions::EDIT_LINK, $this->controller_name . '/edit/{ID}');
+        $this->data['delete_link'] = $this->getOption(\ControllerOptions::DELETE_LINK, $this->controller_name . '/delete/{ID}');
 
         // get record
         $model = $this->getModel();
@@ -329,9 +329,9 @@ class AvocaManageController extends AvocaController
         $page_title = $this->lang->line('Create new') . ' ' . $this->lang->line(ucfirst($this->controller_name));
 
         // check create link. default controller/action
-        $this->data['list_link'] = $this->getOption('list_link', $this->controller_name . '/records');
-        $this->data['view_link'] = $this->getOption('view_link', $this->controller_name . '/record/{ID}');
-        $this->data['delete_link'] = $this->getOption('delete_link', $this->controller_name . '/delete/{ID}');
+        $this->data['list_link'] = $this->getOption(\ControllerOptions::LIST_LINK, $this->controller_name . '/records');
+        $this->data['view_link'] = $this->getOption(\ControllerOptions::VIEW_LINK, $this->controller_name . '/record/{ID}');
+        $this->data['delete_link'] = $this->getOption(\ControllerOptions::DELETE_LINK, $this->controller_name . '/delete/{ID}');
 
         // viewdefs
         $viewdefs = $this->getViewDefs();
@@ -389,17 +389,18 @@ class AvocaManageController extends AvocaController
             // VIEW
             if ($id) {
                 $this->setSuccess('Save record success!');
-                $return_url = $this->getPost('return_url');
-                if (!$return_url) {
-                    $return_url = '/' . $this->controller_name . '/record/' . $id;
-                }
+                $return_url = $this->getPost('return_url')
+                    ?: $this->getOption(\ControllerOptions::SAVE_RETURN_URL)
+                        ?: '/' . $this->controller_name . '/record/' . $id;
             } else {
                 $this->setError($model->getErrors());
 
                 if (!empty($post['id'])) {
-                    $return_url = '/' . $this->controller_name . '/edit/' . $post['id'];
+                    $return_url = $this->getOption(\ControllerOptions::SAVE_RETURN_URL)
+                        ?: '/' . $this->controller_name . '/edit/' . $post['id'];
                 } else {
-                    $return_url = '/' . $this->controller_name . '/edit';
+                    $return_url = $this->getOption(\ControllerOptions::SAVE_RETURN_URL)
+                        ?: '/' . $this->controller_name . '/edit';
                 }
             }
 
@@ -428,7 +429,7 @@ class AvocaManageController extends AvocaController
 
             $return_url = $this->getPost('r');
             if (!$return_url) {
-                $return_url = $this->getOption('list_link', '/' . $this->controller_name);
+                $return_url = $this->getOption(\ControllerOptions::LIST_LINK, '/' . $this->controller_name);
                 return $this->manage_redirect($return_url);
             }
 
@@ -448,7 +449,7 @@ class AvocaManageController extends AvocaController
 
         $return_url = $this->getQuery('r');
         if (!$return_url) {
-            $return_url = $this->getOption('list_link', '/' . $this->controller_name);
+            $return_url = $this->getOption(\ControllerOptions::LIST_LINK, '/' . $this->controller_name);
             return $this->manage_redirect($return_url);
         }
 
