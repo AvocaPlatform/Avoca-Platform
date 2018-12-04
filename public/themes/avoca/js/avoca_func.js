@@ -4,3 +4,7 @@ function avocaAlert(title, content) {
         content: content
     });
 }
+
+function sendMail() {
+    $.get(manage_url + '/emails/popup_mail');
+}
