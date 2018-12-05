@@ -54,7 +54,14 @@ return [
                     'click' => "alert('123')"
                 ],
                 [
-                    'label' => 'BC'
+                    'type' => 'button',
+                    'label' => 'BC',
+                ],
+                [
+                    'type' => 'button',
+                    'label' => 'Popup',
+                    'color' => 'warning',
+                    'click' => 'sendMail()',
                 ]
             ]
         ],

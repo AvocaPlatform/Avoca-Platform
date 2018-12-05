@@ -351,8 +351,36 @@ class AvocaManageController extends AvocaController
             }
         }
 
+
+        $this->data['title'] = $page_title;
+
         $this->setTitle($page_title);
         $this->addStatic();
+    }
+
+    // ACTION / quick create/adit
+    public function quick_edit($id = null)
+    {
+        // viewdefs
+        $viewdefs = $this->getViewDefs();
+        $this->data['viewdefs'] = $viewdefs;
+
+        if (!empty($viewdefs['record'])) {
+            $this->data['recorddefs'] = $viewdefs['record'];
+        }
+
+        $page_title = $this->lang->line('Quick create');
+        $this->data['record'] = [];
+        if ($id) {
+            $record = $this->getModel()->get($id);
+            $this->data['record'] = $record;
+            if (!$this->page_title) {
+                $key_title = (!empty($viewdefs['title'])) ? $viewdefs['title'] : 'id';
+                $page_title = $this->lang->line('Edit') . ': ' . $record[$key_title];
+            }
+        }
+
+        $this->data['title'] = $page_title;
     }
 
     // ACTION save

@@ -39,9 +39,4 @@ class Emails extends AVC_ManageController
             }
         }
     }
-
-    public function popup_mail()
-    {
-
-    }
 }
