@@ -23,8 +23,22 @@ function quickEdit(module, cb) {
                     url : post_url,
                     type: request_method,
                     data : form_data
-                }).done(function(response){ //
-                    $('#modal-application').modal('hide');
+                }).done(function(res){ //
+                    if (res.error) {
+                        if (res.message) {
+                            avocaAlert('Error', res.message);
+                        } else {
+                            avocaAlert('Error', 'Have some error. Please contact with administrator!');
+                        }
+                    } else {
+                        if (res.message) {
+                            avocaAlert('Success', res.message);
+                        } else {
+                            avocaAlert('Success', 'Success!');
+                        }
+
+                        $('#modal-application').modal('hide');
+                    }
                 });
             }
         });

@@ -129,6 +129,7 @@
                         </li>
 
                         <li class="nav-title">{{ __('Modules') }}</li>
+
                         <li class="nav-item nav-dropdown">
                             <a class="nav-link nav-dropdown-toggle" href="{{ avoca_manage('/users') }}">
                                 <i class="nav-icon icon-puzzle"></i> {{ __('Users') }}
@@ -145,6 +146,12 @@
                                     </a>
                                 </li>
                             </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ avoca_manage('/emails') }}" class="nav-link">
+                                <i class="nav-icon icon-puzzle"></i> {{ 'Emails'|lang }}
+                            </a>
                         </li>
 
                         <li class="nav-item mt-auto">

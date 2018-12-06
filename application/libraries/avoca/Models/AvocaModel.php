@@ -112,24 +112,27 @@ class AvocaModel extends \CI_Model
         // get all fields in table
         $fields = $this->db->list_fields($this->table);
 
-        $fields_data = [
-            'date_created' => date('Y-m-d H:i:s')
-        ];
-
+        $fields_data = [];
         // choose/reformat fields from data
         foreach ($fields as $field) {
-
             if (!empty($data[$field]) && $field != 'id') {
-
                 $fields_data[$field] = $this->reformat($field, $data[$field]);
             }
         }
 
+        // check empty data
+        if (empty($fields_data)) {
+            $this->setErrors('Empty data');
+            return false;
+        }
+
         // check valid fields
+        if (!isset($fields_data['date_created']) || !$fields_data['date_created']) {
+            $fields_data['date_created'] = date('Y-m-d H:i:s');
+        }
+
         $valid = $this->valid($fields_data);
-
         if (!empty($valid['error'])) {
-
             $this->setErrors($valid['message']);
             return false;
         }
@@ -169,21 +172,22 @@ class AvocaModel extends \CI_Model
         $fields = $this->db->list_fields($this->table);
 
         $fields_data = [];
-
         // choose/reformat data fields
         foreach ($fields as $field) {
-
             if (!empty($data[$field]) && $field != 'id') {
-
                 $fields_data[$field] = $this->reformat($field, $data[$field]);
             }
         }
 
+        // check empty data
+        if (empty($fields_data)) {
+            $this->setErrors('Empty data');
+            return false;
+        }
+
         // valid fields
         $valid = $this->valid($fields_data);
-
         if (!empty($valid['error'])) {
-
             $this->setErrors($valid['message']);
             return false;
         }

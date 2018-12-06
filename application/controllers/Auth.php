@@ -45,15 +45,15 @@ class Auth extends AVC_Controller
                     ]);
 
                     $this->setSuccess('Login successful');
-                    return $this->redirect_return($this->getRequest('r'));
+                    return $this->redirect_return($this->getPost('return_url'));
                 }
 
                 $this->setError('Login error');
-                return $this->redirect('/auth?r=' . $this->getRequest('r'));
+                return $this->redirect('/auth?r=' . $this->getPost('return_url'));
             }
 
             $this->setError(\Avoca\Libraries\AvocaRequestStatus::$InvalidParams);
-            return $this->redirect('/auth?r=' . $this->getRequest('r'));
+            return $this->redirect('/auth?r=' . $this->getPost('return_url'));
         }
     }
 

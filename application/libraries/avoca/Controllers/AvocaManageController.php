@@ -400,17 +400,18 @@ class AvocaManageController extends AvocaController
             $id = $model->save($post);
 
             // AJAX
-            if ($ajax == '1') {
+            if ($ajax == 1) {
                 if ($id) {
                     return $this->jsonData([
                         'error' => 0,
+                        'message' => $this->lang->line('Save record success'),
                         'id' => $id
                     ]);
                 }
 
                 return $this->jsonData([
                     'error' => 1,
-                    'errors' => $model->getErrors(),
+                    'message' => $model->getErrors(),
                 ]);
             }
 
