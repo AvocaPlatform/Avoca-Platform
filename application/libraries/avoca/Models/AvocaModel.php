@@ -77,6 +77,20 @@ class AvocaModel extends \CI_Model
     }
 
     /**
+     * database fields
+     *
+     * @return array
+     */
+    public function getFields()
+    {
+        if ($this->table) {
+            return $this->db->list_fields($this->table);
+        }
+
+        return [];
+    }
+
+    /**
      * create or update record
      *
      * @param $data
@@ -110,7 +124,7 @@ class AvocaModel extends \CI_Model
         }
 
         // get all fields in table
-        $fields = $this->db->list_fields($this->table);
+        $fields = $this->getFields();
 
         $fields_data = [];
         // choose/reformat fields from data
@@ -169,7 +183,7 @@ class AvocaModel extends \CI_Model
         }
 
         // get all fields in table
-        $fields = $this->db->list_fields($this->table);
+        $fields = $this->getFields();
 
         $fields_data = [];
         // choose/reformat data fields

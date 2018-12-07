@@ -22,6 +22,8 @@ class AvocaApiV1Controller extends AvocaController
     protected $model = '';
     protected $require_auth = true;
 
+    protected $viewdefs = null;
+
     /**
      * @var \Avoca\Libraries\AvocaApiAuth
      */
@@ -179,6 +181,37 @@ class AvocaApiV1Controller extends AvocaController
     }
 
     /**
+     * View Defs from config application/config/models
+     *
+     * @param string $model
+     * @return array|mixed
+     */
+    protected function getViewDefs($model = '')
+    {
+        if (!$model) {
+            if ($this->viewdefs) {
+                return $this->viewdefs;
+            }
+        }
+
+        $model = $model ? $model : $this->model;
+        $uri_viewdef = 'config/models/' . $model . '/viewdefs.php';
+
+        $layout_path = $this->getFilePath($uri_viewdef);
+        if (file_exists($layout_path)) {
+            $viewdefs = include $layout_path;
+
+            if (!$model) {
+                $this->viewdefs = $viewdefs;
+            }
+
+            return $viewdefs;
+        }
+
+        return [];
+    }
+
+    /**
      * Action
      *
      * GET --> get list records
@@ -224,13 +257,85 @@ class AvocaApiV1Controller extends AvocaController
     }
 
     /**
+     * clean up search
+     *
+     * @param $searchFields
+     * @param $where
+     * @return array
+     */
+    protected function whereSearch($searchFields, $where = [])
+    {
+        $whereSearch = [];
+
+        $viewdefs = $this->getViewDefs();
+        $listdefs = isset($viewdefs['list']['fields']) ? $viewdefs['list']['fields'] : [];
+
+        $model = $this->getModel();
+        $fields = $model->getFields();
+
+        foreach ($searchFields as $field => $value) {
+            if (in_array($field, $fields)) {
+                if (!empty($listdefs[$field]['operator'])) {
+                    $operator = strtolower(trim($listdefs[$field]['operator']));
+                    $field_where = "$field $operator";
+
+                    switch ($operator) {
+                        case 'like':
+                            $value = '%' . $value . '%';
+                            $whereSearch[$field_where] = $value;
+                            break;
+                        default:
+                            $whereSearch[$field_where] = $value;
+                            break;
+                    }
+                }
+            }
+        }
+
+        if (!empty($whereSearch)) {
+            if (!$where) {
+                return $whereSearch;
+            }
+
+            if (is_array($where)) {
+                return array_merge($whereSearch, $where);
+            }
+        }
+    }
+
+    /**
      * GET all records
      *
      * @return bool
      */
     protected function listRecords()
     {
-        $this->data['list'] = $this->getModel()->getAll();
+        // sort
+        $orders = [];
+        $order_by = $this->getQuery('order_by');
+        if ($order_by) {
+            $order_type = $this->getQuery('order');
+            if (!$order_type || !in_array($order_type, ['asc', 'desc'])) {
+                $order_type = 'asc';
+            }
+            // get orders
+            $orders = [$order_by => $order_type];
+        }
+
+        // default where
+        $where = $this->getOption(\ControllerOptions::LIST_WHERE, []);
+
+        // query search
+        $where = $this->whereSearch($this->getQuery(), $where);
+
+        // pagination
+        $offset = $this->getQuery('offset') ?: 0;
+
+        // get records
+        $model = $this->getModel();
+        $list = $model->getRecords($where, $offset, $orders);
+
+        $this->data['list'] = $list;
         return true;
     }
 
@@ -304,5 +409,15 @@ class AvocaApiV1Controller extends AvocaController
         if (!empty($errors)) {
             $this->setErrors($errors);
         }
+    }
+
+    /**
+     * Action
+     *
+     * @param null $model
+     */
+    public function meta($model = null)
+    {
+        $this->data['viewdefs'] = $this->getViewDefs($model);
     }
 }

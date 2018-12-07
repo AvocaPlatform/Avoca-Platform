@@ -19,6 +19,8 @@ class AvocaManageController extends AvocaController
     protected $model = '';
     protected $require_auth = true;
 
+    protected $viewdefs = null;
+
     protected function authenticate()
     {
         if (!$this->isLogin()) {
@@ -93,13 +95,24 @@ class AvocaManageController extends AvocaController
      */
     protected function getViewDefs($model = '')
     {
+        if (!$model) {
+            if ($this->viewdefs) {
+                return $this->viewdefs;
+            }
+        }
+
         $model = $model ? $model : $this->model;
         $uri_viewdef = 'config/models/' . $model . '/viewdefs.php';
 
         $layout_path = $this->getFilePath($uri_viewdef);
-
         if (file_exists($layout_path)) {
-            return include $layout_path;
+            $viewdefs = include $layout_path;
+
+            if (!$model) {
+                $this->viewdefs = $viewdefs;
+            }
+
+            return $viewdefs;
         }
 
         return [];
@@ -138,10 +151,10 @@ class AvocaManageController extends AvocaController
      *
      * @param $searchFields
      * @param $get
-     * @param string $where
+     * @param array $where
      * @return array|string
      */
-    protected function whereSearch($searchFields, $get, $where = '')
+    protected function whereSearch($searchFields, $get, $where = [])
     {
         $whereSearch = [];
         foreach ($searchFields as $field => $operator) {
@@ -244,7 +257,7 @@ class AvocaManageController extends AvocaController
         }
 
         // default where
-        $where = $this->getOption(\ControllerOptions::LIST_WHERE, '');
+        $where = $this->getOption(\ControllerOptions::LIST_WHERE, []);
 
         // search
         $search_form = '/manage_templates/search_form.twig';
@@ -253,8 +266,8 @@ class AvocaManageController extends AvocaController
             $this->data['search_form'] = 'custom' . $search_form;
         }
         // query search
-        if (!empty($viewdefs['list'])) {
-            $searchFields = $this->getSearchFields($viewdefs['list']);
+        if (!empty($viewdefs['list']['fields'])) {
+            $searchFields = $this->getSearchFields($viewdefs['list']['fields']);
             $where = $this->whereSearch($searchFields, $this->getQuery(), $where);
         }
 
