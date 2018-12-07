@@ -47,10 +47,9 @@ class AvocaApiV1Controller extends AvocaController
     protected function init()
     {
         $this->auth = new \Avoca\Libraries\AvocaApiAuth();
+        $this->data['_start_rtime'] = microtime(true);
 
-        $this->addGlobals([
-            '_start_rtime' => microtime(true),
-        ]);
+        $this->setViewType();
     }
 
     /**
@@ -76,6 +75,18 @@ class AvocaApiV1Controller extends AvocaController
         }
 
         return true;
+    }
+
+    protected function authenticateError()
+    {
+        $this->jsonData();
+    }
+
+    protected function addGlobals($vars)
+    {
+        foreach ($vars as $var => $val) {
+            $this->data[$var] = $val;
+        }
     }
 
     /**
