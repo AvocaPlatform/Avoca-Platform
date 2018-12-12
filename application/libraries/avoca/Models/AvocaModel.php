@@ -402,6 +402,8 @@ class AvocaModel extends \CI_Model
             $data = [
                 'total' => $total_records,
                 'count' => $query->num_rows(),
+                'offset' => $offset,
+                'per_page' => $this->getLimit(),
                 'records' => []
             ];
 
