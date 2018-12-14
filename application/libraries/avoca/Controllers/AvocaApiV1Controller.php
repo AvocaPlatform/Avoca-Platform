@@ -330,6 +330,7 @@ class AvocaApiV1Controller extends AvocaController
 
         // pagination
         $offset = $this->getQuery('offset') ?: 0;
+        $offset = intval($offset);
 
         // get records
         $model = $this->getModel();
