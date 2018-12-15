@@ -63,9 +63,9 @@ class AvocaField
             } else {
                 $type = (empty($option['type'])) ? 'text' : $option['type'];
                 $type = strtolower($type);
-                $extra = [
-                    'class' => (!empty($option['class'])) ? $option['class'] : 'form-control',
-                ];
+                $extra = $option;
+                unset($extra['type']);
+                $extra['class'] = (!empty($option['class'])) ? $option['class'] : 'form-control';
             }
         } else {
             $type = 'disabled';
