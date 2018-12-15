@@ -316,7 +316,7 @@ class AvocaController extends AvocaBaseController
             if (strpos($css, 'https') !== false || strpos($css, 'http') !== false) {
                 $link[] = $css;
             } else {
-                $link[] = base_url() . $css;
+                $link[] = avoca_static() . $css;
             }
         }
 
@@ -332,7 +332,7 @@ class AvocaController extends AvocaBaseController
             if (strpos($js, 'https') !== false || strpos($js, 'http') !== false) {
                 $src[] = $js;
             } else {
-                $src[] = base_url() . $js;
+                $src[] = avoca_static() . $js;
             }
         }
 
