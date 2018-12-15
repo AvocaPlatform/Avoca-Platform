@@ -9,6 +9,8 @@
 <script src="{{ avoca_static() }}/vendors/@coreui/coreui-plugin-chartjs-custom-tooltips/js/custom-tooltips.min.js"></script>
 <script src="{{ avoca_static() }}/vendors/icheck/icheck.min.js"></script>
 <script src="{{ avoca_static() }}/vendors/jquery-confirm/jquery-confirm.min.js"></script>
-{{ JS|raw }}
+{% for js in _JS %}
+    <script src="{{ js }}"></script>
+{% endfor %}
 {% include 'templates/layouts/manage.alert.inc.twig' %}
 <script src="{{ avoca_static() }}/js/main.js"></script>
