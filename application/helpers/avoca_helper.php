@@ -60,11 +60,17 @@ function avoca_url($uri = '', $protocol = NULL)
 /**
  * static url
  *
+ * @param bool $include_theme
  * @return string
  */
-function avoca_static()
+function avoca_static($include_theme = true)
 {
-    $uri = '/themes/' . config_item('theme_folder');
+    if ($include_theme) {
+        $uri = '/themes/' . config_item('theme_folder');
+    } else {
+        $uri = '';
+    }
+
     $public_folder = config_item('public_folder');
     if ($public_folder) {
         $uri = '/' . $public_folder . $uri;
