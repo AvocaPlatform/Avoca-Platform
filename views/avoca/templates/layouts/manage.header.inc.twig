@@ -9,6 +9,8 @@
 <link href="{{ avoca_static() }}/css/style.css" rel="stylesheet">
 <link href="{{ avoca_static() }}/css/avoca.css" rel="stylesheet">
 <link href="{{ avoca_static() }}/vendors/pace-progress/css/pace.min.css" rel="stylesheet">
-{{ CSS|raw }}
+{% for css in _CSS %}
+    <link rel="stylesheet" href="{{ css }}">
+{% endfor %}
 <script src="{{ avoca_static() }}/vendors/jquery/js/jquery.min.js"></script>
 <script src="{{ avoca_static() }}/js/avoca_func.js"></script>
