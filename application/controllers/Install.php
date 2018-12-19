@@ -99,7 +99,7 @@ class Install extends AVC_Controller
         array_pop($sqls);
 
         foreach ($sqls as $statement) {
-            $statment = $statement . ";";
+            $statement = $statement . ';';
             $this->db->query($statement);
         }
     }
