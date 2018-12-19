@@ -284,10 +284,9 @@ class AvocaModel extends \CI_Model
      * format fields when display to client
      *
      * @param $record
-     * @param bool $is_array
      * @return mixed
      */
-    protected function displayRecord($record, $is_array = false)
+    protected function displayRecord($record)
     {
         return $record;
     }
