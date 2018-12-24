@@ -13,7 +13,7 @@
 
 class Install extends AVC_Controller
 {
-    private $installed = false;
+    private $installed = true;
 
     // action install
     public function index()
