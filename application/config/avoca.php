@@ -10,8 +10,8 @@
  */
 
 $config['public_folder'] = '';
-$config['theme_folder'] = 'avoca';
-$config['view_folder'] = 'avoca';
+$config['theme_folder'] = 'adminlte';
+$config['view_folder'] = 'adminlte';
 $config['error_views_path'] = VIEWPATH . $config['view_folder'] . DIRECTORY_SEPARATOR . 'errors' . DIRECTORY_SEPARATOR;
 
 $config['manage_prefix'] = 'manage';

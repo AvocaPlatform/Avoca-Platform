@@ -1,0 +1,45 @@
+{% extends 'templates/layouts/admin.twig' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">{{ __('Scope') }}</h3>
+
+                    <div class="box-tools pull-right">
+                        <a class="btn btn-box-tool" href="{{ avoca_admin('/oauth2/edit_scope') }}">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table class="table table-responsive-sm">
+                        <thead>
+                        <tr>
+                            <th>{{ __('Scope') }}</th>
+                            <th>{{ __('Is default') }}</th>
+                            <th>{{ __('Action') }}</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for record in records %}
+                            <tr>
+                                <td>{{ record.scope }}</td>
+                                <td>{{ record.is_default }}</td>
+                                <td>
+                                    <a href="{{ avoca_admin('/oauth2/delete/scope/' ~ record.scope) }}"
+                                       class="btn btn-sm btn-danger">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

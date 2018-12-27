@@ -15,6 +15,8 @@ class Auth extends AVC_Controller
     // Action login
     public function index()
     {
+        $this->addGlobal('_pageClass', 'login-page');
+
         if ($this->isLogin()) {
             return $this->redirect_return($this->getRequest('r'));
         }

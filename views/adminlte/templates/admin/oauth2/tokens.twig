@@ -1,0 +1,44 @@
+{% extends 'templates/layouts/admin.twig' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">{{ __('Access Tokens') }}</h3>
+
+                    <div class="box-tools pull-right">
+                        <a class="btn btn-box-tool" href="{{ avoca_admin('/oauth2/remove_expire_tokens') }}">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table class="table table-responsive-sm">
+                        <thead>
+                        <tr>
+                            <th>{{ __('Tokens') }}</th>
+                            <th>{{ __('Client id') }}</th>
+                            <th>{{ __('User') }}</th>
+                            <th>{{ __('Expires') }}</th>
+                            <th>{{ __('Scope') }}</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for record in records %}
+                            <tr>
+                                <td>{{ record.access_token }}</td>
+                                <td>{{ record.client_id }}</td>
+                                <td>{{ record.user_id }}</td>
+                                <td>{{ record.expires }}</td>
+                                <td>{{ record.scope }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

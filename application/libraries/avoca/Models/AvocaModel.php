@@ -341,7 +341,7 @@ class AvocaModel extends \CI_Model
         $query = $this->db->get($table);
 
         if ($query->num_rows() > 0) {
-            return $this->displayRecord($query->row());
+            return $this->displayRecord($query->row_array());
         }
 
         return null;

@@ -1,0 +1,18 @@
+<!-- necessary plugins-->
+<script src="{{ avoca_static() }}/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script>
+    $.widget.bridge('uibutton', $.ui.button);
+</script>
+<script src="{{ avoca_static() }}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="{{ avoca_static() }}/bower_components/moment/min/moment.min.js"></script>
+<script src="{{ avoca_static() }}/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="{{ avoca_static() }}/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="{{ avoca_static() }}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<script src="{{ avoca_static() }}/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<script src="{{ avoca_static() }}/bower_components/fastclick/lib/fastclick.js"></script>
+<script src="{{ avoca_static() }}/dist/js/adminlte.min.js"></script>
+{% for js in _JS %}
+    <script src="{{ js }}"></script>
+{% endfor %}
+{% include 'templates/layouts/manage.alert.inc.twig' %}
+<script src="{{ avoca_static() }}/dist/js/main.js"></script>
