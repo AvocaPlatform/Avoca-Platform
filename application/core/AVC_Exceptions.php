@@ -73,4 +73,34 @@ class AVC_Exceptions extends CI_Exceptions
         ob_end_clean();
         echo $buffer;
     }
+
+    public function show_exception($exception)
+    {
+        $templates_path = $this->getErrorTemplatePath();
+
+        if (empty($templates_path)) {
+            $templates_path = VIEWPATH . 'errors' . DIRECTORY_SEPARATOR;
+        }
+
+        $message = $exception->getMessage();
+        if (empty($message)) {
+            $message = '(null)';
+        }
+
+        if (is_cli()) {
+            $templates_path .= 'cli' . DIRECTORY_SEPARATOR;
+        } else {
+            $templates_path .= 'html' . DIRECTORY_SEPARATOR;
+        }
+
+        if (ob_get_level() > $this->ob_level + 1) {
+            ob_end_flush();
+        }
+
+        ob_start();
+        include($templates_path . 'error_exception.php');
+        $buffer = ob_get_contents();
+        ob_end_clean();
+        echo $buffer;
+    }
 }

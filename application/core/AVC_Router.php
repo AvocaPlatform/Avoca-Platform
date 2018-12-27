@@ -9,11 +9,60 @@
  * Git: https://github.com/tdhungit
  */
 
+require dirname(__FILE__) . '/Modules.php';
+
+
 class AVC_Router extends CI_Router
 {
+    private $located = 0;
+
+    public $module;
+
     public function __construct(array $routing = NULL)
     {
         parent::__construct($routing);
+    }
+
+    protected function _set_request($segments = array())
+    {
+        $segments = $this->_validate_request($segments);
+
+        if (empty($segments)) {
+            $this->_set_default_controller();
+            return;
+        }
+
+        if ($this->translate_uri_dashes === TRUE) {
+            $segments[0] = str_replace('-', '_', $segments[0]);
+            if (isset($segments[1])) {
+                $segments[1] = str_replace('-', '_', $segments[1]);
+            }
+        }
+
+        $segments = $this->locate($segments);
+
+        // @TODO will show when complete HMVC
+//        if ($this->located == -1) {
+//            $this->_set_module_path($this->routes['404_override']);
+//            return;
+//        }
+
+        if (empty($segments)) {
+            $this->_set_default_controller();
+            return;
+        }
+
+        $this->set_class($segments[0]);
+
+        if (isset($segments[1])) {
+            $this->set_method($segments[1]);
+        } else {
+            $segments[1] = 'index';
+        }
+
+        array_unshift($segments, NULL);
+        unset($segments[0]);
+        $this->uri->rsegments = $segments;
     }
 
     protected function _set_routing()
@@ -105,11 +154,78 @@ class AVC_Router extends CI_Router
         }
     }
 
+    protected function _set_module_path(&$_route)
+    {
+        if (!empty($_route)) {
+            // Are module/controller/method segments being specified?
+            $sgs = sscanf($_route, '%[^/]/%[^/]/%[^/]/%s', $module, $class, $method);
+
+            // set the module/controller directory location if found
+            if ($this->locate(array(
+                $module,
+                $class
+            ))) {
+                //reset to class/method
+                switch ($sgs) {
+                    case 1:
+                        $_route = $module . '/index';
+                        break;
+                    case 2:
+                        $_route = ($this->located == 1) ? $module . '/' . $class : $class . '/index';
+                        break;
+                    case 3:
+                        $_route = ($this->located == 1) ? $class . '/' . $method : $method . '/index';
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
     public function set_class($class)
     {
         $this->class = str_replace(array(
             '/',
             '.'
         ), '', $class);
+    }
+
+    public function fetch_module()
+    {
+        return $this->module;
+    }
+
+    public function locate($segments)
+    {
+        /* use module route if available */
+        if (isset($segments[0]) && $routes = Modules::parse_routes($segments[0], implode('/', $segments))) {
+            $segments = $routes;
+        }
+
+        /* get the segments array elements */
+        list($module, $controller) = array_pad($segments, 2, NULL);
+
+        /* check modules */
+        foreach (Modules::$locations as $location => $offset) {
+            /* module exists? */
+            if (is_dir($source = $location . $module . '/controllers/')) {
+                $this->module = $module;
+                $this->directory = $offset . $module . '/controllers/';
+
+                if (is_file($source . ucfirst($controller) . EXT)) {
+                    $this->located = 1;
+                    return array_slice($segments, 1);
+                }
+
+                if (is_file($source . ucfirst($module) . EXT)) {
+                    $this->located = 0;
+                    return $segments;
+                }
+            }
+        }
+
+        $this->located = -1;
+        return $segments;
     }
 }

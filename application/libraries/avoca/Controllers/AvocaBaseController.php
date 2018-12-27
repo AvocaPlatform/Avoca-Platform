@@ -31,6 +31,8 @@ class AvocaBaseController extends \CI_Controller
 {
     protected $version = '1.1';
 
+    public $autoload = array();
+
     protected $controller_name;
     protected $action_name;
 
@@ -137,7 +139,8 @@ class AvocaBaseController extends \CI_Controller
      * detect request method (POST, PUT, GET, DELETE)
      * @return string
      */
-    protected function detectMethod() {
+    protected function detectMethod()
+    {
         $method = strtolower($this->input->server('REQUEST_METHOD'));
 
         if (config_item('enable_emulate_request')) {
@@ -148,7 +151,13 @@ class AvocaBaseController extends \CI_Controller
             }
         }
 
-        if (in_array($method, array('get', 'delete', 'post', 'put', 'options'))) {
+        if (in_array($method, array(
+            'get',
+            'delete',
+            'post',
+            'put',
+            'options'
+        ))) {
             return $method;
         }
 
