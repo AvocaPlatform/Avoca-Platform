@@ -50,9 +50,10 @@ class AvocaManageController extends AvocaController
             $view = $this->router->directory . strtolower($this->controller_name) . DIRECTORY_SEPARATOR . strtolower($this->action_name);
 
             if (!file_exists($this->getViewPath() . $root_path . $view . '.twig')) {
+                $need_view = $view;
                 $view = 'manage_templates' . DIRECTORY_SEPARATOR . strtolower($this->action_name);
                 if (!file_exists($this->getViewPath() . $root_path . $view . '.twig')) {
-                    show_error('ERROR template: ' . $this->getViewPath() . $root_path . $view . '.twig');
+                    show_error('ERROR template: ' . $this->getViewPath() . $root_path . $need_view . '.twig');
                 }
             }
 
@@ -62,9 +63,10 @@ class AvocaManageController extends AvocaController
             $view = $this->router->directory . $this->view_path;
 
             if (!file_exists($this->getViewPath() . $root_path . $view . '.twig')) {
+                $need_view = $view;
                 $view = 'manage_templates' . DIRECTORY_SEPARATOR . $this->view_path;
                 if (!file_exists($this->getViewPath() . $root_path . $view . '.twig')) {
-                    show_error('ERROR template: ' . $this->getViewPath() . $root_path . $view . '.twig');
+                    show_error('ERROR template: ' . $this->getViewPath() . $root_path . $need_view . '.twig');
                 }
             }
 

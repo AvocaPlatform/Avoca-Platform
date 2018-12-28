@@ -208,7 +208,7 @@ define('APPPATH', $application_folder . DIRECTORY_SEPARATOR);
 define('CUSTOMPATH', APPPATH . '../custom' . DIRECTORY_SEPARATOR);
 
 // The path to the "themes" directory
-$view_folder = APPPATH . '..' . DIRECTORY_SEPARATOR . 'views';
+$view_folder = APPPATH . 'views';
 define('VIEWPATH', $view_folder . DIRECTORY_SEPARATOR);
 
 /*
