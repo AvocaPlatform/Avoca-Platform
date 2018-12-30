@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% include 'layouts/header.meta.inc.twig' %}
+    {% include 'layouts/manage.header.inc.twig' %}
+</head>
+
+<body class="app flex-row align-items-center">
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    {% include 'layouts/manage.footer.inc.twig' %}
+</body>
+</html>

@@ -1,0 +1,46 @@
+{% extends 'layouts/admin.twig' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            {{ form_open(avoca_admin('/oauth2/scopes')) }}
+                <div class="card">
+                    <div class="card-header">
+                        {{ __(title) }}
+                    </div>
+
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>{{ __('Client id') }}</label>
+                            {{ form_input('client_id', record.client_id, {class: 'form-control'}) }}
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ __('Client secret') }}</label>
+                            {{ form_input('client_secret', record.client_secret, {class: 'form-control'}) }}
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ __('Redirect uri') }}</label>
+                            {{ form_input('redirect_uri', record.redirect_uri, {class: 'form-control'}) }}
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ __('Grant types') }}</label>
+                            {{ form_multiselect('grant_types[]', _grant_types, record.grant_types_selected, {'class': 'form-control'}) }}
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ __('Scope') }}</label>
+                            {{ form_multiselect('scope[]', oauth_scopes, record.scope_selected, {'class': 'form-control'}) }}
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                    </div>
+                </div>
+            {{ form_close() }}
+        </div>
+    </div>
+{% endblock %}

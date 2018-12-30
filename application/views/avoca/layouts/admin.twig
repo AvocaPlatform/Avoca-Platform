@@ -1,0 +1,62 @@
+{% extends 'layouts/manage.twig' %}
+
+{% block headerNavL %}
+    <ul class="nav navbar-nav d-md-down-none">
+        <li class="nav-item px-3">
+            <a class="nav-link" href="{{ avoca_admin('/') }}">Dashboard</a>
+        </li>
+        <li class="nav-item px-3">
+            <a class="nav-link" href="{{ avoca_admin('/') }}">Users</a>
+        </li>
+        <li class="nav-item px-3">
+            <a class="nav-link" href="{{ avoca_admin('/settings') }}">Settings</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block sidebar %}
+    <nav class="sidebar-nav">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ avoca_admin() }}">
+                    <i class="nav-icon icon-speedometer"></i> Dashboard
+                    <span class="badge badge-primary">NEW</span>
+                </a>
+            </li>
+
+            <li class="nav-item nav-dropdown">
+                <a class="nav-link nav-dropdown-toggle" href="{{ avoca_admin('/oauth2') }}">
+                    <i class="nav-icon icon-puzzle"></i> {{ __('Oauth2') }}
+                </a>
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ avoca_admin('/oauth2') }}">
+                            <i class="nav-icon icon-puzzle"></i> {{ __('Clients') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ avoca_admin('/oauth2/tokens') }}">
+                            <i class="nav-icon icon-puzzle"></i> {{ __('Access tokens') }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ avoca_admin('/oauth2/refresh_tokens') }}">
+                            <i class="nav-icon icon-puzzle"></i> {{ __('Refresh tokens') }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ avoca_admin('/oauth2/scopes') }}">
+                            <i class="nav-icon icon-puzzle"></i> {{ __('Scope') }}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item mt-auto">
+                <a class="nav-link nav-link-success" href="https://avoca.io" target="_top">
+                    <i class="nav-icon icon-cloud-download"></i> Download AvocaIO
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+{% endblock %}
