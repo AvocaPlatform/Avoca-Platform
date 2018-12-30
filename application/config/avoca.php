@@ -14,7 +14,7 @@ $config['theme_folder'] = 'adminlte';
 $config['view_folder'] = 'adminlte';
 $config['error_views_path'] = VIEWPATH . $config['view_folder'] . DIRECTORY_SEPARATOR . 'errors' . DIRECTORY_SEPARATOR;
 
-$config['manage_prefix'] = 'manage';
+$config['manage_prefix'] = '';
 $config['admin_prefix'] = 'admin';
 
 $config['records_per_page'] = 20;

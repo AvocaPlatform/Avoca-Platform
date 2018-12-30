@@ -291,8 +291,16 @@ class AvocaBaseController extends \CI_Controller
      */
     protected function getModel($modelName)
     {
+        if (strpos($modelName, '/') === false) {
+            $model = $modelName;
+            $modelName = $this->module_name . '/' . $modelName;
+        } else {
+            $arr = explode('/', $modelName);
+            $model = $arr[1];
+        }
+
         $this->load->model($modelName);
-        return $this->$modelName;
+        return $this->$model;
     }
 
     /**

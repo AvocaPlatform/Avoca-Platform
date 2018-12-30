@@ -158,7 +158,14 @@ class AVC_Router extends CI_Router
     {
         if (!empty($_route)) {
             // Are module/controller/method segments being specified?
-            $sgs = sscanf($_route, '%[^/]/%[^/]/%[^/]/%s', $module, $class, $method);
+            $sgs = sscanf($_route, '%[^/]/%[^/]/%[^/]/%s', $module, $class, $method, $params);
+            if ($sgs != 3) {
+                $method = 'index';
+            }
+
+            if (!$class) {
+                $class = $module;
+            }
 
             // set the module/controller directory location if found
             if ($this->locate(array(
@@ -168,7 +175,7 @@ class AVC_Router extends CI_Router
                 //reset to class/method
                 switch ($sgs) {
                     case 1:
-                        $_route = $module . '/index';
+                        $_route = $module . '/' . $class . '/index';
                         break;
                     case 2:
                         $_route = ($this->located == 1) ? $module . '/' . $class : $class . '/index';
@@ -181,6 +188,65 @@ class AVC_Router extends CI_Router
                 }
             }
         }
+    }
+
+    protected function _set_default_controller()
+    {
+        if (empty($this->directory)) {
+            /* set the default controller module path */
+            $this->_set_module_path($this->default_controller);
+        }
+
+        if (empty($this->default_controller)) {
+            show_error('Unable to determine what should be displayed. A default route has not been specified in the routing file.');
+        }
+
+        // Is the method being specified?
+        if (sscanf($this->default_controller, '%[^/]/%[^/]/%s', $module, $class, $method) !== 3) {
+            $method = 'index';
+        }
+
+        if (!file_exists(APPPATH . 'modules/' . $this->directory . ucfirst($class) . '.php')) {
+            // This will trigger 404 later
+            return;
+        }
+
+        $this->set_class($class);
+        $this->set_method($method);
+
+        // Assign routed segments, index starting from 1
+        $this->uri->rsegments = array(
+            1 => $class,
+            2 => $method
+        );
+
+        log_message('debug', 'No URI present. Default controller set.');
+    }
+
+    protected function _validate_request($segments)
+    {
+        $c = count($segments);
+        $directory_override = isset($this->directory);
+
+        // Loop through our segments and return as soon as a controller
+        // is found or when such a directory doesn't exist
+        while ($c-- > 0) {
+            $test = $this->directory
+                . ucfirst($this->translate_uri_dashes === TRUE ? str_replace('-', '_', $segments[0]) : $segments[0]);
+
+            if (!file_exists(APPPATH . 'controllers/' . $test . '.php')
+                && $directory_override === FALSE
+                && is_dir(APPPATH . 'controllers/' . $this->directory . $segments[0])
+            ) {
+                $this->set_directory(array_shift($segments), TRUE);
+                continue;
+            }
+
+            return $segments;
+        }
+
+        // This means that all segments were actually directories
+        return $segments;
     }
 
     public function set_class($class)

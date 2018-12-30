@@ -215,7 +215,7 @@ class AvocaController extends AvocaBaseController
         $this->autoGlobals();
 
         if (!$this->view_path) {
-            $this->view_path = $this->router->directory . strtolower($this->controller_name) . DIRECTORY_SEPARATOR . strtolower($this->action_name);
+            $this->view_path = strtolower($this->controller_name) . '/' . strtolower($this->action_name);
         }
 
         return $this->twig->render($this->fixedViewPath($template), $this->data);
@@ -248,7 +248,7 @@ class AvocaController extends AvocaBaseController
         $template = $template ? $template : $this->view_path;
 
         $view_path = $template;
-        $custom_path = 'custom' . DIRECTORY_SEPARATOR . $template;
+        $custom_path = CUSTOMPATH . $template;
 
         if (file_exists(VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR . $custom_path . '.twig')) {
             $view_path = $custom_path;

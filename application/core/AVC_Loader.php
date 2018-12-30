@@ -95,8 +95,6 @@ class AVC_Loader extends CI_Loader
             return $this;
         }
 
-        $path = '';
-
         // Is the model in a sub-folder? If so, parse out the filename and path.
         if (($last_slash = strrpos($model, '/')) !== FALSE) {
             // The path is in front of the last slash
@@ -104,6 +102,8 @@ class AVC_Loader extends CI_Loader
 
             // And the model name behind it
             $model = substr($model, $last_slash);
+        } else {
+            throw new RuntimeException('Unable to locate the model you have specified: ' . $model . '. Need load model: module/model_name');
         }
 
         if (empty($name)) {
@@ -155,13 +155,14 @@ class AVC_Loader extends CI_Loader
         $model = ucfirst($model);
         if (!class_exists($model, FALSE)) {
             foreach ($this->_ci_model_paths as $mod_path) {
-                if (!file_exists($mod_path . 'models/' . $path . $model . '.php')) {
+                $model_path = $mod_path . 'modules/' . $path . 'models/' . $model . '.php';
+                if (!file_exists($model_path)) {
                     continue;
                 }
 
-                require_once($mod_path . 'models/' . $path . $model . '.php');
+                require_once($model_path);
                 if (!class_exists($model, FALSE)) {
-                    throw new RuntimeException($mod_path . "models/" . $path . $model . ".php exists, but doesn't declare class " . $model);
+                    throw new RuntimeException($model_path . " exists, but doesn't declare class " . $model);
                 }
 
                 break;

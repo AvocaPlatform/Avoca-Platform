@@ -91,15 +91,6 @@ class Modules
         /* don't autoload CI_ prefixed classes or those using the config subclass_prefix */
         if (strstr($class, 'CI_') OR strstr($class, config_item('subclass_prefix'))) return;
 
-        /* autoload Modular Extensions MX core classes */
-        if (strstr($class, 'MX_')) {
-            if (is_file($location = dirname(__FILE__) . '/' . substr($class, 3) . EXT)) {
-                include_once $location;
-                return;
-            }
-            show_error('Failed to load MX core class: ' . $class);
-        }
-
         /* autoload core classes */
         if (is_file($location = APPPATH . 'core/' . ucfirst($class) . EXT)) {
             include_once $location;

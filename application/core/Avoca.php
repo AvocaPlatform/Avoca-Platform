@@ -337,12 +337,12 @@ $BM->mark('loading_time:_base_classes_end');
 
 $e404 = FALSE;
 $class = ucfirst($RTR->class);
-$class_path = APPPATH . 'controllers/' . $RTR->directory . $class . '.php';
+$class_path = APPPATH . 'modules/' . $RTR->directory . $class . '.php';
 $method = $RTR->method;
 
 // check controller custom
 $custom_class = $class . 'Controller';
-$custom_class_path = APPPATH . '../custom/controllers/' . $RTR->directory . $class . '.php';
+$custom_class_path = APPPATH . '../custom/modules/' . $RTR->directory . $class . '.php';
 if (file_exists($custom_class_path)) {
     require_once $class_path;
     $class = $custom_class;
