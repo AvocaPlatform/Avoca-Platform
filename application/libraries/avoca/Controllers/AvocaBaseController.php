@@ -33,6 +33,7 @@ class AvocaBaseController extends \CI_Controller
 
     public $autoload = array();
 
+    protected $module_name;
     protected $controller_name;
     protected $action_name;
 
@@ -55,6 +56,7 @@ class AvocaBaseController extends \CI_Controller
 
         parent::__construct();
 
+        $this->module_name = $this->router->fetch_module();
         $this->controller_name = $this->router->fetch_class();
         $this->action_name = $this->router->fetch_method();
 

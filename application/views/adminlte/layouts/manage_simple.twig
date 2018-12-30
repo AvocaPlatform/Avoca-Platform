@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% include 'layouts/header.meta.inc.twig' %}
+    {% include 'layouts/manage.header.inc.twig' %}
+</head>
+
+<body class="hold-transition {{ _pageClass ?? '' }}">
+    {% block content %}{% endblock %}
+
+    {% include 'layouts/manage.footer.inc.twig' %}
+</body>
+</html>

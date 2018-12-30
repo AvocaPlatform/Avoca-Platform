@@ -46,8 +46,8 @@ class AvocaManageController extends AvocaController
 
         if (!$this->view_path) {
 
-            $root_path = 'templates' . DIRECTORY_SEPARATOR;
-            $view = $this->router->directory . strtolower($this->controller_name) . DIRECTORY_SEPARATOR . strtolower($this->action_name);
+            $root_path = '';
+            $view = strtolower($this->controller_name) . '/' . strtolower($this->action_name);
 
             if (!file_exists($this->getViewPath() . $root_path . $view . '.twig')) {
                 $need_view = $view;
@@ -59,7 +59,7 @@ class AvocaManageController extends AvocaController
 
             $this->view_path = $view;
         } else {
-            $root_path = 'templates' . DIRECTORY_SEPARATOR;
+            $root_path = '';
             $view = $this->router->directory . $this->view_path;
 
             if (!file_exists($this->getViewPath() . $root_path . $view . '.twig')) {
@@ -263,7 +263,7 @@ class AvocaManageController extends AvocaController
 
         // search
         $search_form = '/manage_templates/search_form.twig';
-        $this->data['search_form'] = 'templates' . $search_form;
+        $this->data['search_form'] = $search_form;
         if (file_exists(VIEWPATH . $this->getViewFolder() . '/custom' . $search_form)) {
             $this->data['search_form'] = 'custom' . $search_form;
         }
