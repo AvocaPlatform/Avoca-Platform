@@ -11,7 +11,7 @@
 
 class Users extends AVC_APIV1Controller
 {
-    protected $model = 'user';
+    protected $model = 'users/user';
 
     /**
      * Action
@@ -29,7 +29,7 @@ class Users extends AVC_APIV1Controller
                 $username = $oauth_token['user_id'];
 
                 /** @var \User $userModel */
-                $userModel = $this->getModel('user');
+                $userModel = $this->getModel('users/user');
                 $this->data['user'] = $userModel->getByUsername($username);
             }
         }

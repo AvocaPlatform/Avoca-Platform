@@ -25,7 +25,7 @@ class AvocaAdminController extends AvocaController
         }
 
         /** @var \User $userModel */
-        $userModel = $this->getModel('user');
+        $userModel = $this->getModel('users/user');
         $user_idadmin = $this->getSession('user_isadmin');
         if ($user_idadmin == $userModel::$ADMIN_TYPE) {
             return true;

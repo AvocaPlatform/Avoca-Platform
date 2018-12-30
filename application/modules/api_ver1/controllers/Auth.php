@@ -31,7 +31,7 @@ class Auth extends AVC_BaseController
         $userAuth = [];
 
         /** @var User $userModel */
-        $userModel = $this->getModel('user');
+        $userModel = $this->getModel('users/user');
 
         $username = $this->getPost('username');
         $password = $this->getPost('password');
