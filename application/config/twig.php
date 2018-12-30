@@ -15,7 +15,6 @@ $config['twig'] = [
         'get_flash',
         '__',
         'avoca_url',
-        'avoca_manage',
         'avoca_admin',
         'avoca_currentUrl',
         'recordLink',

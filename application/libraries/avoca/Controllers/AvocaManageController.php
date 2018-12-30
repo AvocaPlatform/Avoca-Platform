@@ -296,7 +296,7 @@ class AvocaManageController extends AvocaController
 
         // pagination
         $pagination_config = include APPPATH . 'modules/admin/config/pagination.php';
-        $pagination_config['base_url'] = avoca_manage($this->data['list_link']);
+        $pagination_config['base_url'] = avoca_url($this->data['list_link']);
         $pagination_config['uri_segment'] = 4;
         $pagination_config['total_rows'] = $list['total'];
         $pagination_config['per_page'] = $model->getLimit();
@@ -327,7 +327,7 @@ class AvocaManageController extends AvocaController
 
         if (!$record) {
             $this->setError('Can not found this record');
-            return $this->manage_redirect('/' . $this->controller_name);
+            return $this->redirect('/' . $this->controller_name);
         }
 
         $this->data['record'] = $record;
@@ -455,11 +455,11 @@ class AvocaManageController extends AvocaController
                 }
             }
 
-            return $this->manage_redirect($return_url);
+            return $this->redirect($return_url);
         }
 
         $return_url = $this->getOption('list_link', '/' . $this->controller_name);
-        return $this->manage_redirect($return_url);
+        return $this->redirect($return_url);
     }
 
     // ACTION delete
@@ -481,7 +481,7 @@ class AvocaManageController extends AvocaController
             $return_url = $this->getPost('r');
             if (!$return_url) {
                 $return_url = $this->getOption(\ControllerOptions::LIST_LINK, '/' . $this->controller_name);
-                return $this->manage_redirect($return_url);
+                return $this->redirect($return_url);
             }
 
             return $this->redirect($return_url);
@@ -501,7 +501,7 @@ class AvocaManageController extends AvocaController
         $return_url = $this->getQuery('r');
         if (!$return_url) {
             $return_url = $this->getOption(\ControllerOptions::LIST_LINK, '/' . $this->controller_name);
-            return $this->manage_redirect($return_url);
+            return $this->redirect($return_url);
         }
 
         return $this->redirect($return_url);

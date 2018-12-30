@@ -23,13 +23,13 @@
         {% block headerNavL %}
             <ul class="nav navbar-nav d-md-down-none">
                 <li class="nav-item px-3">
-                    <a class="nav-link" href="{{ avoca_manage('/') }}">Dashboard</a>
+                    <a class="nav-link" href="{{ avoca_url('/') }}">Dashboard</a>
                 </li>
                 <li class="nav-item px-3">
-                    <a class="nav-link" href="{{ avoca_manage('/users') }}">Users</a>
+                    <a class="nav-link" href="{{ avoca_url('/users') }}">Users</a>
                 </li>
                 <li class="nav-item px-3">
-                    <a class="nav-link" href="{{ avoca_manage('/settings') }}">Settings</a>
+                    <a class="nav-link" href="{{ avoca_admin('/settings') }}">Settings</a>
                 </li>
             </ul>
         {% endblock %}
@@ -115,7 +115,7 @@
                 <nav class="sidebar-nav">
                     <ul class="nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ avoca_manage() }}">
+                            <a class="nav-link" href="{{ avoca_url() }}">
                                 <i class="nav-icon icon-speedometer"></i> Dashboard
                                 <span class="badge badge-primary">NEW</span>
                             </a>
@@ -123,7 +123,7 @@
 
                         <li class="nav-title">{{ __('Settings') }}</li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ avoca_manage('/settings') }}">
+                            <a class="nav-link" href="{{ avoca_admin('/settings') }}">
                                 <i class="nav-icon icon-drop"></i> App config
                             </a>
                         </li>
@@ -131,17 +131,17 @@
                         <li class="nav-title">{{ __('Modules') }}</li>
 
                         <li class="nav-item nav-dropdown">
-                            <a class="nav-link nav-dropdown-toggle" href="{{ avoca_manage('/users') }}">
+                            <a class="nav-link nav-dropdown-toggle" href="{{ avoca_url('/users') }}">
                                 <i class="nav-icon icon-puzzle"></i> {{ __('Users') }}
                             </a>
                             <ul class="nav-dropdown-items">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ avoca_manage('/users') }}">
+                                    <a class="nav-link" href="{{ avoca_url('/users') }}">
                                         <i class="nav-icon icon-puzzle"></i> {{ __('View users') }}
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ avoca_manage('/users/edit') }}">
+                                    <a class="nav-link" href="{{ avoca_url('/users/edit') }}">
                                         <i class="nav-icon icon-puzzle"></i> {{ __('Create user') }}
                                     </a>
                                 </li>
@@ -149,7 +149,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ avoca_manage('/emails') }}" class="nav-link">
+                            <a href="{{ avoca_url('/emails') }}" class="nav-link">
                                 <i class="nav-icon icon-puzzle"></i> {{ 'Emails'|lang }}
                             </a>
                         </li>

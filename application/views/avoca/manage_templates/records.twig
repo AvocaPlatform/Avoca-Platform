@@ -8,7 +8,7 @@
                     {{ 'Modules'|lang }}
 
                     <div class="card-header-actions">
-                        <a class="card-header-action btn-setting" href="{{ avoca_manage(create_link) }}">
+                        <a class="card-header-action btn-setting" href="{{ avoca_url(create_link) }}">
                             <i class="fa fa-plus"></i>
                         </a>
                     </div>
@@ -100,7 +100,7 @@
     <script>
         $(function () {
             $('#DeleteRecords').click(function () {
-                $('#ListViewForm').attr('action', '{{ avoca_manage(delete_batch_link) }}');
+                $('#ListViewForm').attr('action', '{{ avoca_url(delete_batch_link) }}');
                 $('#ListViewForm').attr('method', 'post');
                 $('#ListViewForm').submit();
             });

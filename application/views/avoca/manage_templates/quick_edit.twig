@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-lg" role="document" xmlns="http://www.w3.org/1999/html">
     <div class="modal-content">
-        {{ form_open(avoca_manage('/' ~ _controller ~ '/save/1'), {class: 'QuickEditForm'}) }}
+        {{ form_open(avoca_url('/' ~ _controller ~ '/save/1'), {class: 'QuickEditForm'}) }}
             <input type="hidden" name="id" value="{{ recordFVal(record, 'id') }}">
             <div class="modal-header">
                 <h4 class="modal-title">{{ title }}</h4>

@@ -306,7 +306,7 @@
                     <ul class="sidebar-menu" data-widget="tree">
                         <li class="header">MAIN NAVIGATION</li>
                         <li class="active">
-                            <a href="{{ avoca_manage() }}">
+                            <a href="{{ avoca_url() }}">
                                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                             </a>
                         </li>
@@ -318,7 +318,7 @@
                                 </span>
                                 <ul class="treeview-menu">
                                     <li>
-                                        <a href="{{ avoca_manage('/settings') }}">
+                                        <a href="{{ avoca_admin('/settings') }}">
                                             <i class="fa fa-circle-o"></i> App config
                                         </a>
                                     </li>
@@ -333,10 +333,10 @@
                                     </span>
                                 <ul class="treeview-menu">
                                     <li>
-                                        <a href="{{ avoca_manage('/users') }}">
+                                        <a href="{{ avoca_url('/users') }}">
                                             <i class="fa fa-circle-o"></i> View users
                                         </a>
-                                        <a href="{{ avoca_manage('/users/edit') }}">
+                                        <a href="{{ avoca_url('/users/edit') }}">
                                             <i class="fa fa-circle-o"></i> Create user
                                         </a>
                                     </li>
@@ -344,7 +344,7 @@
                             </a>
                         </li>
                         <li class="">
-                            <a href="{{ avoca_manage('/emails') }}">
+                            <a href="{{ avoca_url('/emails') }}">
                                 <i class="fa fa-dashboard"></i> <span>Emails</span>
                             </a>
                         </li>

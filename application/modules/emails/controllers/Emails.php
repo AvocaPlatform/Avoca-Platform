@@ -48,10 +48,10 @@ class Emails extends AVC_ManageController
                         $this->setSuccess('Send mail is successful');
                     }
 
-                    $this->manage_redirect('/emails/record/' . $status['mail_id']);
+                    $this->redirect('/emails/record/' . $status['mail_id']);
                 } else {
                     $this->setError('Invalid parameters');
-                    $this->manage_redirect('/emails');
+                    $this->redirect('/emails');
                 }
             }
 

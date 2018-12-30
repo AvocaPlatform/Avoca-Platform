@@ -3,14 +3,14 @@
 {% block content %}
     <div class="row">
         <div class="col-sm-12">
-            {{ form_open(avoca_manage('/' ~ _controller ~ '/save')) }}
+            {{ form_open(avoca_url('/' ~ _controller ~ '/save')) }}
                 <input type="hidden" name="id" value="{{ recordFVal(record, 'id') }}">
                 <div class="card">
                     <div class="card-header">
                         {{ title }}
 
                         <div class="card-header-actions">
-                            <a class="card-header-action btn-setting" href="{{ avoca_manage(list_link) }}">
+                            <a class="card-header-action btn-setting" href="{{ avoca_url(list_link) }}">
                                 <i class="fa fa-list"></i>
                             </a>
                             {% if record %}
@@ -66,7 +66,7 @@
                         {% endif %}
 
                         {% if not buttons or buttons.cancel is null or buttons.cancel != false %}
-                            <a href="{{ avoca_manage(list_link) }}" class="btn">
+                            <a href="{{ avoca_url(list_link) }}" class="btn">
                                 {% if buttons.cancel and buttons.cancel.label %}
                                     {{ buttons.cancel.label|lang }}
                                 {% else %}

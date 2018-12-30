@@ -80,27 +80,6 @@ function avoca_static($include_theme = true)
 }
 
 /**
- * manage page url
- *
- * @param string $uri
- * @param null $protocol
- * @return string
- */
-function avoca_manage($uri = '', $protocol = NULL)
-{
-    $prefix = config_item('manage_prefix');
-
-    if (substr($uri, 0, 1) == '/') {
-        $uri = $prefix . $uri;
-    } else {
-        $uri = $prefix . '/' . $uri;
-    }
-
-
-    return avoca_url($uri, $protocol);
-}
-
-/**
  * admin page url
  *
  * @param string $uri
@@ -221,7 +200,7 @@ function recordLink($uri, $record)
     $id = recordFVal($record, 'id');
     $uri = str_replace('{ID}', $id, $uri);
 
-    return avoca_manage($uri);
+    return avoca_url($uri);
 }
 
 /**

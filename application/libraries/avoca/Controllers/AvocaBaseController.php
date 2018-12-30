@@ -269,19 +269,6 @@ class AvocaBaseController extends \CI_Controller
     }
 
     /**
-     * redirect to manage page
-     *
-     * @param $uri
-     * @param string $method
-     * @param null $code
-     * @return bool
-     */
-    protected function manage_redirect($uri, $method = 'auto', $code = null)
-    {
-        return $this->redirect(avoca_manage($uri), $method, $code);
-    }
-
-    /**
      * set error message
      *
      * @param $messages

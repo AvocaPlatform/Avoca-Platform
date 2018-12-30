@@ -113,7 +113,7 @@ class AvocaField
     protected function format_link($value, $record, $option)
     {
         if (!empty($option['controller'])) {
-            return '<a href="' . avoca_manage('/' . $option['controller'] . '/record/' . recordFVal($record, 'id')) . '">' . $value . '</a>';
+            return '<a href="' . avoca_url('/' . $option['controller'] . '/record/' . recordFVal($record, 'id')) . '">' . $value . '</a>';
         }
 
         return $value;
