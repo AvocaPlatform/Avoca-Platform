@@ -16,8 +16,8 @@ class AVC_Loader extends CI_Loader
         parent::__construct();
 
         $this->_ci_model_paths = [
+            CUSTOMPATH,
             APPPATH,
-            APPPATH . '..' . DIRECTORY_SEPARATOR . 'custom' . DIRECTORY_SEPARATOR
         ];
     }
 
