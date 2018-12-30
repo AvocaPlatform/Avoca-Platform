@@ -104,8 +104,15 @@ class AvocaManageController extends AvocaController
         }
 
         $model = $model ? $model : $this->model;
-        $uri_viewdef = 'config/models/' . $model . '/viewdefs.php';
+        if (strpos($model, '/') === false) {
+            $module = $this->module_name;
+        } else {
+            $arr = explode('/', $model);
+            $module = $arr[0];
+            $model = $arr[1];
+        }
 
+        $uri_viewdef = 'modules/' . $module . '/config/' . $model . '_viewdefs.php';
         $layout_path = $this->getFilePath($uri_viewdef);
         if (file_exists($layout_path)) {
             $viewdefs = include $layout_path;
