@@ -81,7 +81,8 @@ class AvocaController extends AvocaBaseController
         $config = [
             'paths' => [
                 VIEWPATH . '/' . $this->getViewFolder() . '/',
-                $this->getViewPath()
+                $this->getViewPath(),
+                CUSTOMPATH,
             ],
             'functions' => $twig['functions'],
             'functions_safe' => $twig['functions_safe'],
@@ -247,14 +248,15 @@ class AvocaController extends AvocaBaseController
     {
         $template = $template ? $template : $this->view_path;
 
-        $view_path = $template;
-        $custom_path = CUSTOMPATH . $template;
+        $view = $template;
+        $view_custom = 'modules/' . $this->module_name . '/views/' . $this->getViewFolder() . '/' . $template;
 
-        if (file_exists(VIEWPATH . $this->getViewFolder() . DIRECTORY_SEPARATOR . $custom_path . '.twig')) {
-            $view_path = $custom_path;
+        $custom_path = CUSTOMPATH . $view_custom;
+        if (file_exists($custom_path . '.twig')) {
+            $view = $view_custom;
         }
 
-        return $view_path;
+        return $view;
     }
 
     /**

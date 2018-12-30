@@ -295,7 +295,7 @@ class AvocaManageController extends AvocaController
         }
 
         // pagination
-        $pagination_config = include APPPATH . 'config/avoca/pagination.php';
+        $pagination_config = include APPPATH . 'modules/admin/config/pagination.php';
         $pagination_config['base_url'] = avoca_manage($this->data['list_link']);
         $pagination_config['uri_segment'] = 4;
         $pagination_config['total_rows'] = $list['total'];

@@ -342,7 +342,7 @@ $method = $RTR->method;
 
 // check controller custom
 $custom_class = $class . 'Controller';
-$custom_class_path = APPPATH . '../custom/modules/' . $RTR->directory . $class . '.php';
+$custom_class_path = CUSTOMPATH . 'modules/' . $RTR->directory . $class . '.php';
 if (file_exists($custom_class_path)) {
     require_once $class_path;
     $class = $custom_class;
