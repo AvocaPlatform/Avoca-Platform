@@ -95,11 +95,21 @@ class AvocaBaseController extends \CI_Controller
      */
     protected function loadLanguage()
     {
+        // load app strings
         $this->lang->load('app_strings', $this->language);
-        $this->lang->load($this->controller_name, $this->language);
 
+        // load module strings
+        $package_path = 'modules/' . $this->module_name . '/language/' . $this->module_name . '_' . $this->language . '.php';
+        $this->lang->load($this->module_name, $this->language, false, true, APPPATH . $package_path);
+        $this->lang->load($this->module_name, $this->language, false, true, CUSTOMPATH . $package_path);
+
+        // load custom strings
         foreach ($this->lang_files as $lang) {
-            $this->lang->load($lang, $this->language);
+            if ($lang != $this->module_name) {
+                $package_path = 'modules/' . $this->module_name . '/language/' . $lang . '_' . $this->language . '.php';
+                $this->lang->load($lang, $this->language, false, true, APPPATH . $package_path);
+                $this->lang->load($lang, $this->language, false, true, CUSTOMPATH . $package_path);
+            }
         }
     }
 

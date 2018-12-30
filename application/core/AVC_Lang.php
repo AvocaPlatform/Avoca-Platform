@@ -44,34 +44,19 @@ class AVC_Lang extends CI_Lang
             return;
         }
 
-        // load the default language first, if necessary
-        // only do this for the language files under system/
-        $basepath = SYSDIR . 'language/' . $this->base_language . '/' . $langfile;
-        if (($found = file_exists($basepath)) === TRUE) {
-            include($basepath);
-        }
-
-        // Load the base file, so any others found can override it
-        $basepath = BASEPATH . 'language/' . $idiom . '/' . $langfile;
-        if (($found = file_exists($basepath)) === TRUE) {
-            include($basepath);
-        }
+        $found = FALSE;
 
         // Do we have an alternative path to look in?
         if ($alt_path !== '') {
-            $alt_path .= 'language/' . $idiom . '/' . $langfile;
             if (file_exists($alt_path)) {
                 include($alt_path);
                 $found = TRUE;
             }
         } else {
-            foreach (get_instance()->load->get_package_paths(TRUE) as $package_path) {
-                $package_path .= 'language/' . $idiom . '/' . $langfile;
-                if ($basepath !== $package_path && file_exists($package_path)) {
-                    include($package_path);
-                    $found = TRUE;
-                    break;
-                }
+            $package_path = APPPATH . 'language/' . $idiom . '/' . $langfile;
+            if (file_exists($package_path)) {
+                include($package_path);
+                $found = TRUE;
             }
         }
 
