@@ -202,17 +202,16 @@ class Settings extends AVC_AdminController
         if ($this->isPost()) {
 
             $this->disableView();
+            $this->load->helper('file');
 
-            $model = $this->getPost('model');
-            $table = $this->getPost('table');
-            $controller = $this->getPost('controller');
-            $table_define = $this->getPost('table_define');
-            $table_index = $this->getPost('table_index');
-            $folder = $this->getPost('folder');
+            $module_name = $controller = $this->getPost('module');
+            $model = $this->getPost('model') ? $this->getPost('model') : $module_name;
+            $table = $this->getPost('table') ? $this->getPost('table') : $module_name;
 
-            if ($model && $controller) {
+            if ($module_name) {
                 $module = [
-                    'controller' => $controller,
+                    'module' => $module_name,
+                    'controller' => $module_name,
                     'model' => $model,
                     'table' => $table,
                 ];
@@ -221,22 +220,31 @@ class Settings extends AVC_AdminController
                 $modules[$controller] = $module;
                 write_array2file('modules/admin/config/modules.php', $modules);
 
-                // write to model class in models/
-                if ($table) {
-                    $this->_createModel($model, $table, $folder);
+                $package_folder = APPPATH . 'modules/admin/config/module_builders/' . $module_name;
+                if (!is_dir($package_folder)) {
+                    mkdir($package_folder, 0775, true);
                 }
 
-                // write to controller class in controllers/
-                $this->_createController($controller, $model, $folder);
-
-                // write data base into to modules/admin/config/databases.php
-                if ($table && $table_define) {
-                    $this->_createTableDefined($table, $table_define, $table_index);
+                $var_defs = [];
+                $var_defs_file = $package_folder . '/vardefs.php';
+                if (file_exists($var_defs_file)) {
+                    $var_defs = include $var_defs_file;
                 }
+
+                $var_defs['module'] = $module_name;
+                $var_defs['model'] = $model;
+                $var_defs['table'] = $table;
+
+                if (empty($var_defs['fields'])) {
+                    $var_defs['fields'] = [
+                        'id INT 10 unsigned:true auto_increment:true',
+                        'date_created DATETIME',
+                    ];
+                }
+
+                write_array2file('modules/admin/config/module_builders/' . $module_name . '/vardefs.php', $var_defs);
+                return $this->jsonData([]);
             }
-
-            $this->setSuccess('Create/update module success!');
-            return $this->admin_redirect('/settings');
         }
     }
 

@@ -2,59 +2,98 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-sm-12">
-            {{ form_open(avoca_admin('/settings/create_module')) }}
-                <div class="card">
-                    <div class="card-header">
-                        {{ __('Module generate') }}
+        <div class="col-sm-12 mb-4">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active show" data-toggle="tab" href="#ModuleInfo" role="tab" aria-controls="home" aria-selected="true">
+                        <i class="icon-calculator"></i> {{ 'Create module'|lang }}
+                        <span class="badge badge-success">New</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#ModuleFieldInfo" role="tab" aria-controls="home" aria-selected="true">
+                        <i class="icon-calculator"></i> {{ 'Fields'|lang }}
+                        <span class="badge badge-success">New</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#ModuleRelateInfo" role="tab" aria-controls="home" aria-selected="true">
+                        <i class="icon-calculator"></i> {{ 'Relationship'|lang }}
+                        <span class="badge badge-success">New</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#ModuleListView" role="tab" aria-controls="home" aria-selected="true">
+                        <i class="icon-calculator"></i> {{ 'List view'|lang }}
+                        <span class="badge badge-success">New</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#ModuleRecordView" role="tab" aria-controls="home" aria-selected="true">
+                        <i class="icon-calculator"></i> {{ 'Record view'|lang }}
+                        <span class="badge badge-success">New</span>
+                    </a>
+                </li>
+            </ul>
 
-                        <div class="card-header-actions">
-                            <a class="card-header-action btn-setting" href="{{ avoca_admin('/settings/modules') }}">
-                                <i class="fa fa-arrow-circle-left"></i>
-                            </a>
+            <div class="tab-content">
+
+                <div class="tab-pane active show" id="ModuleInfo">
+                    <div class="card mb-0">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>{{ 'Module name'|lang }}</label>
+                                {{ form_input('module', module.model, {class: 'form-control'}) }}
+                            </div>
+
+                            <div class="form-group">
+                                <label>{{ 'Model name'|lang }}</label>
+                                {{ form_input('model', module.model, {class: 'form-control'}) }}
+                            </div>
+
+                            <div class="form-group">
+                                <label>{{ __('Database table') }}</label>
+                                {{ form_input('table', module.table, {class: 'form-control'}) }}
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label>{{ __('Model') }}</label>
-                            {{ form_input('model', module.model, {class: 'form-control'}) }}
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-primary" id="btnCreateModule">{{ __('Create module') }}</button>
+                            <a href="{{ avoca_admin('/settings') }}" class="btn btn-link">{{ 'Cancel'|lang }}</a>
                         </div>
-
-                        <div class="form-group">
-                            <label>{{ __('Database table') }}</label>
-                            {{ form_input('table', module.table, {class: 'form-control'}) }}
-                        </div>
-
-                        <div class="form-group">
-                            <label>{{ __('Controller') }}</label>
-                            {{ form_input('controller', module.controller, {class: 'form-control'}) }}
-                        </div>
-
-                        <div class="form-group">
-                            <label>{{ __('Table structure') }}</label>
-                            {{ form_textarea('table_define', table_fields, {class: 'form-control'}) }}
-                            <span class="form-text text-muted">{{ __('1 field/1 line') }}</span>
-                        </div>
-
-                        <div class="form-group">
-                            <label>{{ __('Table indexes') }}</label>
-                            {{ form_textarea('table_index', table_indexes, {class: 'form-control'}) }}
-                            <span class="form-text text-muted">{{ __('1 field/1 line') }}</span>
-                        </div>
-
-                        <div class="form-group">
-                            <label>{{ 'Module folder' }}</label>
-                            {{ form_dropdown('folder', {custom: 'custom', core: 'core'}, ['custom'], {class: 'form-control'}) }}
-                            <span class="form-text text-muted">{{ 'Create model in custom or core' }}</span>
-                        </div>
-                    </div>
-
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">{{ __('Create module') }}</button>
                     </div>
                 </div>
-            {{ form_close() }}
+
+                <div class="tab-pane active show" id="ModuleFieldInfo">
+
+                </div>
+
+                <div class="tab-pane active show" id="ModuleRelateInfo">
+
+                </div>
+
+                <div class="tab-pane active show" id="ModuleListView">
+
+                </div>
+
+                <div class="tab-pane active show" id="ModuleRecordView">
+
+                </div>
+
+            </div>
         </div>
     </div>
+{% endblock %}
+
+{% block jsLive %}
+    <script>
+        $(function () {
+            $('#btnCreateModule').click(function () {
+                $.post('{{ avoca_admin('/settings/create_module') }}', {
+                    module: $('input[name=module]').val()
+                }, function (data) {
+                    console.log(data);
+                });
+            });
+        });
+    </script>
 {% endblock %}

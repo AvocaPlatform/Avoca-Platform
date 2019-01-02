@@ -22,4 +22,11 @@ return array (
     'model' => 'mailsend',
     'table' => 'emails',
   ),
+  'usergroups' => 
+  array (
+    'module' => 'usergroups',
+    'controller' => 'usergroups',
+    'model' => 'usergroups',
+    'table' => 'usergroups',
+  ),
 );
