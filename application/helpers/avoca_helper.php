@@ -68,7 +68,7 @@ function avoca_static($include_theme = true)
     if ($include_theme) {
         $uri = '/themes/' . config_item('theme_folder');
     } else {
-        $uri = '';
+        $uri = '/';
     }
 
     $public_folder = config_item('public_folder');
@@ -76,7 +76,7 @@ function avoca_static($include_theme = true)
         $uri = '/' . $public_folder . $uri;
     }
 
-    return avoca_url($uri);
+    return trim(avoca_url($uri), '/');
 }
 
 /**

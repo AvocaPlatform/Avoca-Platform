@@ -15,9 +15,9 @@
 <![endif]-->
 <!-- Google Font -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-<link href="{{ avoca_static() }}/dist/css/avoca.css" rel="stylesheet">
+<link href="{{ avoca_static(false) }}/themes/avoca_global/css/avoca.css" rel="stylesheet">
 {% for css in _CSS %}
     <link rel="stylesheet" href="{{ css }}">
 {% endfor %}
 <script src="{{ avoca_static() }}/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="{{ avoca_static() }}/dist/js/avoca_func.js"></script>
+<script src="{{ avoca_static(false) }}/themes/avoca_global/js/avoca_func.js"></script>

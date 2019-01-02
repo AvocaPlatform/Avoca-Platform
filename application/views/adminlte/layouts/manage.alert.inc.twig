@@ -1,4 +1,4 @@
-<script src="{{ avoca_static() }}/plugins/notify/notify.min.js"></script>
+<script src="{{ avoca_static(false) }}/themes/avoca_global/js/notify.min.js"></script>
 <script>
     $(document).ready(function () {
         var notifyErrorMsg = "{{ get_flash('error') }}", notifyWarningMsg = "{{ get_flash('warn') }}", notifyInfoMsg = "{{ get_flash('info') }}", notifySuccessMsg = "{{ get_flash('success') }}";

@@ -194,6 +194,11 @@ class Settings extends AVC_AdminController
             }
         }
 
+        $this->addJs([
+            avoca_static(false) . '/themes/avoca_global/js/jquery-sortable.js',
+        ]);
+
+        // process create module
         if ($this->isPost()) {
 
             $this->disableView();
