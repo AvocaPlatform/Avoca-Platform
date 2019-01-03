@@ -1,35 +1,60 @@
 {% extends 'layouts/admin.twig' %}
 
 {% block content %}
-    <div class="row">
+    <div class="row" id="ModuleBuilder">
         <div class="col-sm-12 mb-4">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active show" data-toggle="tab" href="#ModuleInfo" role="tab" aria-controls="home" aria-selected="true">
+                    <a class="nav-link{% if tab == 'ModuleInfo' %} active show{% endif %}"
+                       data-toggle="tab"
+                       href="#ModuleInfo"
+                       role="tab"
+                       aria-controls="home"
+                       aria-selected="true">
                         <i class="icon-calculator"></i> {{ 'Create module'|lang }}
                         <span class="badge badge-success">New</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#ModuleFieldInfo" role="tab" aria-controls="home" aria-selected="true">
+                    <a class="nav-link{% if tab == 'ModuleFieldInfo' %} active show{% endif %}"
+                       data-toggle="tab"
+                       href="#ModuleFieldInfo"
+                       role="tab"
+                       aria-controls="home"
+                       aria-selected="true">
                         <i class="icon-calculator"></i> {{ 'Fields'|lang }}
                         <span class="badge badge-success">New</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#ModuleRelateInfo" role="tab" aria-controls="home" aria-selected="true">
+                    <a class="nav-link{% if tab == 'ModuleRelateInfo' %} active show{% endif %}"
+                       data-toggle="tab"
+                       href="#ModuleRelateInfo"
+                       role="tab"
+                       aria-controls="home"
+                       aria-selected="true">
                         <i class="icon-calculator"></i> {{ 'Relationship'|lang }}
                         <span class="badge badge-success">New</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#ModuleListView" role="tab" aria-controls="home" aria-selected="true">
+                    <a class="nav-link{% if tab == 'ModuleListView' %} active show{% endif %}"
+                       data-toggle="tab"
+                       href="#ModuleListView"
+                       role="tab"
+                       aria-controls="home"
+                       aria-selected="true">
                         <i class="icon-calculator"></i> {{ 'List view'|lang }}
                         <span class="badge badge-success">New</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#ModuleRecordView" role="tab" aria-controls="home" aria-selected="true">
+                    <a class="nav-link{% if tab == 'ModuleRecordView' %} active show{% endif %}"
+                       data-toggle="tab"
+                       href="#ModuleRecordView"
+                       role="tab"
+                       aria-controls="home"
+                       aria-selected="true">
                         <i class="icon-calculator"></i> {{ 'Record view'|lang }}
                         <span class="badge badge-success">New</span>
                     </a>
@@ -37,63 +62,176 @@
             </ul>
 
             <div class="tab-content">
+                <div class="tab-pane{% if tab == 'ModuleInfo' %} active show{% endif %}" id="ModuleInfo">
+                    {{ form_open(avoca_admin('/settings/create_module')) }}
+                        <div class="card mb-0">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>{{ 'Module name'|lang }}</label>
+                                    {{ form_input('module', module.model, {class: 'form-control'}) }}
+                                </div>
 
-                <div class="tab-pane active show" id="ModuleInfo">
-                    <div class="card mb-0">
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label>{{ 'Module name'|lang }}</label>
-                                {{ form_input('module', module.model, {class: 'form-control'}) }}
+                                <div class="form-group">
+                                    <label>{{ 'Model name'|lang }}</label>
+                                    {{ form_input('model', module.model, {class: 'form-control'}) }}
+                                </div>
+
+                                <div class="form-group">
+                                    <label>{{ __('Database table') }}</label>
+                                    {{ form_input('table', module.table, {class: 'form-control'}) }}
+                                </div>
                             </div>
-
-                            <div class="form-group">
-                                <label>{{ 'Model name'|lang }}</label>
-                                {{ form_input('model', module.model, {class: 'form-control'}) }}
-                            </div>
-
-                            <div class="form-group">
-                                <label>{{ __('Database table') }}</label>
-                                {{ form_input('table', module.table, {class: 'form-control'}) }}
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary" id="btnCreateModule">{{ __('Create module') }}</button>
+                                <a href="{{ avoca_admin('/settings') }}" class="btn btn-link">{{ 'Cancel'|lang }}</a>
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <button type="button" class="btn btn-primary" id="btnCreateModule">{{ __('Create module') }}</button>
-                            <a href="{{ avoca_admin('/settings') }}" class="btn btn-link">{{ 'Cancel'|lang }}</a>
+                    {{ form_close }}
+                </div>
+
+                <div class="tab-pane{% if tab == 'ModuleFieldInfo' %} active show{% endif %}" id="ModuleFieldInfo">
+                    {% if not create_module %}
+                        <div class="card mb-2">
+                            <div class="card-header">
+                                {{ 'Fields'|lang }}
+                                <div class="card-header-actions">
+                                    <button class="card-header-action btn-setting"
+                                            data-toggle="modal"
+                                            data-target="#fieldConfigModal">
+                                        {{ 'Add field'|lang }} <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm table-bordered">
+                                    <tr v-for="(extra, field) in moduleData.fields">
+                                        <td>
+                                            <a href="#">{{ '{{ field }}' }}</a>
+                                        </td>
+                                        <td>{{ '{{ extra.type }}' }}</td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
-                    </div>
+
+                        <div class="card mb-2">
+                            <div class="card-header">
+                                {{ 'Indexes'|lang }}
+                                <div class="card-header-actions">
+                                    <button class="card-header-action btn-setting"
+                                            data-toggle="modal"
+                                            data-target="#indexConfigModal">
+                                        {{ 'Add index'|lang }} <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm table-bordered">
+                                    <tr v-for="(extra, index_name) in moduleData.indexes">
+                                        <td>
+                                            <a href="#">{{ '{{ index_name }}' }}</a>
+                                        </td>
+                                        <td>{{ '{{ extra.type }}' }}</td>
+                                        <td>{{ '{{ extra.fields }}' }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="mb-0">
+                            <button type="submit" class="btn btn-primary">{{ 'Update fields'|lang }}</button>
+                        </div>
+                    {% endif %}
                 </div>
 
-                <div class="tab-pane active show" id="ModuleFieldInfo">
+                <div class="tab-pane{% if tab == 'ModuleRelateInfo' %} active show{% endif %}" id="ModuleRelateInfo">
 
                 </div>
 
-                <div class="tab-pane active show" id="ModuleRelateInfo">
+                <div class="tab-pane{% if tab == 'ModuleListView' %} active show{% endif %}" id="ModuleListView">
 
                 </div>
 
-                <div class="tab-pane active show" id="ModuleListView">
-
-                </div>
-
-                <div class="tab-pane active show" id="ModuleRecordView">
+                <div class="tab-pane{% if tab == 'ModuleRecordView' %} active show{% endif %}" id="ModuleRecordView">
 
                 </div>
 
             </div>
+        </div>
+
+        <!-- Model create/update field -->
+        <div class="modal fade"
+             id="fieldConfigModal"
+             tabindex="-1"
+             role="dialog"
+             aria-labelledby="fieldConfigModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{ 'Create field' }}</h4>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>{{ 'Field name'|lang }}</label>
+                            <input type="text" name="field_name" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ 'Field type'|lang }}</label>
+                            <input type="text" name="field_name" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">{{ 'Close'|lang }}</button>
+                        <button class="btn btn-primary" type="button">{{ 'Add field'|lang }}</button>
+                    </div>
+                </div>
+                <!-- /.modal-content-->
+            </div>
+            <!-- /.modal-dialog-->
+        </div>
+
+        <!-- Model create/update index -->
+        <div class="modal fade"
+             id="indexConfigModal"
+             tabindex="-1"
+             role="dialog"
+             aria-labelledby="indexConfigModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{ 'Create index' }}</h4>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>One fine body…</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">{{ 'Close'|lang }}</button>
+                        <button class="btn btn-primary" type="button">{{ 'Add index' }}</button>
+                    </div>
+                </div>
+                <!-- /.modal-content-->
+            </div>
+            <!-- /.modal-dialog-->
         </div>
     </div>
 {% endblock %}
 
 {% block jsLive %}
     <script>
-        $(function () {
-            $('#btnCreateModule').click(function () {
-                $.post('{{ avoca_admin('/settings/create_module') }}', {
-                    module: $('input[name=module]').val()
-                }, function (data) {
-                    console.log(data);
-                });
-            });
+        new Vue({
+            el: '#ModuleBuilder',
+            data: {
+                moduleData: JSON.parse('{{ module|json_encode|raw }}')
+            }
         });
     </script>
 {% endblock %}

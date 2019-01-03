@@ -11,104 +11,12 @@
 
 class Settings extends AVC_AdminController
 {
-    protected $model = 'setting';
+    protected $model = 'admin/setting';
 
     // ACTION
     public function index()
     {
 
-    }
-
-    /**
-     * convert data to ci create table structure
-     * @return array
-     */
-    private function readDatabaseStructure()
-    {
-        $databases = include APPPATH . 'modules/admin/config/databases.php';
-        $database_structures = [];
-
-        foreach ($databases as $table => $options) {
-
-            $fields = [];
-            $indexes = [];
-
-            foreach ($options['fields'] as $fields_option) {
-
-                try {
-
-                    $fields_option = preg_replace('/\s+/', ' ', $fields_option);
-                    $options_arr = explode(' ', $fields_option);
-
-                    $length = count($options_arr);
-                    if ($length < 2) {
-                        show_error('ERROR FIELD DATA: ' . $fields_option);
-                    }
-
-                    $field = $options_arr[0];
-                    $type = $options_arr[1];
-
-                    $fields[$field] = ['type' => $type];
-
-                    if ($length > 2) {
-                        $i = 0;
-                        foreach ($options_arr as $op) {
-                            if ($i == 2) {
-                                $fields[$field]['constraint'] = $op;
-                            } else if ($i > 2) {
-                                if (strpos($op, ':') !== false) {
-                                    $arr = explode(':', $op);
-
-                                    $value = strtolower(trim($arr[1]));
-
-                                    if ($value === 'true') {
-                                        $value = true;
-                                    } else if ($value === 'false') {
-                                        $value = false;
-                                    }
-
-                                    $fields[$field][$arr[0]] = $value;
-                                }
-                            }
-
-                            $i++;
-                        }
-                    }
-                } catch (Exception $exception) {
-                    show_error('ERROR DATA!');
-                }
-            }
-
-            foreach ($options['indexes'] as $index) {
-                try {
-                    $index_arr = explode(' ', $index);
-                    $index_type = $index_arr[0];
-                    $index_fields = $index_arr[1];
-
-                    if ($index_type == 'PK') {
-                        $indexes['primary'][] = $index_fields;
-                    } else {
-                        $index_name = $index_arr[2];
-                        $indexes['key'][] = [
-                            'name' => $index_name,
-                            'type' => $index_type,
-                            'fields' => $index_fields
-                        ];
-                    }
-                } catch (Exception $exception) {
-                    show_error('ERROR DATA INDEX: ' . $index);
-                }
-            }
-
-            $database_structures[$table] = [
-                'name' => $table,
-                'ENGINE' => $options['ENGINE'],
-                'fields' => $fields,
-                'indexes' => $indexes
-            ];
-        }
-
-        return $database_structures;
     }
 
     // ACTION - Create/Update database from modules/admin/config/databases.php
@@ -117,7 +25,9 @@ class Settings extends AVC_AdminController
         $this->disableView();
         $this->load->dbforge();
 
-        $db_structure = $this->readDatabaseStructure();
+        /** @var Setting $settingModel */
+        $settingModel = $this->getModel($this->model);
+        $db_structure = $settingModel->readDatabaseStructure();
         foreach ($db_structure as $table => $info) {
 
             if ($this->db->table_exists($table)) {
@@ -174,28 +84,33 @@ class Settings extends AVC_AdminController
     // ACTION
     public function create_module($module_name = null)
     {
+        $tab = $this->getQuery('tab');
+        if (!in_array($tab, [
+            'ModuleInfo',
+            'ModuleFieldInfo',
+            'ModuleRelateInfo',
+            'ModuleListView',
+            'ModuleRecordView'
+        ])) {
+            $tab = 'ModuleInfo';
+        }
+
+        $this->data['tab'] = $tab;
+
         // default value to view
-        $modules = include APPPATH . 'modules/admin/config/modules.php';
         $this->data['module'] = [];
-        $this->data['table'] = [];
-        $this->data['table_fields'] = '';
-        $this->data['table_indexs'] = '';
+        $this->data['create_module'] = true;
 
-        if (!empty($modules[$module_name])) {
-            $this->data['module'] = $modules[$module_name];
+        if ($module_name) {
+            $this->data['create_module'] = false;
 
-            $tables = include APPPATH . 'modules/admin/config/databases.php';
-            if (!empty($tables[$modules[$module_name]['table']])) {
-                $this->data['table'] = $tables[$modules[$module_name]['table']];
-                // fields to textarea value
-                $this->data['table_fields'] = implode("\n", $this->data['table']['fields']);
-                // indexes to textarea value
-                $this->data['table_indexes'] = implode("\n", $this->data['table']['indexes']);
-            }
+            $module = include APPPATH . 'modules/admin/config/module_builders/' . $module_name . '/vardefs.php';
+            $this->data['module'] = $module;
         }
 
         $this->addJs([
             avoca_static(false) . '/themes/avoca_global/js/jquery-sortable.js',
+            'https://cdn.jsdelivr.net/npm/vue',
         ]);
 
         // process create module
@@ -237,13 +152,28 @@ class Settings extends AVC_AdminController
 
                 if (empty($var_defs['fields'])) {
                     $var_defs['fields'] = [
-                        'id INT 10 unsigned:true auto_increment:true',
-                        'date_created DATETIME',
+                        'id' => [
+                            'name' => 'id',
+                            'type' => 'ID',
+                        ],
+                        'date_created' => [
+                            'name' => 'date_created',
+                            'type' => 'DATETIME',
+                        ],
+                    ];
+                }
+
+                if (empty($var_defs['indexes'])) {
+                    $var_defs['indexes'] = [
+                        'primary' => [
+                            'type' => 'PK',
+                            'fields' => ['id'],
+                        ],
                     ];
                 }
 
                 write_array2file('modules/admin/config/module_builders/' . $module_name . '/vardefs.php', $var_defs);
-                return $this->jsonData([]);
+                return $this->admin_redirect('/settings/create_module/' . $module_name . '?tab=ModuleFieldInfo');
             }
         }
     }

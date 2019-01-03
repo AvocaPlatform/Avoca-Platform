@@ -9,12 +9,6 @@
  * Git: https://github.com/tdhungit
  */
 
-return array (
-  'usergroups' => 
-  array (
-    'module' => 'usergroups',
-    'controller' => 'usergroups',
-    'model' => 'usergroups',
-    'table' => 'usergroups',
-  ),
-);
+return [
+    'ID' => '%s INT 10 unsigned:true auto_increment:true',
+];
