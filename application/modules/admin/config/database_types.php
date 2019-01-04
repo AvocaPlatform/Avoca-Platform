@@ -10,5 +10,19 @@
  */
 
 return [
-    'ID' => '%s INT 10 unsigned:true auto_increment:true',
+    'default' => [
+        'int',
+        'varchar',
+        'float',
+        'double',
+        'text',
+        'date',
+        'datetime',
+    ],
+    'defined' => [
+        'id' => '%s INT 10 unsigned:true auto_increment:true',
+        'num' => '%s INT 10',
+        'relate' => '%s INT 10',
+        'enum' => '%s VARCHAR 255',
+    ],
 ];

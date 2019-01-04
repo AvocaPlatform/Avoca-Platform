@@ -84,6 +84,14 @@ class Settings extends AVC_AdminController
     // ACTION
     public function create_module($module_name = null)
     {
+        $this->setTitle('Create Module', true);
+
+        $this->addJs([
+            avoca_static(false) . '/themes/avoca_global/js/jquery-sortable.js',
+            'https://cdn.jsdelivr.net/npm/vue',
+            'https://cdn.jsdelivr.net/npm/vue-resource@1.5.1',
+        ]);
+
         $tab = $this->getQuery('tab');
         if (!in_array($tab, [
             'ModuleInfo',
@@ -108,10 +116,17 @@ class Settings extends AVC_AdminController
             $this->data['module'] = $module;
         }
 
-        $this->addJs([
-            avoca_static(false) . '/themes/avoca_global/js/jquery-sortable.js',
-            'https://cdn.jsdelivr.net/npm/vue',
-        ]);
+        // field types
+        $dbTypes = include APPPATH . 'modules/admin/config/database_types.php';
+        $types = [];
+        foreach ($dbTypes['defined'] as $type => $type_value) {
+            $types[] = $type;
+        }
+
+        // app_list_strings
+        $this->data['app_list_strings'] = getAppListStrings(null, true);
+
+        $this->data['types'] = array_merge($types, $dbTypes['default']);
 
         // process create module
         if ($this->isPost()) {
@@ -154,11 +169,11 @@ class Settings extends AVC_AdminController
                     $var_defs['fields'] = [
                         'id' => [
                             'name' => 'id',
-                            'type' => 'ID',
+                            'type' => 'id',
                         ],
                         'date_created' => [
                             'name' => 'date_created',
-                            'type' => 'DATETIME',
+                            'type' => 'datetime',
                         ],
                     ];
                 }
@@ -174,6 +189,48 @@ class Settings extends AVC_AdminController
 
                 write_array2file('modules/admin/config/module_builders/' . $module_name . '/vardefs.php', $var_defs);
                 return $this->admin_redirect('/settings/create_module/' . $module_name . '?tab=ModuleFieldInfo');
+            }
+        }
+    }
+
+    // ACTION
+    public function edit_list_strings($string = null)
+    {
+        $this->data['string'] = '';
+        $this->data['list_strings'] = [];
+
+        if ($string) {
+            $this->data['string'] = $string;
+
+            $list_strings = getAppListStrings($string);
+            $this->data['list_strings'] = $list_strings;
+        }
+
+        if ($this->getQuery('ajax') == 1) {
+            return $this->jsonData();
+        }
+    }
+
+    // ACTION
+    public function save_list_strings()
+    {
+        $this->disableView();
+        if ($this->isPost()) {
+            if ($this->getPost('name')) {
+                $name = $this->getPost('name');
+                $value = $this->getPost('value') ?: [];
+
+                $app_list_strings = [];
+                if (file_exists(CUSTOMPATH . 'config/app_list_strings.php')) {
+                    $app_list_strings = include CUSTOMPATH . 'config/app_list_strings.php';
+                }
+
+                $app_list_strings[$name] = $value;
+                write_array2file(CUSTOMPATH . 'config/app_list_strings.php', $app_list_strings, false);
+
+                return $this->jsonData([
+                    'error' => 0
+                ]);
             }
         }
     }

@@ -44,7 +44,7 @@ function avoca_theme()
     return config_item('view_folder');
 }
 
-function getAppListStrings($name = null)
+function getAppListStrings($name = null, $all = false)
 {
     $app_list_strings = config_item('app_list_strings');
 
@@ -52,6 +52,8 @@ function getAppListStrings($name = null)
         if (!empty($app_list_strings[$name])) {
             return $app_list_strings[$name];
         }
+    } else if ($all === true) {
+        return $app_list_strings;
     }
 
     return [];
@@ -118,9 +120,11 @@ function avoca_currentUrl()
     return $_SERVER['QUERY_STRING'] ? $url . '?' . $_SERVER['QUERY_STRING'] : $url;
 }
 
-function write_array2file($file, $array)
+function write_array2file($file, $array, $app_folder = true)
 {
-    $file = APPPATH . $file;
+    if ($app_folder) {
+        $file = APPPATH . $file;
+    }
 
     $template = file_get_contents(APPPATH . 'modules/admin/config/builders/file_header.avc');
 

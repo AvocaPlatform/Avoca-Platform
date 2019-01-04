@@ -141,14 +141,6 @@ class AvocaApiV1Controller extends AvocaController
     protected function getPost($name = null)
     {
         $post = parent::getPost($name);
-        if (empty($post)) {
-            try {
-                $post = json_decode(trim(file_get_contents('php://input')), true);
-            } catch (\Exception $exception) {
-                $post = [];
-            }
-        }
-
         return $post;
     }
 

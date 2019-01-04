@@ -1,7 +1,7 @@
 {% extends 'layouts/admin.twig' %}
 
 {% block content %}
-    <div class="row" id="ModuleBuilder">
+    <div class="row" id="ModuleBuilder" xmlns:v-bind="http://www.w3.org/1999/xhtml">
         <div class="col-sm-12 mb-4">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
@@ -165,7 +165,8 @@
              tabindex="-1"
              role="dialog"
              aria-labelledby="fieldConfigModalLabel"
-             aria-hidden="true">
+             aria-hidden="true"
+             data-backdrop="static">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -177,22 +178,56 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>{{ 'Field type'|lang }}</label>
-                            <input type="text" name="field_name" class="form-control">
+                            <select class="form-control" v-model="newField.type" @change="changeType()">
+                                <option></option>
+                                <option v-for="type in fieldTypes" v-bind:value="type">{{ '{{ type }}' }}</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
                             <label>{{ 'Field name'|lang }}</label>
-                            <input type="text" name="field_name" class="form-control">
+                            <input type="text" name="field_name" class="form-control" v-model="newField.name">
                         </div>
 
                         <div class="form-group">
                             <label>{{ 'Field label'|lang }}</label>
-                            <input type="text" name="field_label" class="form-control">
+                            <input type="text" name="field_label" class="form-control" v-model="newField.label">
+                        </div>
+
+                        <div class="form-group" v-if="isLength">
+                            <label>{{ 'Length'|lang }}</label>
+                            <input type="number" name="field_length" class="form-control" v-model="newField.length">
+                        </div>
+
+                        <div class="form-group" v-if="isDecimal">
+                            <label>{{ 'Decimal'|lang }}</label>
+                            <input type="number" name="field_decimal" class="form-control" v-model="newField.decimal">
+                        </div>
+
+                        <div class="form-group" v-if="isOptions">
+                            <label class="col-form-label">{{ 'Options'|lang }}</label>
+                            <div class="controls">
+                                <div class="input-group">
+                                    <select class="form-control" v-model="newField.options">
+                                        <option></option>
+                                        <option v-for="(strings, key) in allOptions" v-bind:value="key">{{ '{{ key }}' }}</option>
+                                    </select>
+                                    <span class="input-group-append">
+                                        <button class="btn btn-secondary" type="button" v-if="!newField.options" @click="editListStrings('')">Create</button>
+                                        <button class="btn btn-secondary" type="button" v-if="newField.options" @click="editListStrings(newField.options)">Edit</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" v-if="isRelate">
+                            <label>{{ 'Module relate'|lang }}</label>
+                            <input type="text" name="field_relate" class="form-control" v-model="newField.relate">
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">{{ 'Close'|lang }}</button>
-                        <button class="btn btn-primary" type="button">{{ 'Add field'|lang }}</button>
+                        <button class="btn btn-primary" type="button" @click="addField()">{{ 'Add field'|lang }}</button>
                     </div>
                 </div>
                 <!-- /.modal-content-->
@@ -206,7 +241,8 @@
              tabindex="-1"
              role="dialog"
              aria-labelledby="indexConfigModalLabel"
-             aria-hidden="true">
+             aria-hidden="true"
+             data-backdrop="static">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -216,11 +252,85 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>One fine body…</p>
+                        <div class="form-group">
+                            <label>{{ 'Index name' }}</label>
+                            <input type="text" class="form-control" v-model="newIndex.name">
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ 'Index type' }}</label>
+                            <select class="form-control" v-model="newIndex.type">
+                                <option v-for="index in indexTypes" v-bind:value="index">{{ '{{ index }}' }}</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ 'Index fields' }}</label>
+                            <select class="form-control" v-model="newIndex.field">
+                                <option v-for="(extra, field) in moduleData.fields" v-bind:value="field">{{ '{{ field }}' }}</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">{{ 'Close'|lang }}</button>
-                        <button class="btn btn-primary" type="button">{{ 'Add index' }}</button>
+                        <button class="btn btn-primary" type="button">{{ 'Add index'|lang }}</button>
+                    </div>
+                </div>
+                <!-- /.modal-content-->
+            </div>
+            <!-- /.modal-dialog-->
+        </div>
+
+        <!-- Model create/update list strings -->
+        <div class="modal fade"
+             id="listStringsModal"
+             tabindex="-1"
+             role="dialog"
+             aria-labelledby="listStringsModalLabel"
+             aria-hidden="true"
+             data-backdrop="static">
+             <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" v-if="options.create">{{ 'Create dropdown list'|lang }}</h4>
+                        <h4 class="modal-title" v-if="!options.create">{{ 'Update'|lang }}: {{ '{{ options.name }}' }}</h4>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" v-if="options.create">
+                            <input type="text" class="form-control" placeholder="{{ 'List string name'|lang }}" v-model="options.name">
+                        </div>
+
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                            <tr>
+                                <th>{{ 'Value'|lang }}</th>
+                                <th>{{ 'Text'|lang }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(text, string) in options.value">
+                                <td>{{ '{{ string }}' }}</td>
+                                <td>{{ '{{ text }}' }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="input-group">
+                            <input class="form-control" type="text" v-model="option.string" placeholder="{{ 'Value'|lang }}">
+                            <input class="form-control" type="text" v-model="option.text" placeholder="{{ 'Text'|lang }}">
+                            <span class="input-group-prepend">
+                                <button class="btn btn-secondary" type="button" @click="addDropdown()">
+                                    <i class="fa fa-send"></i> Add
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">{{ 'Close'|lang }}</button>
+                        <button class="btn btn-primary" type="button" @click="saveDropdown()">{{ 'Save'|lang }}</button>
                     </div>
                 </div>
                 <!-- /.modal-content-->
@@ -235,7 +345,129 @@
         new Vue({
             el: '#ModuleBuilder',
             data: {
-                moduleData: JSON.parse('{{ module|json_encode|raw }}')
+                moduleData: JSON.parse('{{ module|json_encode|raw }}'),
+                fieldTypes: JSON.parse('{{ types|json_encode|raw }}'),
+
+                newField: {},
+                newIndex: {},
+
+                isLength: true,
+                isDecimal: false,
+                isOptions: false,
+                isRelate: false,
+
+                indexTypes: ['INDEX', 'UNIQUE', 'PRIMARY'],
+                allOptions: JSON.parse('{{ app_list_strings|json_encode|raw }}'),
+
+                option: {},
+                options: {
+                    create: true,
+                    name: '',
+                    value: {}
+                },
+            },
+            methods: {
+                hideOptions() {
+                    this.isLength = false;
+                    this.isDecimal = false;
+                    this.isOptions = false;
+                    this.isRelate = false;
+                },
+
+                defaultOptions() {
+                    this.hideOptions();
+                    this.isLength = true;
+                },
+
+                changeType() {
+                    let change = false;
+
+                    if (['id', 'num', 'date', 'datetime'].includes(this.newField.type)) {
+                        change = true;
+                        this.hideOptions();
+                    }
+
+                    if (['float', 'double'].includes(this.newField.type)) {
+                        change = true;
+                        this.hideOptions();
+                        this.isLength = true;
+                        this.isDecimal = true;
+                    }
+
+                    if (['enum', 'multinum'].includes(this.newField.type)) {
+                        change = true;
+                        this.hideOptions();
+                        this.isOptions = true;
+                    }
+
+                    if (['relate'].includes(this.newField.type)) {
+                        change = true;
+                        this.hideOptions();
+                        this.isRelate = true;
+                    }
+
+                    if (change === false) {
+                        this.defaultOptions();
+                    }
+                },
+
+                addField() {
+                    if (this.newField.type && this.newField.name && this.newField.label) {
+                        this.moduleData.fields[this.newField.name] = {...this.newField};
+                        this.newField = {};
+                        $('#fieldConfigModal').modal('hide');
+                    }
+                },
+
+                editListStrings(name = '') {
+                    this.options.create = true;
+                    if (name) {
+                        this.options.create = false;
+                        const url = admin_url + 'settings/edit_list_strings/' + name + '?ajax=1';
+                        this.$http.get(url).then(response => {
+                            const data = response.body;
+                            this.options.name = data.string;
+                            this.options.value = data.list_strings;
+                            $('#listStringsModal').modal();
+                        }, error => {
+                            console.log(error);
+                            avocaAlert('Error', 'Some error. Please contact with administrator!');
+                        });
+                    } else {
+                        $('#listStringsModal').modal();
+                    }
+                },
+
+                addDropdown() {
+                    if (this.option.string && this.option.text) {
+                        const option = {...this.option};
+                        this.options.value[option.string] = option.text;
+                        this.option = {};
+                    }
+                },
+
+                saveDropdown() {
+                    if (this.options.name) {
+                        const url = admin_url + 'settings/save_list_strings';
+                        this.$http.post(url, this.options).then(response => {
+                            const data = response.body;
+                            if (data.error == 0) {
+                                this.allOptions[this.options.name] = this.options.value;
+                                this.newField.options = this.options.name;
+                                this.options = {
+                                    create: true,
+                                    name: '',
+                                    value: {}
+                                };
+
+                                $('#listStringsModal').modal('hide');
+                            }
+                        }, error => {
+                            console.log(error);
+                            avocaAlert('Error', 'Some error. Please contact with administrator!');
+                        });
+                    }
+                }
             }
         });
     </script>

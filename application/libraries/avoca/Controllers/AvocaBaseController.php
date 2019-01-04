@@ -198,7 +198,16 @@ class AvocaBaseController extends \CI_Controller
      */
     protected function getPost($name = null)
     {
-        $value = $this->input->post($name);
+        $post = $this->input->post();
+        if (empty($post)) {
+            try {
+                $post = json_decode(trim(file_get_contents('php://input')), true);
+            } catch (\Exception $exception) {
+                $post = [];
+            }
+        }
+
+        $value = isset($post[$name]) ? $post[$name] : '';
 
         if (is_string($value)) {
             return trim($value);
