@@ -32,6 +32,18 @@ function avoca_log($data, $log_name = 'debug')
     return write_file(APPPATH . 'logs' . DIRECTORY_SEPARATOR . $log_name . '.log', $str, 'a+');
 }
 
+function avoca_theme()
+{
+    $CI = &get_instance();
+
+    $module = $CI->router->fetch_module();
+    if ($module == 'admin') {
+        return 'avoca';
+    }
+
+    return config_item('view_folder');
+}
+
 function getAppListStrings($name = null)
 {
     $app_list_strings = config_item('app_list_strings');
@@ -66,7 +78,7 @@ function avoca_url($uri = '', $protocol = NULL)
 function avoca_static($include_theme = true)
 {
     if ($include_theme) {
-        $uri = '/themes/' . config_item('theme_folder');
+        $uri = '/themes/' . avoca_theme();
     } else {
         $uri = '/';
     }

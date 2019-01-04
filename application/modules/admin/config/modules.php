@@ -14,7 +14,7 @@ return array (
   array (
     'module' => 'usergroups',
     'controller' => 'usergroups',
-    'model' => 'usergroups',
+    'model' => 'usergroup',
     'table' => 'usergroups',
   ),
 );

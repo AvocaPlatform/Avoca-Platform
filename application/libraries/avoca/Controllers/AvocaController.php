@@ -78,12 +78,17 @@ class AvocaController extends AvocaBaseController
         $this->load->config('twig');
         $twig = config_item('twig');
 
+        $paths = [VIEWPATH . '/' . $this->getViewFolder() . '/'];
+
+        $viewPath = $this->getViewPath('');
+        if ($viewPath) {
+            $paths[] = $viewPath;
+        }
+
+        $paths[] = CUSTOMPATH;
+
         $config = [
-            'paths' => [
-                VIEWPATH . '/' . $this->getViewFolder() . '/',
-                $this->getViewPath(),
-                CUSTOMPATH,
-            ],
+            'paths' => $paths,
             'functions' => $twig['functions'],
             'functions_safe' => $twig['functions_safe'],
         ];
@@ -146,17 +151,21 @@ class AvocaController extends AvocaBaseController
 
     protected function getViewFolder()
     {
-        return config_item('view_folder');
+        return avoca_theme();
     }
 
-    protected function getViewPath()
+    protected function getViewPath($default = false)
     {
         $view_path = VIEWPATH . '../modules/' . $this->module_name . '/views/' .  $this->getViewFolder() . '/';
         if (is_dir($view_path)) {
             return $view_path;
         }
 
-        return VIEWPATH . $this->getViewFolder() . '/';
+        if ($default === false) {
+            return VIEWPATH . $this->getViewFolder() . '/';
+        }
+
+        return $default;
     }
 
     protected function getFilePath($uri_path)
