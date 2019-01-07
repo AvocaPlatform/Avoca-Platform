@@ -139,7 +139,7 @@
                         </div>
 
                         <div class="mb-0">
-                            <button type="submit" class="btn btn-primary">{{ 'Update fields'|lang }}</button>
+                            <button type="button" class="btn btn-primary" @click="saveModule()">{{ 'Update fields'|lang }}</button>
                         </div>
                     {% endif %}
                 </div>
@@ -149,7 +149,7 @@
                         <i class="fa fa-plus"></i> {{ 'Create relationship'|lang }}
                     </button>
                     <hr>
-                    <div class="card" v-for="opt in relationships">
+                    <div class="card" v-for="opt in moduleData.relationships">
                         <div class="card-body">
                             <div class="form-group">
                                 <label>{{ 'Field relate'|lang }}</label>
@@ -177,7 +177,7 @@
                         </div>
                     </div>
 
-                    <button type="button" class="btn btn-primary" @click="saveRelationship()" v-if="relationships.length">{{ 'Save relationship'|lang }}</button>
+                    <button type="button" class="btn btn-primary" @click="saveModule()" v-if="moduleData.relationships.length">{{ 'Save relationship'|lang }}</button>
                 </div>
 
                 <div class="tab-pane{% if tab == 'ModuleListView' %} active show{% endif %}" id="ModuleListView">
@@ -381,6 +381,7 @@
         new Vue({
             el: '#ModuleBuilder',
             data: {
+                module_created: {{ module_created }},
                 moduleData: JSON.parse('{{ module|json_encode|raw }}'),
                 fieldTypes: JSON.parse('{{ types|json_encode|raw }}'),
 
@@ -402,9 +403,12 @@
                     value: {}
                 },
 
-                relationships: [],
-
                 rfields: [],
+            },
+            created: function () {
+                if (!Array.isArray(this.moduleData.relationships)) {
+                    this.moduleData.relationships = Object.values(this.moduleData.relationships);
+                }
             },
             methods: {
                 hideOptions() {
@@ -510,7 +514,7 @@
                 },
 
                 addRelationship() {
-                    this.relationships.push({
+                    this.moduleData.relationships.push({
                         field: '',
                         module: '',
                         rfield: ''
@@ -534,8 +538,8 @@
                     )
                 },
 
-                saveRelationship() {
-                    console.log(this.relationships);
+                saveModule() {
+                    console.log(this.moduleData);
                 }
             }
         });

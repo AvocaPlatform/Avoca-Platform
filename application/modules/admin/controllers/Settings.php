@@ -112,6 +112,7 @@ class Settings extends AVC_AdminController
         // default value to view
         $this->data['module'] = [];
         $this->data['create_module'] = true;
+        $this->data['module_created'] = 0;
 
         if ($module_name) {
             // check exist module
@@ -123,9 +124,19 @@ class Settings extends AVC_AdminController
             $this->data['create_module'] = false;
 
             if (is_dir(APPPATH . 'modules/' . $module_name)) {
+                $this->data['module_created'] = 1;
                 $module = include APPPATH . 'modules/' . $module_name . '/config/' . $modules[$module_name]['model'] . '_vardefs.php';
             } else {
+                $this->data['module_created'] = 0;
                 $module = include APPPATH . 'modules/admin/config/module_builders/' . $module_name . '/vardefs.php';
+            }
+
+            if (!isset($module['relationships'])) {
+                $module['relationships'] = [];
+            }
+
+            if (!isset($module['indexes'])) {
+                $module['indexes'] = [];
             }
 
             $this->data['module'] = $module;

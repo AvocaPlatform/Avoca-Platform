@@ -48,7 +48,11 @@ return array(
             ]
         ]
     ],
-    'relationship' => [
-
+    'relationships' => [
+        'user_email' => [
+            'field' => 'id',
+            'module' => 'emails',
+            'rfield' => 'id',
+        ]
     ],
 );
