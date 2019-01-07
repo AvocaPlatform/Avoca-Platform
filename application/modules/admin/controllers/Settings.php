@@ -228,7 +228,68 @@ class Settings extends AVC_AdminController
         }
     }
 
-    // ACTION
+    // ACTION AJAX
+    public function build_module()
+    {
+        $this->disableView();
+
+        if (!$this->isPost()) {
+            return $this->jsonData([
+                'error' => 1
+            ]);
+        }
+
+        $data = $this->getPost('data');
+        if (!$data) {
+            return $this->jsonData([
+                'error' => 1
+            ]);
+        }
+
+        if (empty($data['module'])
+            || empty($data['model'])
+            || empty($data['fields'])) {
+            return $this->jsonData([
+                'error' => 1
+            ]);
+        }
+
+        if (empty($data['table'])) {
+            $data['table'] = $data['module'];
+        }
+
+        // reformat relationships
+        $relationships = [];
+        if (!empty($data['relationships'])) {
+            foreach ($data['relationships'] as $relationship) {
+                if (!empty($relationship['field'])
+                    && !empty($relationship['module'])
+                    && !empty($relationship['rfield'])) {
+                    $relate_name = $data['module'] . '_' . $relationship['module']
+                        . $relationship['field'] . '_' . $relationship['rfield'];
+                    $relationships[$relate_name] = $relationship;
+                }
+            }
+        }
+
+        if (file_exists(APPPATH . 'modules/' . $data['module'] . '/config/' . $data['model'] . '_vardefs.php')) {
+            write_array2file('modules/' . $data['module'] . '/config/' . $data['model'] . '_vardefs.php', $data);
+        } else if (file_exists(APPPATH . 'modules/admin/config/module_builders/' . $data['module'] . '/vardefs.php')) {
+            write_array2file('modules/admin/config/module_builders/' . $data['module'] . '/vardefs.php', $data);
+        }
+
+        return $this->jsonData([
+            'error' => 0
+        ]);
+    }
+
+    // ACTION AJAX
+    public function deploy_module()
+    {
+
+    }
+
+    // ACTION AJAX
     public function edit_list_strings($string = null)
     {
         $this->data['string'] = '';
@@ -246,7 +307,7 @@ class Settings extends AVC_AdminController
         }
     }
 
-    // ACTION
+    // ACTION AJAX
     public function save_list_strings()
     {
         $this->disableView();
@@ -270,7 +331,7 @@ class Settings extends AVC_AdminController
         }
     }
 
-    // ACTION
+    // ACTION AJAX
     public function module_fields($module)
     {
         $this->disableView();

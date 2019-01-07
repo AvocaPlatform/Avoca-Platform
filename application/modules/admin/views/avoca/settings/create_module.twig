@@ -542,7 +542,16 @@
                 },
 
                 saveModule() {
-                    console.log(this.moduleData);
+                    this.$http.post(admin_url + 'settings/build_module', {data: this.moduleData}).then(
+                        response => {
+                            const res = response.body;
+                            console.log(res);
+                        },
+                        error => {
+                            console.log(error);
+                            avocaAlert('Error', 'Some error. Please contact with administrator!');
+                        }
+                    );
                 }
             }
         });
