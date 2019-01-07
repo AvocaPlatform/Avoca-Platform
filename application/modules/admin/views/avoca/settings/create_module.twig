@@ -145,7 +145,39 @@
                 </div>
 
                 <div class="tab-pane{% if tab == 'ModuleRelateInfo' %} active show{% endif %}" id="ModuleRelateInfo">
+                    <button type="button" class="btn btn-secondary" @click="addRelationship()">
+                        <i class="fa fa-plus"></i> {{ 'Create relationship'|lang }}
+                    </button>
+                    <hr>
+                    <div class="card" v-for="opt in relationships">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>{{ 'Field relate'|lang }}</label>
+                                <select class="form-control" v-model="opt.field">
+                                    <option v-for="(extra, field) in moduleData.fields">{{ '{{ field }}' }}</option>
+                                </select>
+                            </div>
 
+                            <div class="form-group">
+                                <label>{{ 'Module relate'|lang }}</label>
+                                <select class="form-control" v-model="opt.module" @change="getModuleFields(opt.module)">
+                                    <option></option>
+                                    {% for module_opt in allModules %}
+                                        <option value="{{ module_opt.module }}">{{ module_opt.module }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>{{ 'Module relate field'|lang }}</label>
+                                <select class="form-control" v-model="opt.rname">
+                                    <option v-for="item, name in rfields" v-bind:value="name">{{ '{{ name }}' }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-primary" @click="saveRelationship()" v-if="relationships.length">{{ 'Save relationship'|lang }}</button>
                 </div>
 
                 <div class="tab-pane{% if tab == 'ModuleListView' %} active show{% endif %}" id="ModuleListView">
@@ -369,6 +401,10 @@
                     name: '',
                     value: {}
                 },
+
+                relationships: [],
+
+                rfields: [],
             },
             methods: {
                 hideOptions() {
@@ -471,6 +507,35 @@
                             avocaAlert('Error', 'Some error. Please contact with administrator!');
                         });
                     }
+                },
+
+                addRelationship() {
+                    this.relationships.push({
+                        field: '',
+                        module: '',
+                        rfield: ''
+                    });
+                },
+
+                getModuleFields(module) {
+                    this.$http.get(admin_url + 'settings/module_fields/' + module).then(
+                        response => {
+                            const res = response.body;
+                            if (res.error == 0) {
+                                this.rfields = res.fields;
+                            } else {
+                                avocaAlert('Error', 'Can not found this module!');
+                            }
+                        },
+                        error => {
+                            console.log(error);
+                            avocaAlert('Error', 'Some error. Please contact with administrator!');
+                        }
+                    )
+                },
+
+                saveRelationship() {
+                    console.log(this.relationships);
                 }
             }
         });

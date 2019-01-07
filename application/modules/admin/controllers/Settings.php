@@ -249,6 +249,35 @@ class Settings extends AVC_AdminController
     }
 
     // ACTION
+    public function module_fields($module)
+    {
+        $this->disableView();
+
+        /** @var Setting $settingModel */
+        $settingModel = $this->getModel('admin/setting');
+        $modules = $settingModel->getModules();
+
+        if (empty($modules[$module])) {
+            return $this->jsonData([
+                'error' => 1
+            ]);
+        }
+
+        $module_info = $modules[$module];
+        if (!file_exists(APPPATH . 'modules/' . $module . '/config/' . $module_info['model'] . '_vardefs.php')) {
+            return $this->jsonData([
+                'error' => 1
+            ]);
+        }
+
+        $vardefs = include APPPATH . 'modules/' . $module . '/config/' . $module_info['model'] . '_vardefs.php';
+        return $this->jsonData([
+            'error' => 0,
+            'fields' => $vardefs['fields']
+        ]);
+    }
+
+    // ACTION
     public function modules()
     {
         /** @var Setting $settingModel */

@@ -189,7 +189,7 @@ class Setting extends AVC_Model
                 $is_created = false;
             }
 
-            $allModules[] = [
+            $allModules[$module['module']] = [
                 'module' => $module['module'],
                 'model' => $module['model'],
                 'is_created' => $is_created,
