@@ -199,6 +199,33 @@ class Setting extends AVC_Model
         return $allModules;
     }
 
+    public function getModuleFields($module, $only_field_name = true) {
+        $modules = $this->getModules();
+        if (empty($modules[$module])) {
+            return [];
+        }
+
+        $module_info = $modules[$module];
+        if ($module_info['is_created']) {
+            $vardefs = include APPPATH . 'modules/' . $module . '/config/' . $module_info['model'] . '_vardefs.php';
+        } else if (file_exists(APPPATH . 'modules/admin/config/module_builders/' . $module . '/vardefs.php')) {
+            $vardefs = include APPPATH . 'modules/admin/config/module_builders/' . $module . '/vardefs.php';
+        } else {
+            return [];
+        }
+
+        if (!$only_field_name) {
+            return $vardefs['fields'];
+        }
+
+        $fields = [];
+        foreach ($vardefs['fields'] as $field => $options) {
+            $fields[] = $field;
+        }
+
+        return $fields;
+    }
+
     public function createModel($module, $model, $table)
     {
         $model_name = ucfirst(strtolower($model));

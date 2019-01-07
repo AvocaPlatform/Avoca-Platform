@@ -149,30 +149,34 @@
                         <i class="fa fa-plus"></i> {{ 'Create relationship'|lang }}
                     </button>
                     <hr>
-                    <div class="card" v-for="opt in moduleData.relationships">
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label>{{ 'Field relate'|lang }}</label>
-                                <select class="form-control" v-model="opt.field">
-                                    <option v-for="(extra, field) in moduleData.fields">{{ '{{ field }}' }}</option>
-                                </select>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-4" v-for="(opt, idx) in moduleData.relationships">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>{{ 'Field relate'|lang }}</label>
+                                        <select class="form-control" v-model="opt.field">
+                                            <option v-for="(extra, field) in moduleData.fields">{{ '{{ field }}' }}</option>
+                                        </select>
+                                    </div>
 
-                            <div class="form-group">
-                                <label>{{ 'Module relate'|lang }}</label>
-                                <select class="form-control" v-model="opt.module" @change="getModuleFields(opt.module)">
-                                    <option></option>
-                                    {% for module_opt in allModules %}
-                                        <option value="{{ module_opt.module }}">{{ module_opt.module }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
+                                    <div class="form-group">
+                                        <label>{{ 'Module relate'|lang }}</label>
+                                        <select class="form-control" v-model="opt.module" @change="getModuleFields(opt.module, idx)">
+                                            <option></option>
+                                            {% for module_opt in allModules %}
+                                                <option value="{{ module_opt.module }}">{{ module_opt.module }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
 
-                            <div class="form-group">
-                                <label>{{ 'Module relate field'|lang }}</label>
-                                <select class="form-control" v-model="opt.rname">
-                                    <option v-for="item, name in rfields" v-bind:value="name">{{ '{{ name }}' }}</option>
-                                </select>
+                                    <div class="form-group">
+                                        <label>{{ 'Module relate field'|lang }}</label>
+                                        <select class="form-control" v-model="opt.rfield">
+                                            <option v-for="opt_field in opt.fields" v-bind:value="opt_field">{{ '{{ opt_field }}' }}</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -402,8 +406,6 @@
                     name: '',
                     value: {}
                 },
-
-                rfields: [],
             },
             created: function () {
                 if (!Array.isArray(this.moduleData.relationships)) {
@@ -517,16 +519,17 @@
                     this.moduleData.relationships.push({
                         field: '',
                         module: '',
-                        rfield: ''
+                        rfield: '',
+                        fields: []
                     });
                 },
 
-                getModuleFields(module) {
+                getModuleFields(module, idx) {
                     this.$http.get(admin_url + 'settings/module_fields/' + module).then(
                         response => {
                             const res = response.body;
                             if (res.error == 0) {
-                                this.rfields = res.fields;
+                                this.moduleData.relationships[idx].fields = res.fields;
                             } else {
                                 avocaAlert('Error', 'Can not found this module!');
                             }

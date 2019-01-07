@@ -122,7 +122,6 @@ class Settings extends AVC_AdminController
             }
 
             $this->data['create_module'] = false;
-
             if (is_dir(APPPATH . 'modules/' . $module_name)) {
                 $this->data['module_created'] = 1;
                 $module = include APPPATH . 'modules/' . $module_name . '/config/' . $modules[$module_name]['model'] . '_vardefs.php';
@@ -131,14 +130,26 @@ class Settings extends AVC_AdminController
                 $module = include APPPATH . 'modules/admin/config/module_builders/' . $module_name . '/vardefs.php';
             }
 
-            if (!isset($module['relationships'])) {
-                $module['relationships'] = [];
-            }
-
+            // default value
             if (!isset($module['indexes'])) {
                 $module['indexes'] = [];
             }
 
+            /** @var Setting $settingModel */
+            $settingModel = $this->getModel('admin/setting');
+            $relationships = [];
+            // clean up relationship data
+            foreach ($module['relationships'] as $relationship) {
+                if($relationship['module']) {
+                    $relationship['fields'] = $settingModel->getModuleFields($relationship['module']);
+                } else {
+                    $relationship['fields'] = [];
+                }
+
+                $relationships[] = $relationship;
+            }
+
+            $module['relationships'] = $relationships;
             $this->data['module'] = $module;
         }
 
@@ -266,25 +277,17 @@ class Settings extends AVC_AdminController
 
         /** @var Setting $settingModel */
         $settingModel = $this->getModel('admin/setting');
-        $modules = $settingModel->getModules();
+        $fields = $settingModel->getModuleFields($module);
 
-        if (empty($modules[$module])) {
+        if (empty($fields)) {
             return $this->jsonData([
                 'error' => 1
             ]);
         }
 
-        $module_info = $modules[$module];
-        if (!file_exists(APPPATH . 'modules/' . $module . '/config/' . $module_info['model'] . '_vardefs.php')) {
-            return $this->jsonData([
-                'error' => 1
-            ]);
-        }
-
-        $vardefs = include APPPATH . 'modules/' . $module . '/config/' . $module_info['model'] . '_vardefs.php';
         return $this->jsonData([
             'error' => 0,
-            'fields' => $vardefs['fields']
+            'fields' => $fields
         ]);
     }
 
