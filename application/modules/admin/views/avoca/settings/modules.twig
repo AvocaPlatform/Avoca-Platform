@@ -18,9 +18,9 @@
                     <table class="table table-responsive-sm">
                         <thead>
                         <tr>
-                            <th>{{ __('Controller Name') }}</th>
-                            <th>{{ __('Model Name') }}</th>
-                            <th>{{ __('Table Name') }}</th>
+                            <th>{{ __('Module name') }}</th>
+                            <th>{{ __('Models') }}</th>
+                            <th>{{ __('Is created') }}</th>
                             <th>{{ __('Action') }}</th>
                         </tr>
                         </thead>
@@ -29,14 +29,14 @@
                             {% for module in modules %}
                                 <tr>
                                     <td>
-                                        <a href="{{ avoca_url(module.controller) }}">
-                                            {{ module.controller }}
+                                        <a href="{{ avoca_url(module.module) }}">
+                                            {{ module.module }}
                                         </a>
                                     </td>
                                     <td>{{ module.model }}</td>
-                                    <td>{{ module.table }}</td>
+                                    <td>{{ module.is_created ?: '0' }}</td>
                                     <td>
-                                        <a href="{{ avoca_admin('/settings/create_module/' ~ module.controller) }}">
+                                        <a href="{{ avoca_admin('/settings/create_module/' ~ module.module) }}">
                                             <i class="fa fa-pencil"></i>
                                         </a>
                                     </td>

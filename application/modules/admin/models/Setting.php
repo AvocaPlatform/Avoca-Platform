@@ -118,4 +118,28 @@ class Setting extends AVC_Model
 
         return $indexes;
     }
+
+    public function getModules($raw = false)
+    {
+        $modules = include APPPATH . 'modules/admin/config/modules.php';
+        if ($raw) {
+            return $modules;
+        }
+
+        $allModules = [];
+        foreach ($modules as $module) {
+            $is_created = true;
+            if (!is_dir(APPPATH . 'modules/' . $module['module'])) {
+                $is_created = false;
+            }
+
+            $allModules[] = [
+                'module' => $module['module'],
+                'model' => $module['model'],
+                'is_created' => $is_created,
+            ];
+        }
+
+        return $allModules;
+    }
 }

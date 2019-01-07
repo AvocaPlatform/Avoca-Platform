@@ -105,14 +105,29 @@ class Settings extends AVC_AdminController
 
         $this->data['tab'] = $tab;
 
+        /** @var Setting $settingModel */
+        $settingModel = $this->getModel('admin/setting');
+        $modules = $settingModel->getModules(true);
+
         // default value to view
         $this->data['module'] = [];
         $this->data['create_module'] = true;
 
         if ($module_name) {
+            // check exist module
+            if (!isset($modules[$module_name])) {
+                $this->setError('Did not found this module');
+                return $this->admin_redirect('/settings/modules');
+            }
+
             $this->data['create_module'] = false;
 
-            $module = include APPPATH . 'modules/admin/config/module_builders/' . $module_name . '/vardefs.php';
+            if (is_dir(APPPATH . 'modules/' . $module_name)) {
+                $module = include APPPATH . 'modules/' . $module_name . '/config/' . $modules[$module_name]['model'] . '_vardefs.php';
+            } else {
+                $module = include APPPATH . 'modules/admin/config/module_builders/' . $module_name . '/vardefs.php';
+            }
+
             $this->data['module'] = $module;
         }
 
@@ -141,9 +156,7 @@ class Settings extends AVC_AdminController
             if ($module_name) {
                 $module = [
                     'module' => $module_name,
-                    'controller' => $module_name,
                     'model' => $model,
-                    'table' => $table,
                 ];
 
                 // write to modules/admin/config/modules.php
@@ -308,7 +321,9 @@ class Settings extends AVC_AdminController
     // ACTION
     public function modules()
     {
-        $modules = include APPPATH . 'modules/admin/config/modules.php';
+        /** @var Setting $settingModel */
+        $settingModel = $this->getModel('admin/setting');
+        $modules = $settingModel->getModules();
         $this->data['modules'] = $modules;
     }
 

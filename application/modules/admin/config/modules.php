@@ -9,12 +9,20 @@
  * Git: https://github.com/tdhungit
  */
 
-return array (
-  'usergroups' => 
-  array (
-    'module' => 'usergroups',
-    'controller' => 'usergroups',
-    'model' => 'usergroup',
-    'table' => 'usergroups',
-  ),
+return array(
+    'users' =>
+        array(
+            'module' => 'users',
+            'model' => 'user',
+        ),
+    'emails' =>
+        array(
+            'module' => 'emails',
+            'model' => 'mailsend',
+        ),
+    'usergroups' =>
+        array(
+            'module' => 'usergroups',
+            'model' => 'usergroups',
+        ),
 );
