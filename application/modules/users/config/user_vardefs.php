@@ -15,11 +15,9 @@ return array(
     'table' => 'users',
     'fields' => [
         'id' => [
-            'name' => 'id',
             'type' => 'ID',
         ],
         'date_created' => [
-            'name' => 'date_created',
             'type' => 'DATETIME',
         ],
         'username' => [

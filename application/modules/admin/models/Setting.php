@@ -119,6 +119,62 @@ class Setting extends AVC_Model
         return $indexes;
     }
 
+    public function transferVardefs2DBConfig($vardef_path)
+    {
+        if (!file_exists($vardef_path)) {
+            return false;
+        }
+
+        $vardefs = include $vardef_path;
+        $db_types = include APPPATH . 'modules/admin/config/database_types.php';
+        $defined_types = $db_types['defined'];
+
+        $fields = [];
+        if (!empty($vardefs['fields'])) {
+            foreach ($vardefs['fields'] as $field => $options) {
+                $type = isset($options['type']) ? $options['type'] : 'VARCHAR';
+                $type_key = strtolower($type);
+
+                if (!empty($defined_types[$type_key])) {
+                    $fvar = sprintf($defined_types[$type_key], $field);
+                } else {
+                    $constraint = isset($options['constraint']) ? $options['constraint'] : '';
+                    $fvar = "$field $type $constraint";
+                    $fvar = trim($fvar) . ' ';
+
+                    unset($options['type']);
+                    unset($options['constraint']);
+
+                    foreach ($options as $key => $value) {
+                        $fvar .= $key . ':' . $value . ' ';
+                    }
+
+                    $fvar = trim($fvar);
+                }
+
+                $fields[$field] = $fvar;
+            }
+        }
+
+        $indexes = [];
+        if (!empty($vardefs['indexes'])) {
+            foreach ($vardefs['indexes'] as $index_name => $index_opt) {
+                if ($index_opt['type'] == 'PK') {
+                    $index = 'PK ' . implode(',', $index_opt['fields']);
+                } else {
+                    $index = $index_opt['type'] . ' ' . implode(',', $index_opt['fields']) . ' ' . $index_name;
+                }
+
+                $indexes[] = $index;
+            }
+        }
+
+        return [
+            'fields' => $fields,
+            'indexes' => $indexes,
+        ];
+    }
+
     public function getModules($raw = false)
     {
         $modules = include APPPATH . 'modules/admin/config/modules.php';
@@ -141,5 +197,118 @@ class Setting extends AVC_Model
         }
 
         return $allModules;
+    }
+
+    public function createModel($module, $model, $table)
+    {
+        $model_name = ucfirst(strtolower($model));
+        $model_path = APPPATH . 'modules/' . $module . '/models/' . $model_name . '.php';
+
+        if (!file_exists($model_path)) {
+            $template = file_get_contents(APPPATH . 'modules/admin/config/builders/model.avc');
+            $data = str_replace(
+                ['$$MODEL_CLASS$$', '$$TABLE_NAME$$'],
+                [$model_name, strtolower($table)],
+                $template);
+
+            write_file($model_path, $data, 'w');
+        }
+    }
+
+    public function createController($module, $controller, $model)
+    {
+        $model_name = ucfirst(strtolower($model));
+        $controller_name = ucfirst(strtolower($controller));
+        $controller_path = APPPATH . 'modules/' . $module . '/controllers/' . $controller_name . '.php';
+
+        if (!file_exists($controller_path)) {
+            $template = file_get_contents(APPPATH . 'modules/admin/config/builders/controller.avc');
+            $data = str_replace(
+                ['$$CONTROLLER_CLASS$$', '$$MODEL_NAME$$'],
+                [$controller_name, strtolower($model_name)],
+                $template);
+
+            write_file($controller_path, $data, 'w');
+        }
+    }
+
+    public function createTableDefined($table_name, $table_define, $table_index)
+    {
+        $define = [];
+        $define_arr = explode("\n", $table_define);
+        foreach ($define_arr as $value) {
+            $define[] = trim(trim($value, "\n"));
+        }
+
+        $index = [];
+        if ($table_index) {
+            $index_arr = explode("\n", $table_index);
+            foreach ($index_arr as $value) {
+                $index[] = trim(trim($value, "\n"));
+            }
+        }
+
+        $table = [
+            'name' => strtolower($table_name),
+            'ENGINE' => 'InnoDB',
+            'fields' => $define,
+            'indexes' => $index
+        ];
+
+        $tables = include APPPATH . 'modules/admin/config/databases.php';
+        $tables[$table_name] = $table;
+
+        write_array2file('modules/admin/config/databases.php', $tables);
+    }
+
+    public function createModule($module)
+    {
+        if (!file_exists(APPPATH . 'modules/admin/module_builders/' . $module . '/vardefs.php')) {
+            return false;
+        }
+
+        $controller = ucfirst($module);
+        $controller_path = APPPATH . 'modules/' . $module . '/controllers/' . $controller . '.php';
+
+        // not yet create module
+        if (!file_exists($controller_path)) {
+            // create module dir
+            if (!is_dir(APPPATH . 'modules/' . $module)) {
+                mkdir(APPPATH . 'modules/' . $module, 0775);
+            }
+
+            if (!is_dir(APPPATH . 'modules/' . $module . '/controllers')) {
+                mkdir(APPPATH . 'modules/' . $module . '/controllers', 0775);
+            }
+
+            if (!is_dir(APPPATH . 'modules/' . $module . '/models')) {
+                mkdir(APPPATH . 'modules/' . $module . '/models', 0775);
+            }
+
+            if (!is_dir(APPPATH . 'modules/' . $module . '/config')) {
+                mkdir(APPPATH . 'modules/' . $module . '/config', 0775);
+            }
+
+            if (!is_dir(APPPATH . 'modules/' . $module . '/views')) {
+                mkdir(APPPATH . 'modules/' . $module . '/views', 0775);
+            }
+        } else {
+            // module exist
+        }
+
+        $module_info = include APPPATH . 'modules/admin/module_builders/' . $module . '/vardefs.php';
+
+        // create config
+        if (!file_exists(APPPATH . 'modules/' . $module . '/config/' . $module_info['model'] . '_vardef.php')) {
+            write_array2file('modules/' . $module . '/config/' . $module_info['model'] . '_vardef.php', $module_info);
+        }
+
+        // create controller
+        $this->createController($module, $module, $module_info['model']);
+
+        // create model
+        if (!empty($module_info['model'])) {
+            $this->createModel($module, $module_info['model'], $module_info['table']);
+        }
     }
 }

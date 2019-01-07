@@ -140,8 +140,8 @@ class Settings extends AVC_AdminController
 
         // app_list_strings
         $this->data['app_list_strings'] = getAppListStrings(null, true);
-
         $this->data['types'] = array_merge($types, $dbTypes['default']);
+        $this->data['allModules'] = $settingModel->getModules();
 
         // process create module
         if ($this->isPost()) {
@@ -248,76 +248,6 @@ class Settings extends AVC_AdminController
         }
     }
 
-    private function _createModel($model, $table, $folder = 'custom')
-    {
-        $model_name = ucfirst(strtolower($model));
-        if ($folder == 'core') {
-            $model_path = APPPATH . 'models/' . $model_name . '.php';
-        } else {
-            $model_path = CUSTOMPATH . 'models/' . $model_name . '.php';
-        }
-
-        if (!file_exists($model_path)) {
-            $template = file_get_contents(APPPATH . 'modules/admin/config/builders/model.avc');
-            $data = str_replace(
-                ['$$MODEL_CLASS$$', '$$TABLE_NAME$$'],
-                [$model_name, strtolower($table)],
-                $template);
-
-            write_file($model_path, $data, 'w');
-        }
-    }
-
-    private function _createController($controller, $model, $folder = 'custom')
-    {
-        $model_name = ucfirst(strtolower($model));
-        $controller_name = ucfirst(strtolower($controller));
-        if ($folder == 'core') {
-            $controller_path = APPPATH . 'controllers/manage/' . $controller_name . '.php';
-        } else {
-            $controller_path = CUSTOMPATH . 'controllers/manage/' . $controller_name . '.php';
-        }
-
-        if (!file_exists($controller_path)) {
-            $template = file_get_contents(APPPATH . 'modules/admin/config/builders/controller.avc');
-            $data = str_replace(
-                ['$$CONTROLLER_CLASS$$', '$$MODEL_NAME$$'],
-                [$controller_name, strtolower($model_name)],
-                $template);
-
-            write_file($controller_path, $data, 'w');
-        }
-    }
-
-    private function _createTableDefined($table_name, $table_define, $table_index)
-    {
-        $define = [];
-        $define_arr = explode("\n", $table_define);
-        foreach ($define_arr as $value) {
-            $define[] = trim(trim($value, "\n"));
-        }
-
-        $index = [];
-        if ($table_index) {
-            $index_arr = explode("\n", $table_index);
-            foreach ($index_arr as $value) {
-                $index[] = trim(trim($value, "\n"));
-            }
-        }
-
-        $table = [
-            'name' => strtolower($table_name),
-            'ENGINE' => 'InnoDB',
-            'fields' => $define,
-            'indexes' => $index
-        ];
-
-        $tables = include APPPATH . 'modules/admin/config/databases.php';
-        $tables[$table_name] = $table;
-
-        write_array2file('modules/admin/config/databases.php', $tables);
-    }
-
     // ACTION
     public function modules()
     {
@@ -325,6 +255,10 @@ class Settings extends AVC_AdminController
         $settingModel = $this->getModel('admin/setting');
         $modules = $settingModel->getModules();
         $this->data['modules'] = $modules;
+
+//        $this->disableView();
+//        echo '<pre>';
+//        print_r($settingModel->transferVardefs2DBConfig(APPPATH . 'modules/users/config/user_vardefs.php'));
     }
 
     // ACTION
