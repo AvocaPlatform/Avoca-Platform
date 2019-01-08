@@ -15,6 +15,8 @@ class Setting extends AVC_Model
 {
     protected $table = 'settings';
 
+    private $dbParams = ['unsigned', 'auto_increment', 'unique', 'null', 'default'];
+
     /**
      * convert data to ci create table structure
      * @return array
@@ -139,14 +141,18 @@ class Setting extends AVC_Model
                     $fvar = sprintf($defined_types[$type_key], $field);
                 } else {
                     $constraint = isset($options['constraint']) ? $options['constraint'] : '';
+                    if (!empty($options['decimal'])) {
+                        $constraint .= ',' . $options['decimal'];
+                    }
+
                     $fvar = "$field $type $constraint";
                     $fvar = trim($fvar) . ' ';
 
-                    unset($options['type']);
-                    unset($options['constraint']);
-
                     foreach ($options as $key => $value) {
-                        $fvar .= $key . ':' . $value . ' ';
+                        $key = strtolower($key);
+                        if (in_array($key, $this->dbParams)) {
+                            $fvar .= $key . ':' . $value . ' ';
+                        }
                     }
 
                     $fvar = trim($fvar);

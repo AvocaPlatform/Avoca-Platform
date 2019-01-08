@@ -232,7 +232,7 @@
 
                         <div class="form-group" v-if="isLength">
                             <label>{{ 'Length'|lang }}</label>
-                            <input type="number" name="field_length" class="form-control" v-model="newField.length">
+                            <input type="number" name="field_length" class="form-control" v-model="newField.constraint">
                         </div>
 
                         <div class="form-group" v-if="isDecimal">
@@ -459,7 +459,8 @@
 
                 addField() {
                     if (this.newField.type && this.newField.name && this.newField.label) {
-                        this.moduleData.fields[this.newField.name] = {...this.newField};
+                        let newField = {...this.newField};
+                        this.moduleData.fields[this.newField.name] = newField;
                         this.newField = {};
                         $('#fieldConfigModal').modal('hide');
                     }
@@ -545,7 +546,11 @@
                     this.$http.post(admin_url + 'settings/build_module', {data: this.moduleData}).then(
                         response => {
                             const res = response.body;
-                            console.log(res);
+                            if (res.error == 0) {
+                                avocaAlert('Successful', 'Save successful!');
+                            } else {
+                                avocaAlert('Error', 'Some error. Please contact with administrator!');
+                            }
                         },
                         error => {
                             console.log(error);

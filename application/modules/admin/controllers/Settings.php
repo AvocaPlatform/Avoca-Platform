@@ -271,11 +271,13 @@ class Settings extends AVC_AdminController
                     && !empty($relationship['rfield'])) {
                     $relate_name = $data['module'] . '_' . $relationship['module']
                         . $relationship['field'] . '_' . $relationship['rfield'];
+                    unset($relationship['fields']);
                     $relationships[$relate_name] = $relationship;
                 }
             }
         }
 
+        $data['relationships'] = $relationships;
         if (file_exists(APPPATH . 'modules/' . $data['module'] . '/config/' . $data['model'] . '_vardefs.php')) {
             write_array2file('modules/' . $data['module'] . '/config/' . $data['model'] . '_vardefs.php', $data);
         } else if (file_exists(APPPATH . 'modules/admin/config/module_builders/' . $data['module'] . '/vardefs.php')) {
@@ -366,7 +368,7 @@ class Settings extends AVC_AdminController
 
 //        $this->disableView();
 //        echo '<pre>';
-//        print_r($settingModel->transferVardefs2DBConfig(APPPATH . 'modules/users/config/user_vardefs.php'));
+//        print_r($settingModel->transferVardefs2DBConfig(APPPATH . 'modules/admin/config/module_builders/usergroups/vardefs.php'));
     }
 
     // ACTION
