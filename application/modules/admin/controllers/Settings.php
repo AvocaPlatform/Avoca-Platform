@@ -131,6 +131,10 @@ class Settings extends AVC_AdminController
             }
 
             // default value
+            if (!isset($module['relationships'])) {
+                $module['relationships'] = [];
+            }
+
             if (!isset($module['indexes'])) {
                 $module['indexes'] = [];
             }
