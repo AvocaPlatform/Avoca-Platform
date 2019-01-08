@@ -64,6 +64,25 @@
 }
 /* !Descending */
 
+/* List */
 .list-action a.btn-sm {
     padding: 0 7px;
+}
+
+/* dragging */
+.dragDrop {
+    min-height: 50px;
+}
+
+.drag-list-move {
+    transition: transform 0.5s;
+}
+
+.drag-ghost {
+    opacity: 0.4;
+    background-color: #eeeeee;
+}
+
+.sortable-drag, .sortable-chosen {
+    opacity: 1;
 }

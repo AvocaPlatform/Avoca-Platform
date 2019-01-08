@@ -84,90 +84,9 @@ class Settings extends AVC_AdminController
     // ACTION
     public function create_module($module_name = null)
     {
-        $this->setTitle('Create Module', true);
-
-        $this->addJs([
-            avoca_static(false) . '/themes/avoca_global/js/jquery-sortable.js',
-            'https://cdn.jsdelivr.net/npm/vue',
-            'https://cdn.jsdelivr.net/npm/vue-resource@1.5.1',
-        ]);
-
-        $tab = $this->getQuery('tab');
-        if (!in_array($tab, [
-            'ModuleInfo',
-            'ModuleFieldInfo',
-            'ModuleRelateInfo',
-            'ModuleListView',
-            'ModuleRecordView'
-        ])) {
-            $tab = 'ModuleInfo';
-        }
-
-        $this->data['tab'] = $tab;
-
         /** @var Setting $settingModel */
         $settingModel = $this->getModel('admin/setting');
         $modules = $settingModel->getModules(true);
-
-        // default value to view
-        $this->data['module'] = [];
-        $this->data['create_module'] = true;
-        $this->data['module_created'] = 0;
-
-        if ($module_name) {
-            // check exist module
-            if (!isset($modules[$module_name])) {
-                $this->setError('Did not found this module');
-                return $this->admin_redirect('/settings/modules');
-            }
-
-            $this->data['create_module'] = false;
-            if (is_dir(APPPATH . 'modules/' . $module_name)) {
-                $this->data['module_created'] = 1;
-                $module = include APPPATH . 'modules/' . $module_name . '/config/' . $modules[$module_name]['model'] . '_vardefs.php';
-            } else {
-                $this->data['module_created'] = 0;
-                $module = include APPPATH . 'modules/admin/config/module_builders/' . $module_name . '/vardefs.php';
-            }
-
-            // default value
-            if (!isset($module['relationships'])) {
-                $module['relationships'] = [];
-            }
-
-            if (!isset($module['indexes'])) {
-                $module['indexes'] = [];
-            }
-
-            /** @var Setting $settingModel */
-            $settingModel = $this->getModel('admin/setting');
-            $relationships = [];
-            // clean up relationship data
-            foreach ($module['relationships'] as $relationship) {
-                if($relationship['module']) {
-                    $relationship['fields'] = $settingModel->getModuleFields($relationship['module']);
-                } else {
-                    $relationship['fields'] = [];
-                }
-
-                $relationships[] = $relationship;
-            }
-
-            $module['relationships'] = $relationships;
-            $this->data['module'] = $module;
-        }
-
-        // field types
-        $dbTypes = include APPPATH . 'modules/admin/config/database_types.php';
-        $types = [];
-        foreach ($dbTypes['defined'] as $type => $type_value) {
-            $types[] = $type;
-        }
-
-        // app_list_strings
-        $this->data['app_list_strings'] = getAppListStrings(null, true);
-        $this->data['types'] = array_merge($types, $dbTypes['default']);
-        $this->data['allModules'] = $settingModel->getModules();
 
         // process create module
         if ($this->isPost()) {
@@ -230,6 +149,88 @@ class Settings extends AVC_AdminController
                 return $this->admin_redirect('/settings/create_module/' . $module_name . '?tab=ModuleFieldInfo');
             }
         }
+
+        $this->setTitle('Create Module', true);
+        $this->addJs([
+            'https://cdn.jsdelivr.net/npm/vue',
+            'https://cdn.jsdelivr.net/npm/vue-resource@1.5.1',
+            'https://cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.17.0/vuedraggable.min.js',
+        ]);
+
+        $tab = $this->getQuery('tab');
+        if (!in_array($tab, [
+            'ModuleInfo',
+            'ModuleFieldInfo',
+            'ModuleRelateInfo',
+            'ModuleListView',
+            'ModuleRecordView'
+        ])) {
+            $tab = 'ModuleInfo';
+        }
+
+        // default value to view
+        $this->data['tab'] = $tab;
+        $this->data['module'] = [];
+        $this->data['create_module'] = true;
+        $this->data['module_created'] = 0;
+        $this->data['all_fields'] = [];
+
+        if ($module_name) {
+            // check exist module
+            if (!isset($modules[$module_name])) {
+                $this->setError('Did not found this module');
+                return $this->admin_redirect('/settings/modules');
+            }
+
+            $this->data['all_fields'] = $settingModel->getModuleFields($module_name, true, true);
+            $this->data['create_module'] = false;
+            if (is_dir(APPPATH . 'modules/' . $module_name)) {
+                $this->data['module_created'] = 1;
+                $module = include APPPATH . 'modules/' . $module_name . '/config/' . $modules[$module_name]['model'] . '_vardefs.php';
+            } else {
+                $this->data['module_created'] = 0;
+                $module = include APPPATH . 'modules/admin/config/module_builders/' . $module_name . '/vardefs.php';
+            }
+
+            // default value
+            if (!isset($module['relationships'])) {
+                $module['relationships'] = [];
+            }
+
+            if (!isset($module['indexes'])) {
+                $module['indexes'] = [];
+            }
+
+            /** @var Setting $settingModel */
+            $settingModel = $this->getModel('admin/setting');
+            $relationships = [];
+            // clean up relationship data
+            foreach ($module['relationships'] as $relationship) {
+                if($relationship['module']) {
+                    $relationship['fields'] = $settingModel->getModuleFields($relationship['module']);
+                } else {
+                    $relationship['fields'] = [];
+                }
+
+                $relationships[] = $relationship;
+            }
+
+            $module['relationships'] = $relationships;
+            $this->data['module'] = $module;
+        }
+
+        // field types
+        $dbTypes = include APPPATH . 'modules/admin/config/database_types.php';
+        $types = [];
+        foreach ($dbTypes['defined'] as $type => $type_value) {
+            $types[] = $type;
+        }
+
+        // app_list_strings
+        $this->data['app_list_strings'] = getAppListStrings(null, true);
+        $this->data['types'] = array_merge($types, $dbTypes['default']);
+        $this->data['allModules'] = $settingModel->getModules();
     }
 
     // ACTION AJAX

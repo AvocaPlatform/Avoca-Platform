@@ -205,7 +205,7 @@ class Setting extends AVC_Model
         return $allModules;
     }
 
-    public function getModuleFields($module, $only_field_name = true) {
+    public function getModuleFields($module, $only_field_name = true, $include_label = false) {
         $modules = $this->getModules();
         if (empty($modules[$module])) {
             return [];
@@ -225,8 +225,18 @@ class Setting extends AVC_Model
         }
 
         $fields = [];
-        foreach ($vardefs['fields'] as $field => $options) {
-            $fields[] = $field;
+        if (!$include_label) {
+            foreach ($vardefs['fields'] as $field => $options) {
+                $fields[] = $field;
+            }
+        } else {
+            foreach ($vardefs['fields'] as $field => $options) {
+                $label = !empty($options['label']) ? $options['label'] : __(str_replace('_', ' ', ucfirst($field)));
+                $fields[] = [
+                    'name' => $field,
+                    'label' => $label,
+                ];
+            }
         }
 
         return $fields;
