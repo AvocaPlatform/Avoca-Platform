@@ -1,7 +1,8 @@
 {% extends 'layouts/admin.twig' %}
 
 {% block content %}
-    <div class="row" id="ModuleBuilder" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+    <div class="row" id="ModuleBuilder" xmlns:v-bind="http://www.w3.org/1999/xhtml"
+         xmlns:v-on="http://www.w3.org/1999/xhtml">
         <div class="col-sm-12 mb-4">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
@@ -229,15 +230,40 @@
                             <div class="card">
                                 <div class="card-header">
                                     {{ 'Record fields'|lang }}
+                                    <div class="card-header-actions">
+                                        <a href="javascript:void(0)" class="card-header-action btn-setting" @click="addRecordRow()">
+                                            <i class="fa fa-plus"></i> {{ 'Add row'|lang }}
+                                        </a>
+                                    </div>
                                 </div>
                                 <div class="card-body">
-                                    <draggable v-model="record_fields" :options="dragRecordOptions">
-                                        <transition-group name="drag-list" class="dragDrop row" tag="div">
-                                            <div class="col-md-6" style="margin: 5px 0" v-for="field in record_fields" :key="field.name">
-                                                <button type="button" class="btn btn-info btn-block">{{ '{{ field.label }}' }}</button>
-                                            </div>
-                                        </transition-group>
-                                    </draggable>
+                                    <div v-for="(line, idx1) in record_fields">
+                                        <div class="row">
+                                            <drop class="col-md-6 mb-2" v-for="(field, idx2) in line" @drop="handleSelectedField">
+                                                <div class="btn-group" role="group" style="width: 100%" v-if="field.name">
+                                                    <button type="button"
+                                                            class="btn btn-info btn-block"
+                                                            v-bind:idx1="idx1"
+                                                            v-bind:idx2="idx2"
+                                                            @click="">
+                                                        {{ '{{ field.label }}' }}
+                                                    </button>
+                                                    <button type="button"
+                                                            class="btn btn-danger"
+                                                            v-bind:idx1="idx1"
+                                                            v-bind:idx2="idx2"
+                                                            v-on:click="removeSelectedField">x</button>
+                                                </div>
+                                                <button type="button" disabled
+                                                        class="btn btn-outline-dark btn-block"
+                                                        v-if="!field.name"
+                                                        v-bind:idx1="idx1"
+                                                        v-bind:idx2="idx2">
+                                                    {{ 'Drop here'|lang }}
+                                                </button>
+                                            </drop>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -247,13 +273,13 @@
                                     {{ 'Available fields'|lang }}
                                 </div>
                                 <div class="card-body">
-                                    <draggable v-model="record_choose_fields" :options="dragRecordOptions">
-                                        <transition-group name="drag-list" class="dragDrop" tag="div">
-                                            <div style="margin: 5px 0" v-for="field in record_choose_fields" :key="field.name">
-                                                <button type="button" class="btn btn-light btn-block">{{ '{{ field.label }}' }}</button>
-                                            </div>
-                                        </transition-group>
-                                    </draggable>
+                                    <div class="" v-for="field in record_choose_fields">
+                                        <drag class="mb-2" :transfer-data="field">
+                                            <button type="button" class="btn btn-light btn-block">
+                                                {{ '{{ field.label }}' }}
+                                            </button>
+                                        </drag>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -484,7 +510,7 @@
                 list_fields: [],
                 list_choose_fields: JSON.parse('{{ all_fields|json_encode|raw }}'),
 
-                record_fields: [],
+                record_fields: [[{name: '', label: ''}, {name: '', label: ''}]],
                 record_choose_fields: JSON.parse('{{ all_fields|json_encode|raw }}'),
             },
             created: function () {
@@ -636,6 +662,41 @@
                             avocaAlert('Error', 'Some error. Please contact with administrator!');
                         }
                     )
+                },
+
+                handleSelectedField(data, event) {
+                    const el = event.target;
+                    const idx1 = $(el).attr('idx1');
+                    const idx2 = $(el).attr('idx2');
+
+                    this.record_fields[idx1][idx2] = data;
+                    const chooseIdx = _.findIndex(this.record_choose_fields, {name: data.name, label: data.label});
+                    if (chooseIdx >= 0) {
+                        this.record_choose_fields.splice(chooseIdx, 1);
+                    }
+
+                    $(el).text(data.label);
+                    $(el).attr('disabled', false);
+                    $(el).removeClass('btn-outline-dark');
+                    $(el).addClass('btn-info');
+                },
+
+                removeSelectedField(event) {
+                    const el = event.target;
+                    const idx1 = $(el).attr('idx1');
+                    const idx2 = $(el).attr('idx2');
+
+                    this.record_choose_fields.push(this.record_fields[idx1][idx2]);
+                    this.record_fields[idx1][idx2] = {name: '', label: ''};
+
+                    $(el).text('Drop here');
+                    $(el).attr('disabled', true);
+                    $(el).addClass('btn-outline-dark');
+                    $(el).removeClass('btn-info');
+                },
+
+                addRecordRow() {
+                    this.record_fields.push([{name: '', label: ''}, {name: '', label: ''}]);
                 },
 
                 saveModule() {

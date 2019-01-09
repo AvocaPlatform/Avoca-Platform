@@ -152,10 +152,12 @@ class Settings extends AVC_AdminController
 
         $this->setTitle('Create Module', true);
         $this->addJs([
+            'https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js',
             'https://cdn.jsdelivr.net/npm/vue',
             'https://cdn.jsdelivr.net/npm/vue-resource@1.5.1',
             'https://cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js',
             'https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.17.0/vuedraggable.min.js',
+            'https://unpkg.com/vue-drag-drop',
         ]);
 
         $tab = $this->getQuery('tab');
