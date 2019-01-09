@@ -239,29 +239,38 @@
                                 <div class="card-body">
                                     <div v-for="(line, idx1) in record_fields">
                                         <div class="row">
-                                            <drop class="col-md-6 mb-2" v-for="(field, idx2) in line" @drop="handleSelectedField">
-                                                <div class="btn-group" role="group" style="width: 100%" v-if="field.name">
-                                                    <button type="button"
-                                                            class="btn btn-info btn-block"
-                                                            v-bind:idx1="idx1"
-                                                            v-bind:idx2="idx2"
-                                                            @click="">
-                                                        {{ '{{ field.label }}' }}
-                                                    </button>
-                                                    <button type="button"
-                                                            class="btn btn-danger"
-                                                            v-bind:idx1="idx1"
-                                                            v-bind:idx2="idx2"
-                                                            v-on:click="removeSelectedField">x</button>
+                                            <div class="col-md-1">
+                                                <button type="button"
+                                                        class="btn btn-outline-danger pull-right"
+                                                        @click="removeRecordRow(idx1)">x</button>
+                                            </div>
+                                            <div class="col-md-11">
+                                                <div class="row">
+                                                    <drop class="col-md-6 mb-2" v-for="(field, idx2) in line" @drop="handleSelectedField">
+                                                        <div class="btn-group" role="group" style="width: 100%" v-if="field.name">
+                                                            <button type="button"
+                                                                    class="btn btn-info btn-block"
+                                                                    v-bind:idx1="idx1"
+                                                                    v-bind:idx2="idx2"
+                                                                    @click="">
+                                                                {{ '{{ field.label }}' }}
+                                                            </button>
+                                                            <button type="button"
+                                                                    class="btn btn-danger"
+                                                                    v-bind:idx1="idx1"
+                                                                    v-bind:idx2="idx2"
+                                                                    v-on:click="removeSelectedField">x</button>
+                                                        </div>
+                                                        <button type="button" disabled
+                                                                class="btn btn-outline-dark btn-block"
+                                                                v-if="!field.name"
+                                                                v-bind:idx1="idx1"
+                                                                v-bind:idx2="idx2">
+                                                            {{ 'Drop here'|lang }}
+                                                        </button>
+                                                    </drop>
                                                 </div>
-                                                <button type="button" disabled
-                                                        class="btn btn-outline-dark btn-block"
-                                                        v-if="!field.name"
-                                                        v-bind:idx1="idx1"
-                                                        v-bind:idx2="idx2">
-                                                    {{ 'Drop here'|lang }}
-                                                </button>
-                                            </drop>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -697,6 +706,16 @@
 
                 addRecordRow() {
                     this.record_fields.push([{name: '', label: ''}, {name: '', label: ''}]);
+                },
+
+                removeRecordRow(idx) {
+                    const fields = [...this.record_fields[idx]];
+                    for (let i in fields) {
+                        let field = fields[i];
+                        this.record_choose_fields.push(field);
+                    }
+
+                    this.record_fields.splice(idx, 1);
                 },
 
                 saveModule() {
