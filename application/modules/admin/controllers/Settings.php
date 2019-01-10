@@ -261,6 +261,7 @@ class Settings extends AVC_AdminController
             ]);
         }
 
+        // module defined
         if (empty($data['table'])) {
             $data['table'] = $data['module'];
         }
@@ -273,7 +274,7 @@ class Settings extends AVC_AdminController
                     && !empty($relationship['module'])
                     && !empty($relationship['rfield'])) {
                     $relate_name = $data['module'] . '_' . $relationship['module']
-                        . $relationship['field'] . '_' . $relationship['rfield'];
+                        . '_' . $relationship['field'] . '_' . $relationship['rfield'];
                     unset($relationship['fields']);
                     $relationships[$relate_name] = $relationship;
                 }
@@ -281,10 +282,44 @@ class Settings extends AVC_AdminController
         }
 
         $data['relationships'] = $relationships;
+
+        // layout defined
+        $viewdefs = [];
+        if (file_exists(APPPATH . 'modules/' . $data['module'] . '/config/' . $data['model'] . '_viewdefs.php')) {
+            $viewdefs = include APPPATH . 'modules/' . $data['module'] . '/config/' . $data['model'] . '_viewdefs.php';
+        } else if (file_exists(APPPATH . 'modules/admin/config/module_builders/' . $data['module'] . '/viewdefs.php')) {
+            $viewdefs = include APPPATH . 'modules/admin/config/module_builders/' . $data['module'] . '/viewdefs.php';
+        }
+
+        $list = [];
+        $list_view = $this->getPost('list_view');
+        foreach ($list_view as $field) {
+            if (!empty($field['name'])) {
+                $list[$field['name']] = $field;
+            }
+        }
+
+        $record = [];
+        $record_view = $this->getPost('record_view');
+        $i = 0;
+        foreach ($record_view as $line) {
+            foreach ($line as $field) {
+                if (!empty($field['name'])) {
+                    $record[$i][$field['name']] = $field;
+                }
+            }
+        }
+
+        $viewdefs['list'] = $list;
+        $viewdefs['record'] = $record;
+
+        // write defined module
         if (file_exists(APPPATH . 'modules/' . $data['module'] . '/config/' . $data['model'] . '_vardefs.php')) {
             write_array2file('modules/' . $data['module'] . '/config/' . $data['model'] . '_vardefs.php', $data);
+            write_array2file('modules/' . $data['module'] . '/config/' . $data['model'] . '_viewdefs.php', $viewdefs);
         } else if (file_exists(APPPATH . 'modules/admin/config/module_builders/' . $data['module'] . '/vardefs.php')) {
             write_array2file('modules/admin/config/module_builders/' . $data['module'] . '/vardefs.php', $data);
+            write_array2file('modules/admin/config/module_builders/' . $data['module'] . '/viewdefs.php', $viewdefs);
         }
 
         return $this->jsonData([

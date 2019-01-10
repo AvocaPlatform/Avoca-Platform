@@ -721,8 +721,8 @@
                 saveModule() {
                     this.$http.post(admin_url + 'settings/build_module', {
                         data: this.moduleData,
-                        list_fields: this.list_fields,
-                        record_fields: this.record_fields,
+                        list_view: this.list_fields,
+                        record_view: this.record_fields,
                     }).then(
                         response => {
                             const res = response.body;
