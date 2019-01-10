@@ -1,5 +1,18 @@
 {% extends 'layouts/admin.twig' %}
 
+{% block breadcrumbItem %}
+    <li class="breadcrumb-item">
+        <a href="{{ avoca_admin() }}">{{ 'Admin'|lang }}</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{{ avoca_admin('/settings') }}">{{ 'Settings'|lang }}</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{{ avoca_admin('/settings/modules') }}">{{ 'Modules manage'|lang }}</a>
+    </li>
+    <li class="breadcrumb-item active">{{ 'Create module'|lang }}</li>
+{% endblock %}
+
 {% block content %}
     <div class="row" id="ModuleBuilder" xmlns:v-bind="http://www.w3.org/1999/xhtml"
          xmlns:v-on="http://www.w3.org/1999/xhtml">
@@ -13,7 +26,7 @@
                        aria-controls="home"
                        aria-selected="true">
                         <i class="icon-calculator"></i> {{ 'Create module'|lang }}
-                        <span class="badge badge-success">New</span>
+                        <span class="badge badge-success"><i class="fa fa-flash"></i></span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -24,7 +37,7 @@
                        aria-controls="home"
                        aria-selected="true">
                         <i class="icon-calculator"></i> {{ 'Fields'|lang }}
-                        <span class="badge badge-success">New</span>
+                        <span class="badge badge-success"><i class="fa fa-flash"></i></span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -35,7 +48,7 @@
                        aria-controls="home"
                        aria-selected="true">
                         <i class="icon-calculator"></i> {{ 'Relationship'|lang }}
-                        <span class="badge badge-success">New</span>
+                        <span class="badge badge-success"><i class="fa fa-flash"></i></span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -46,7 +59,7 @@
                        aria-controls="home"
                        aria-selected="true">
                         <i class="icon-calculator"></i> {{ 'List view'|lang }}
-                        <span class="badge badge-success">New</span>
+                        <span class="badge badge-success"><i class="fa fa-flash"></i></span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -57,7 +70,7 @@
                        aria-controls="home"
                        aria-selected="true">
                         <i class="icon-calculator"></i> {{ 'Record view'|lang }}
-                        <span class="badge badge-success">New</span>
+                        <span class="badge badge-success"><i class="fa fa-flash"></i></span>
                     </a>
                 </li>
             </ul>
@@ -534,8 +547,10 @@
                 record_choose_fields: JSON.parse('{{ all_fields|json_encode|raw }}'),
             },
             created: function () {
-                if (!Array.isArray(this.moduleData.relationships)) {
-                    this.moduleData.relationships = Object.values(this.moduleData.relationships);
+                if (this.moduleData.relationships) {
+                    if (!Array.isArray(this.moduleData.relationships)) {
+                        this.moduleData.relationships = Object.values(this.moduleData.relationships);
+                    }
                 }
                 // list_choose_fields
                 _.forEach(this.list_fields, (field, key) => {

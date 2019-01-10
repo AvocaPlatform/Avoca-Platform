@@ -60,3 +60,26 @@
     </nav>
     <button class="sidebar-minimizer brand-minimizer" type="button"></button>
 {% endblock %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{{ avoca_admin() }}">{{ 'Admin'|lang }}</a>
+        </li>
+        {% block breadcrumbItem %}
+            <li class="breadcrumb-item">
+                <a href="{{ avoca_admin(_controller) }}">{{ _controller|capitalize }}</a>
+            </li>
+            <li class="breadcrumb-item active">{{ _pageTitle }}</li>
+        {% endblock %}
+        <!-- Breadcrumb Menu-->
+        <li class="breadcrumb-menu d-md-down-none">
+            <div class="btn-group" role="group" aria-label="Button group">
+                <a class="btn" href="{{ avoca_admin() }}">
+                    <i class="icon-graph"></i>  Dashboard</a>
+                <a class="btn" href="{{ avoca_admin('/settings') }}">
+                    <i class="icon-settings"></i>  Settings</a>
+            </div>
+        </li>
+    </ol>
+{% endblock %}

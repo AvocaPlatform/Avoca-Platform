@@ -173,11 +173,14 @@ class Settings extends AVC_AdminController
 
         // default value to view
         $this->data['tab'] = $tab;
-        $this->data['module'] = [];
+        $this->data['module'] = [
+            'relationships' => new stdClass(),
+            'indexes' => new stdClass()
+        ];
         $this->data['create_module'] = true;
         $this->data['module_created'] = 0;
         $this->data['all_fields'] = [];
-        $this->data['viewdefs'] = [];
+        $this->data['viewdefs'] = new stdClass();
 
         if ($module_name) {
             // check exist module
@@ -201,11 +204,11 @@ class Settings extends AVC_AdminController
 
             // clean up module defined
             if (!isset($module['relationships'])) {
-                $module['relationships'] = [];
+                $module['relationships'] = new stdClass();
             }
 
             if (!isset($module['indexes'])) {
-                $module['indexes'] = [];
+                $module['indexes'] = new stdClass();
             }
 
             /** @var Setting $settingModel */
