@@ -317,6 +317,7 @@ class Settings extends AVC_AdminController
             $i++;
         }
 
+        $viewdefs['title'] = $this->getPost('field_title');
         $viewdefs['list']['fields'] = $list;
         $viewdefs['record']['fields'] = $record;
 
