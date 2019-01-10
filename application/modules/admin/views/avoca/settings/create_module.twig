@@ -110,8 +110,7 @@
                                 {{ 'Fields'|lang }}
                                 <div class="card-header-actions">
                                     <button class="card-header-action btn-setting"
-                                            data-toggle="modal"
-                                            data-target="#fieldConfigModal">
+                                            @click="editField('')">
                                         {{ 'Add field'|lang }} <i class="fa fa-plus"></i>
                                     </button>
                                 </div>
@@ -120,9 +119,10 @@
                                 <table class="table table-sm table-bordered">
                                     <tr v-for="(extra, field) in moduleData.fields">
                                         <td>
-                                            <a href="#">{{ '{{ field }}' }}</a>
+                                            <a href="javascript:void(0)" @click="editField(field)">{{ 'field'|ajs }}</a>
                                         </td>
-                                        <td>{{ '{{ extra.type }}' }}</td>
+                                        <td>{{ 'extra.type'|ajs }}</td>
+                                        <td>{{ 'extra.constraint'|ajs }}</td>
                                     </tr>
                                 </table>
                             </div>
@@ -133,8 +133,7 @@
                                 {{ 'Indexes'|lang }}
                                 <div class="card-header-actions">
                                     <button class="card-header-action btn-setting"
-                                            data-toggle="modal"
-                                            data-target="#indexConfigModal">
+                                            @click="editIndex('')">
                                         {{ 'Add index'|lang }} <i class="fa fa-plus"></i>
                                     </button>
                                 </div>
@@ -143,10 +142,10 @@
                                 <table class="table table-sm table-bordered">
                                     <tr v-for="(extra, index_name) in moduleData.indexes">
                                         <td>
-                                            <a href="#">{{ '{{ index_name }}' }}</a>
+                                            <a href="javascript:void(0)" @click="editIndex(index_name)">{{ 'index_name'|ajs }}</a>
                                         </td>
-                                        <td>{{ '{{ extra.type }}' }}</td>
-                                        <td>{{ '{{ extra.fields }}' }}</td>
+                                        <td>{{ 'extra.type'|ajs }}</td>
+                                        <td>{{ 'extra.fields'|ajs }}</td>
                                     </tr>
                                 </table>
                             </div>
@@ -342,7 +341,7 @@
                             <label>{{ 'Field type'|lang }}</label>
                             <select class="form-control" v-model="newField.type" @change="changeType()">
                                 <option></option>
-                                <option v-for="type in fieldTypes" v-bind:value="type">{{ '{{ type }}' }}</option>
+                                <option v-for="type in fieldTypes" v-bind:value="type">{{ 'type'|ajs }}</option>
                             </select>
                         </div>
 
@@ -641,6 +640,16 @@
                     }
                 },
 
+                editField(field) {
+                    if (field && this.moduleData.fields && this.moduleData.fields[field]) {
+                        this.newField = this.moduleData.fields[field];
+                    } else {
+                        this.newField = {};
+                    }
+
+                    $('#fieldConfigModal').modal('show');
+                },
+
                 editListStrings(name = '') {
                     this.options.create = true;
                     if (name) {
@@ -689,6 +698,18 @@
                             avocaAlert('Error', 'Some error. Please contact with administrator!');
                         });
                     }
+                },
+
+                addIndex() {},
+
+                editIndex(index) {
+                    if (index && this.moduleData.indexes && this.moduleData.indexes[index]) {
+                        this.newIndex = this.moduleData.indexes[index];
+                    } else {
+                        this.newIndex = {};
+                    }
+
+                    $('#indexConfigModal').modal('show');
                 },
 
                 addRelationship() {

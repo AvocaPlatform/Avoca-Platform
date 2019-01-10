@@ -135,6 +135,12 @@ class Twig
         });
         $twig->addFilter($filter_translate);
 
+        // print js lib var
+        $filter_js_var = new \Twig_SimpleFilter('ajs', function ($string) {
+            return '{{ ' . $string . ' }}';
+        });
+        $twig->addFilter($filter_js_var);
+
         $this->twig = $twig;
     }
 
