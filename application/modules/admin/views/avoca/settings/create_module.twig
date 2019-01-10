@@ -487,6 +487,8 @@
 
 {% block jsLive %}
     <script>
+        var viewdefs = JSON.parse('{{ viewdefs|json_encode|raw }}');
+
         $(function () {
 
         });
@@ -516,16 +518,34 @@
                     value: {}
                 },
 
-                list_fields: [],
+                list_fields: viewdefs.list && Object.values(viewdefs.list) || [],
                 list_choose_fields: JSON.parse('{{ all_fields|json_encode|raw }}'),
 
-                record_fields: [[{name: '', label: ''}, {name: '', label: ''}]],
+                record_fields: viewdefs.record && Object.values(viewdefs.record) || [[{name: '', label: ''}, {name: '', label: ''}]],
                 record_choose_fields: JSON.parse('{{ all_fields|json_encode|raw }}'),
             },
             created: function () {
                 if (!Array.isArray(this.moduleData.relationships)) {
                     this.moduleData.relationships = Object.values(this.moduleData.relationships);
                 }
+                // list_choose_fields
+                _.forEach(this.list_fields, (field, key) => {
+                    let field_name = field.name || '';
+                    if (field_name) {
+                        let choose_idx = _.findIndex(this.list_choose_fields, {name: field_name});
+                        this.list_choose_fields.splice(choose_idx, 1);
+                    }
+                });
+                // record_choose_fields
+                _.forEach(this.record_fields, (line, key0) => {
+                    _.forEach(line, (field, key1) => {
+                        let field_name = field.name || '';
+                        if (field_name) {
+                            let choose_idx = _.findIndex(this.record_choose_fields, {name: field_name});
+                            this.record_choose_fields.splice(choose_idx, 1);
+                        }
+                    });
+                });
             },
             computed: {
                 dragListOptions() {

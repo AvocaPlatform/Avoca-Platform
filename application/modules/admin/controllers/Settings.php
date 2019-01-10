@@ -177,6 +177,7 @@ class Settings extends AVC_AdminController
         $this->data['create_module'] = true;
         $this->data['module_created'] = 0;
         $this->data['all_fields'] = [];
+        $this->data['viewdefs'] = [];
 
         if ($module_name) {
             // check exist module
@@ -185,17 +186,20 @@ class Settings extends AVC_AdminController
                 return $this->admin_redirect('/settings/modules');
             }
 
+            // get module defined
             $this->data['all_fields'] = $settingModel->getModuleFields($module_name, true, true);
             $this->data['create_module'] = false;
             if (is_dir(APPPATH . 'modules/' . $module_name)) {
                 $this->data['module_created'] = 1;
                 $module = include APPPATH . 'modules/' . $module_name . '/config/' . $modules[$module_name]['model'] . '_vardefs.php';
+                $viewdefs = include APPPATH . 'modules/' . $module_name . '/config/' . $modules[$module_name]['model'] . '_viewdefs.php';
             } else {
                 $this->data['module_created'] = 0;
                 $module = include APPPATH . 'modules/admin/config/module_builders/' . $module_name . '/vardefs.php';
+                $viewdefs = include APPPATH . 'modules/admin/config/module_builders/' . $module_name . '/viewdefs.php';
             }
 
-            // default value
+            // clean up module defined
             if (!isset($module['relationships'])) {
                 $module['relationships'] = [];
             }
@@ -219,7 +223,9 @@ class Settings extends AVC_AdminController
             }
 
             $module['relationships'] = $relationships;
+
             $this->data['module'] = $module;
+            $this->data['viewdefs'] = $viewdefs;
         }
 
         // field types
@@ -308,6 +314,7 @@ class Settings extends AVC_AdminController
                     $record[$i][$field['name']] = $field;
                 }
             }
+            $i++;
         }
 
         $viewdefs['list'] = $list;
