@@ -317,8 +317,8 @@ class Settings extends AVC_AdminController
             $i++;
         }
 
-        $viewdefs['list'] = $list;
-        $viewdefs['record'] = $record;
+        $viewdefs['list']['fields'] = $list;
+        $viewdefs['record']['fields'] = $record;
 
         // write defined module
         if (file_exists(APPPATH . 'modules/' . $data['module'] . '/config/' . $data['model'] . '_vardefs.php')) {

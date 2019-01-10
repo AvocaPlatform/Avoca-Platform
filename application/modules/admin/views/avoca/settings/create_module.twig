@@ -518,10 +518,10 @@
                     value: {}
                 },
 
-                list_fields: viewdefs.list && Object.values(viewdefs.list) || [],
+                list_fields: viewdefs.list && viewdefs.list.fields && Object.values(viewdefs.list.fields) || [],
                 list_choose_fields: JSON.parse('{{ all_fields|json_encode|raw }}'),
 
-                record_fields: viewdefs.record && Object.values(viewdefs.record) || [[{name: '', label: ''}, {name: '', label: ''}]],
+                record_fields: viewdefs.record && viewdefs.record.fields && Object.values(viewdefs.record.fields) || [[{name: '', label: ''}, {name: '', label: ''}]],
                 record_choose_fields: JSON.parse('{{ all_fields|json_encode|raw }}'),
             },
             created: function () {

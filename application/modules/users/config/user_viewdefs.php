@@ -18,10 +18,13 @@ return [
     'list' => [
         'fields' => [
             'id' => [
+                'name' => 'id',
                 'type' => 'int',
                 'label' => 'ID',
             ],
             'username' => [
+                'name' => 'username',
+                'label' => 'Username',
                 'type' => 'link',
                 'controller' => 'users',
                 //'label' => 'Username',
@@ -35,9 +38,14 @@ return [
         'fields' => [
             [
                 'id' => [
+                    'name' => 'id',
+                    'label' => 'ID',
                     'type' => 'disabled'
                 ],
-                'username' => true,
+                'username' => [
+                    'name' => 'username',
+                    'label' => 'Username',
+                ],
             ],
         ],
 //        'buttons' => [
