@@ -332,6 +332,12 @@
             </div>
         </div>
 
+        <div class="col-sm-12 mb-4" v-if="module_created == 0">
+            <button type="button"
+                    class="btn btn-danger btn-block"
+                    @click="deploy()">{{ 'Deploy module'|lang }}</button>
+        </div>
+
         <!-- Model create/update field -->
         <div class="modal fade"
              id="fieldConfigModal"
@@ -519,7 +525,7 @@
 
 {% block jsLive %}
     <script>
-        var viewdefs = JSON.parse('{{ viewdefs|json_encode|raw }}');
+        var viewdefs = {{ viewdefs|json_encode|raw }};
 
         $(function () {
 
@@ -529,8 +535,8 @@
             el: '#ModuleBuilder',
             data: {
                 module_created: {{ module_created }},
-                moduleData: JSON.parse('{{ module|json_encode|raw }}'),
-                fieldTypes: JSON.parse('{{ types|json_encode|raw }}'),
+                moduleData: {{ module|json_encode|raw }},
+                fieldTypes: {{ types|json_encode|raw }},
 
                 newField: {},
                 newIndex: {},
@@ -541,7 +547,7 @@
                 isRelate: false,
 
                 indexTypes: ['INDEX', 'UNIQUE', 'PK'],
-                allOptions: JSON.parse('{{ app_list_strings|json_encode|raw }}'),
+                allOptions: {{ app_list_strings|json_encode|raw }},
 
                 option: {},
                 options: {
@@ -551,11 +557,11 @@
                 },
 
                 list_fields: viewdefs.list && viewdefs.list.fields && Object.values(viewdefs.list.fields) || [],
-                list_choose_fields: JSON.parse('{{ all_fields|json_encode|raw }}'),
+                list_choose_fields: {{ all_fields|json_encode|raw }},
 
                 record_title: viewdefs.title || '',
                 record_fields: viewdefs.record && viewdefs.record.fields && Object.values(viewdefs.record.fields) || [[{name: '', label: ''}, {name: '', label: ''}]],
-                record_choose_fields: JSON.parse('{{ all_fields|json_encode|raw }}'),
+                record_choose_fields: {{ all_fields|json_encode|raw }},
             },
             created: function () {
                 if (this.moduleData.relationships) {
@@ -835,6 +841,25 @@
                             avocaAlert('Error', 'Some error. Please contact with administrator!');
                         }
                     );
+                },
+
+                deploy() {
+                    if (!this.module_created) {
+                        this.$http.post(admin_url + 'settings/deploy_module', {module: this.moduleData.module || ''}).then(
+                            response => {
+                                const res = response.body;
+                                if (res.error == 0) {
+                                    avocaAlert('Success', 'Deploy success');
+                                } else {
+                                    avocaAlert('Error', 'Some error. Please contact with administrator!');
+                                }
+                            },
+                            error => {
+                                console.log(error);
+                                avocaAlert('Error', 'Some error. Please contact with administrator!');
+                            }
+                        )
+                    }
                 },
             }
         });

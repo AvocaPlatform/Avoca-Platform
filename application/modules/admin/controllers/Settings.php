@@ -341,7 +341,46 @@ class Settings extends AVC_AdminController
     // ACTION AJAX
     public function deploy_module()
     {
+        $this->disableView();
 
+        if (!$this->isPost()) {
+            return $this->jsonData(['error' => 1]);
+        }
+
+        $module = $this->getPost('module');
+        if (!$module) {
+            return $this->jsonData(['error' => 1]);
+        }
+
+        // check source
+        $vardefs_source = APPPATH . "modules/admin/config/module_builders/{$module}/vardefs.php";
+        $viewdefs_source = APPPATH . "modules/admin/config/module_builders/{$module}/viewdefs.php";
+        if (!file_exists($vardefs_source)) {
+            return $this->jsonData(['error' => 1]);
+        }
+
+        // check params
+        $vardefs = include $vardefs_source;
+        if (empty($vardefs['model'])) {
+            return $this->jsonData([
+                'error' => 1,
+                'message' => 'Invalid model name',
+            ]);
+        }
+
+        /** @var Setting $settingModel */
+        $settingModel = $this->getModel('admin/setting');
+        $settingModel->createModule($module);
+
+        // create vardefs file
+        write_array2file(APPPATH . "modules/$module/config/{$vardefs['model']}_vardefs.php", $vardefs);
+        // create view source
+        if (file_exists($viewdefs_source)) {
+            $viewdefs = include $viewdefs_source;
+            write_array2file(APPPATH . "modules/$module/config/{$vardefs['model']}_viewdefs.php", $viewdefs);
+        }
+
+        return $this->jsonData(['error' => 0]);
     }
 
     // ACTION AJAX

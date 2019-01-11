@@ -15,28 +15,50 @@ return [
     'title' => 'subject',
     'list' => [
         'fields' => [
-            'subject' => [],
-            'from' => [],
-            'to' => [],
+            'subject' => [
+                'name' => 'subject',
+                'label' => 'Subject',
+            ],
+            'from' => [
+                'name' => 'from',
+                'label' => 'From',
+            ],
+            'to' => [
+                'name' => 'name',
+                'label' => 'To',
+            ],
         ]
     ],
     'record' => [
         'fields' => [
             [
-                'from' => true,
-                'to' => true,
+                'from' => [
+                    'name' => 'from',
+                    'label' => 'From',
+                ],
+                'to' => [
+                    'name' => 'to',
+                    'label' => 'To',
+                ],
             ],
             [
-                'subject' => true,
+                'subject' => [
+                    'name' => 'subject',
+                    'label' => 'Subject',
+                ],
             ],
             [
                 'message' => [
-                    'type' => 'textarea'
+                    'type' => 'textarea',
+                    'name' => 'message',
+                    'label' => 'Message',
                 ]
             ],
             [
                 'attachments' => [
-                    'type' => 'files'
+                    'type' => 'files',
+                    'name' => 'attachments',
+                    'label' => 'Attachments',
                 ]
             ],
         ],
