@@ -9,7 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
-class Home extends AVC_Controller
+use Avoca\Libraries\Controllers\AvocaController;
+
+class Home extends AvocaController
 {
     /**
      * @throws Exception

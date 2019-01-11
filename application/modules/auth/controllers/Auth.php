@@ -9,8 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
+use Avoca\Libraries\Controllers\AvocaController;
 
-class Auth extends AVC_Controller
+class Auth extends AvocaController
 {
     // Action login
     public function index()

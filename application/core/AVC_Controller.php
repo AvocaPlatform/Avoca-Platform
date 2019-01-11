@@ -9,27 +9,12 @@
  * Git: https://github.com/tdhungit
  */
 
-/**
- * Class AVC_BaseController
- */
-class AVC_BaseController extends Avoca\Libraries\Controllers\AvocaBaseController {}
+use Avoca\Libraries\Controllers\AvocaController;
 
 /**
  * Class AVC_Controller
  */
-class AVC_Controller extends Avoca\Libraries\Controllers\AvocaController {}
+class AVC_Controller extends AvocaController
+{
 
-/**
- * Class AVC_ManageController
- */
-class AVC_ManageController extends Avoca\Libraries\Controllers\AvocaManageController {}
-
-/**
- * Class AVC_AdminController
- */
-class AVC_AdminController extends Avoca\Libraries\Controllers\AvocaAdminController {}
-
-/**
- * Class AVC_APIController
- */
-class AVC_APIV1Controller extends Avoca\Libraries\Controllers\AvocaApiV1Controller {}
+}

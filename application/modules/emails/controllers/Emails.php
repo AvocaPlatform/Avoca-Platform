@@ -9,7 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
-class Emails extends AVC_ManageController
+use Avoca\Libraries\Controllers\AvocaManageController;
+
+class Emails extends AvocaManageController
 {
     protected $model = 'mailsend';
 

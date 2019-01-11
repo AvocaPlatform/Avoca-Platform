@@ -9,7 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
-class User extends AVC_Model
+use Avoca\Libraries\Models\AvocaModel;
+
+class User extends AvocaModel
 {
     protected $table = 'users';
     protected $limit = 7;

@@ -10,8 +10,9 @@
  * Facebook: https://www.facebook.com/jackytran0101
  */
 
+use Avoca\Libraries\Controllers\AvocaController;
 
-class Install extends AVC_Controller
+class Install extends AvocaController
 {
     private $installed = true;
 

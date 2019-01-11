@@ -9,7 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
-class Dashboard extends AVC_AdminController
+use Avoca\Libraries\Controllers\AvocaAdminController;
+
+class Dashboard extends AvocaAdminController
 {
     public function index()
     {

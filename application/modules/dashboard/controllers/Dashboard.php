@@ -9,8 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
+use Avoca\Libraries\Controllers\AvocaManageController;
 
-class Dashboard extends AVC_ManageController
+class Dashboard extends AvocaManageController
 {
     public function index()
     {

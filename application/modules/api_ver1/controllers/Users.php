@@ -9,7 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
-class Users extends AVC_APIV1Controller
+use Avoca\Libraries\Controllers\AvocaApiV1Controller;
+
+class Users extends AvocaApiV1Controller
 {
     protected $model = 'users/user';
 

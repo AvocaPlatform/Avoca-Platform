@@ -9,8 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
+use Avoca\Libraries\Controllers\AvocaAdminController;
 
-class Oauth2 extends AVC_AdminController
+class Oauth2 extends AvocaAdminController
 {
     protected function init()
     {

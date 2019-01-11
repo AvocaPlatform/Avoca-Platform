@@ -9,7 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
-class Users extends AVC_ManageController
+use Avoca\Libraries\Controllers\AvocaManageController;
+
+class Users extends AvocaManageController
 {
     protected $model = 'User';
 }

@@ -9,7 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
-class Settings extends AVC_AdminController
+use Avoca\Libraries\Controllers\AvocaAdminController;
+
+class Settings extends AvocaAdminController
 {
     protected $model = 'admin/setting';
 

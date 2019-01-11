@@ -9,7 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
-class Auth extends AVC_BaseController
+use Avoca\Libraries\Controllers\AvocaBaseController;
+
+class Auth extends AvocaBaseController
 {
     /** @var \Avoca\Libraries\AvocaApiAuth */
     private $server;

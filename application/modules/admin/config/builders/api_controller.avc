@@ -9,7 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
-class $$CONTROLLER_CLASS$$ extends AVC_APIV1Controller
+use Avoca\Libraries\Controllers\AvocaApiV1Controller;
+
+class $$CONTROLLER_CLASS$$ extends AvocaApiV1Controller
 {
     protected $model = '$$MODEL_NAME$$';
 }

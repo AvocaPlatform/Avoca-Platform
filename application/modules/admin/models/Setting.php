@@ -10,8 +10,9 @@
  * Facebook: https://www.facebook.com/jackytran0101
  */
 
+use Avoca\Libraries\Models\AvocaModel;
 
-class Setting extends AVC_Model
+class Setting extends AvocaModel
 {
     protected $table = 'settings';
 

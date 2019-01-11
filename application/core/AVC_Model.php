@@ -9,7 +9,12 @@
  * Git: https://github.com/tdhungit
  */
 
+use Avoca\Libraries\Models\AvocaModel;
+
 /**
  * Class AVC_Model
  */
-class AVC_Model extends Avoca\Libraries\Models\AvocaModel {}
+class AVC_Model extends AvocaModel
+{
+
+}

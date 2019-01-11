@@ -9,7 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
-class $$CONTROLLER_CLASS$$ extends AVC_ManageController
+use Avoca\Libraries\Controllers\AvocaManageController;
+
+class $$CONTROLLER_CLASS$$ extends AvocaManageController
 {
     protected $model = '$$MODEL_NAME$$';
 }
