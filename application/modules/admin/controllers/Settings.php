@@ -459,6 +459,35 @@ class Settings extends AVC_AdminController
 //        print_r($settingModel->transferVardefs2DBConfig(APPPATH . 'modules/admin/config/module_builders/usergroups/vardefs.php'));
     }
 
+    public function remove_module($module)
+    {
+        $this->disableView();
+
+        // not allow module deployed
+        if (is_dir(APPPATH . "modules/{$module}")) {
+            $this->setError('Can not delete module deployed');
+            return $this->admin_redirect('/settings/modules');
+        }
+
+        /** @var Setting $settingModel */
+        $settingModel = $this->getModel('admin/setting');
+
+        // get all modules
+        $allModules = $settingModel->getModules(true);
+        if (!empty($allModules[$module])) {
+            unset($allModules[$module]);
+            write_array2file('modules/admin/config/modules.php', $allModules);
+        }
+
+        if (is_dir(APPPATH . "modules/admin/config/module_builders/$module")) {
+            delete_files(APPPATH . "modules/admin/config/module_builders/$module", true);
+            rmdir(APPPATH . "modules/admin/config/module_builders/$module");
+        }
+
+        $this->setSuccess("Remove module: {$module} successful");
+        return $this->admin_redirect('/settings/modules');
+    }
+
     // ACTION
     public function mail_setting()
     {

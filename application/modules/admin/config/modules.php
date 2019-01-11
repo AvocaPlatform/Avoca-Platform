@@ -9,20 +9,15 @@
  * Git: https://github.com/tdhungit
  */
 
-return array(
-    'users' =>
-        array(
-            'module' => 'users',
-            'model' => 'user',
-        ),
-    'emails' =>
-        array(
-            'module' => 'emails',
-            'model' => 'mailsend',
-        ),
-    'usergroups' =>
-        array(
-            'module' => 'usergroups',
-            'model' => 'usergroups',
-        ),
+return array (
+  'users' => 
+  array (
+    'module' => 'users',
+    'model' => 'user',
+  ),
+  'emails' => 
+  array (
+    'module' => 'emails',
+    'model' => 'mailsend',
+  ),
 );

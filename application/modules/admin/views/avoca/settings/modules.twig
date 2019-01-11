@@ -34,10 +34,19 @@
                                         </a>
                                     </td>
                                     <td>{{ module.model }}</td>
-                                    <td>{{ module.is_created ?: '0' }}</td>
                                     <td>
-                                        <a href="{{ avoca_admin('/settings/create_module/' ~ module.module) }}">
+                                        {% if module.is_created %}
+                                            <span class="badge badge-info">{{ 'Created'|lang }}</span>
+                                        {% else %}
+                                            <span class="badge badge-warning">{{ 'N/A'|lang }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{{ avoca_admin('/settings/create_module/' ~ module.module) }}" class="badge badge-warning">
                                             <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a href="{{ avoca_admin('/settings/remove_module/' ~ module.module) }}" class="badge badge-danger">
+                                            <i class="fa fa-trash"></i>
                                         </a>
                                     </td>
                                 </tr>
