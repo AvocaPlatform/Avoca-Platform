@@ -70,33 +70,33 @@ class AVC_Router extends CI_Router
         // Load the routes.php file. It would be great if we could
         // skip this for enable_query_strings = TRUE, but then
         // default_controller would be empty ...
-        if (file_exists(APPPATH . 'config/routes.php')) {
-            include(APPPATH . 'config/routes.php');
+        if (file_exists(APPPATH . 'Config/routes.php')) {
+            include(APPPATH . 'Config/routes.php');
         }
 
-        if (file_exists(APPPATH . 'config/' . ENVIRONMENT . '/routes.php')) {
-            include(APPPATH . 'config/' . ENVIRONMENT . '/routes.php');
+        if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/routes.php')) {
+            include(APPPATH . 'Config/' . ENVIRONMENT . '/routes.php');
         }
 
         // API
         # Authenticate
-        $route['api/v(:num)/auth'] = "api_ver$1/auth/index";
-        $route['api/v(:num)/auth/(:any)'] = "api_ver$1/auth/$2";
+        $route['api/v(:num)/auth'] = "ApiVer$1/auth/index";
+        $route['api/v(:num)/auth/(:any)'] = "ApiVer$1/auth/$2";
 
         # GET --> list records
         # POST --> create record
         # example: /api/v1/users --> api_ver1/Users/records
-        $route['api/v(:num)/(:any)'] = "api_ver$1/$2/records";
+        $route['api/v(:num)/(:any)'] = "ApiVer$1/$2/records";
 
         # GET --> detail record
         # PUT --> edit record
         # DELETE --> delete record
         # example: /api/v1/users/1 --> api_ver1/Users/record
-        $route['api/v(:num)/(:any)/(:num)'] = "api_ver$1/$2/record/$3";
+        $route['api/v(:num)/(:any)/(:num)'] = "ApiVer$1/$2/record/$3";
 
         // Controllers
-        $route['api/v(:num)/(:any)/(:any)'] = "api_ver$1/$2/$3";
-        $route['api/v(:num)/(:any)/(:any)/(.+)'] = "api_ver$1/$2/$3/$4";
+        $route['api/v(:num)/(:any)/(:any)'] = "ApiVer$1/$2/$3";
+        $route['api/v(:num)/(:any)/(:any)/(.+)'] = "ApiVer$1/$2/$3/$4";
         ##################################################
 
         // Validate & get reserved routes
@@ -232,11 +232,11 @@ class AVC_Router extends CI_Router
         // is found or when such a directory doesn't exist
         while ($c-- > 0) {
             $test = $this->directory
-                . ucfirst($this->translate_uri_dashes === TRUE ? str_replace('-', '_', $segments[0]) : $segments[0]);
+                . $this->translate_uri_dashes === TRUE ? str_replace('-', '_', $segments[0]) : $segments[0];
 
-            if (!file_exists(APPPATH . 'controllers/' . $test . '.php')
+            if (!file_exists(APPPATH . 'Controllers/' . $test . '.php')
                 && $directory_override === FALSE
-                && is_dir(APPPATH . 'controllers/' . $this->directory . $segments[0])
+                && is_dir(APPPATH . 'Controllers/' . $this->directory . $segments[0])
             ) {
                 $this->set_directory(array_shift($segments), TRUE);
                 continue;
@@ -275,16 +275,16 @@ class AVC_Router extends CI_Router
         /* check modules */
         foreach (Modules::$locations as $location => $offset) {
             /* module exists? */
-            if (is_dir($source = $location . $module . '/controllers/')) {
+            if (is_dir($source = $location . $module . '/Controllers/')) {
                 $this->module = $module;
-                $this->directory = $offset . $module . '/controllers/';
+                $this->directory = $offset . $module . '/Controllers/';
 
-                if (is_file($source . ucfirst($controller) . EXT)) {
+                if (is_file($source . $controller . EXT)) {
                     $this->located = 1;
                     return array_slice($segments, 1);
                 }
 
-                if (is_file($source . ucfirst($module) . EXT)) {
+                if (is_file($source . $module . EXT)) {
                     $this->located = 0;
                     return $segments;
                 }

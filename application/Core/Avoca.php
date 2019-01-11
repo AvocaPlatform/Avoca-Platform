@@ -24,12 +24,12 @@ const CI_VERSION = '3.1.9';
  *  Load the framework constants
  * ------------------------------------------------------
  */
-if (file_exists(APPPATH . 'config/' . ENVIRONMENT . '/constants.php')) {
-    require_once(APPPATH . 'config/' . ENVIRONMENT . '/constants.php');
+if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/constants.php')) {
+    require_once(APPPATH . 'Config/' . ENVIRONMENT . '/constants.php');
 }
 
-if (file_exists(APPPATH . 'config/constants.php')) {
-    require_once(APPPATH . 'config/constants.php');
+if (file_exists(APPPATH . 'Config/constants.php')) {
+    require_once(APPPATH . 'Config/constants.php');
 }
 
 /*
@@ -309,7 +309,7 @@ function &get_instance()
     return CI_Controller::get_instance();
 }
 
-require_once APPPATH . 'core/AVC_Controller.php';
+require_once APPPATH . 'Core/AVC_Controller.php';
 
 // Set a mark point for benchmarking
 $BM->mark('loading_time:_base_classes_end');
@@ -336,13 +336,13 @@ $BM->mark('loading_time:_base_classes_end');
  */
 
 $e404 = FALSE;
-$class = ucfirst($RTR->class);
-$class_path = APPPATH . 'modules/' . $RTR->directory . $class . '.php';
+$class = $RTR->class;
+$class_path = APPPATH . 'Modules/' . $RTR->directory . $class . '.php';
 $method = $RTR->method;
 
 // check controller custom
 $custom_class = $class . 'Controller';
-$custom_class_path = CUSTOMPATH . 'modules/' . $RTR->directory . $class . '.php';
+$custom_class_path = CUSTOMPATH . 'Modules/' . $RTR->directory . $class . '.php';
 if (file_exists($custom_class_path)) {
     require_once $class_path;
     $class = $custom_class;
@@ -395,12 +395,12 @@ if ($e404) {
         $error_class = ucfirst($error_class);
 
         if (!class_exists($error_class, FALSE)) {
-            if (file_exists(APPPATH . 'controllers/' . $RTR->directory . $error_class . '.php')) {
-                require_once(APPPATH . 'controllers/' . $RTR->directory . $error_class . '.php');
+            if (file_exists(APPPATH . 'Controllers/' . $RTR->directory . $error_class . '.php')) {
+                require_once(APPPATH . 'Controllers/' . $RTR->directory . $error_class . '.php');
                 $e404 = !class_exists($error_class, FALSE);
             } // Were we in a directory? If so, check for a global override
-            elseif (!empty($RTR->directory) && file_exists(APPPATH . 'controllers/' . $error_class . '.php')) {
-                require_once(APPPATH . 'controllers/' . $error_class . '.php');
+            elseif (!empty($RTR->directory) && file_exists(APPPATH . 'Controllers/' . $error_class . '.php')) {
+                require_once(APPPATH . 'Controllers/' . $error_class . '.php');
                 if (($e404 = !class_exists($error_class, FALSE)) === FALSE) {
                     $RTR->directory = '';
                 }

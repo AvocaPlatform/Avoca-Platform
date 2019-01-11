@@ -53,7 +53,7 @@ class AVC_Lang extends CI_Lang
                 $found = TRUE;
             }
         } else {
-            $package_path = APPPATH . 'language/' . $idiom . '/' . $langfile;
+            $package_path = APPPATH . 'Language/' . $idiom . '/' . $langfile;
             if (file_exists($package_path)) {
                 include($package_path);
                 $found = TRUE;

@@ -17,7 +17,7 @@
 	],
 	"autoload": {
 		"psr-4" : {
-			"Avoca\\" : "application/libraries/avoca/",
+			"Avoca\\" : "application/Libraries/Avoca/",
 			"App\\" : "application/",
 			"Custom\\" : "custom/"
 		}

@@ -13,7 +13,7 @@ global $CFG;
 
 /* get module locations from config settings or use the default module location and offset */
 Modules::$locations = array(
-    APPPATH . 'modules/' => '../modules/',
+    APPPATH . 'Modules/' => '../Modules/',
 );
 
 /* PHP5 spl_autoload */
@@ -71,7 +71,7 @@ class Modules
             if (empty($class)) return;
 
             /* set the module directory */
-            $path = APPPATH . 'controllers/' . $CI->router->directory;
+            $path = APPPATH . 'Controllers/' . $CI->router->directory;
 
             /* load the controller class */
             $class = $class . $CI->config->item('controller_suffix');
@@ -92,13 +92,13 @@ class Modules
         if (strstr($class, 'CI_') OR strstr($class, config_item('subclass_prefix'))) return;
 
         /* autoload core classes */
-        if (is_file($location = APPPATH . 'core/' . ucfirst($class) . EXT)) {
+        if (is_file($location = APPPATH . 'Core/' . $class . EXT)) {
             include_once $location;
             return;
         }
 
         /* autoload library classes */
-        if (is_file($location = APPPATH . 'libraries/' . ucfirst($class) . EXT)) {
+        if (is_file($location = APPPATH . 'Libraries/' . $class . EXT)) {
             include_once $location;
             return;
         }
@@ -153,7 +153,7 @@ class Modules
             foreach ($modules as $module => $subpath) {
                 $fullpath = $location . $module . '/' . $base . $subpath;
 
-                if ($base == 'libraries/' OR $base == 'models/') {
+                if ($base == 'Libraries/' OR $base == 'Models/') {
                     if (is_file($fullpath . ucfirst($file_ext))) return array(
                         $fullpath,
                         ucfirst($file)
@@ -178,7 +178,7 @@ class Modules
     {
         /* load the route file */
         if (!isset(self::$routes[$module])) {
-            if (list($path) = self::find('routes', $module, 'config/')) {
+            if (list($path) = self::find('routes', $module, 'Config/')) {
                 $path && self::$routes[$module] = self::load_file('routes', $path, 'route');
             }
         }
