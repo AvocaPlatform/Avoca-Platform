@@ -275,6 +275,23 @@ class Setting extends AVC_Model
         }
     }
 
+    public function createAPIController($module, $controller, $model)
+    {
+        $model_name = strtolower($module) . '' . strtolower($model);
+        $controller_name = ucfirst(strtolower($controller));
+        $controller_path = APPPATH . "modules/api_ver1/controllers/{$controller_name}.php";
+
+        if (!file_exists($controller_path)) {
+            $template = file_get_contents(APPPATH . 'modules/admin/config/builders/api_controller.avc');
+            $data = str_replace(
+                ['$$CONTROLLER_CLASS$$', '$$MODEL_NAME$$'],
+                [$controller_name, $model_name],
+                $template);
+
+            write_file($controller_path, $data, 'w');
+        }
+    }
+
     public function createTableDefined($table_name, $table_define, $table_index)
     {
         $define = [];

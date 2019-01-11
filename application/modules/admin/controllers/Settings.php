@@ -380,6 +380,18 @@ class Settings extends AVC_AdminController
             write_array2file(APPPATH . "modules/$module/config/{$vardefs['model']}_viewdefs.php", $viewdefs);
         }
 
+        // create required files
+        $controller = !empty($vardefs['controller']) ? $vardefs['controller'] : $module;
+        $model = !empty($vardefs['model']) ? $vardefs['model'] : '';
+        $table = !empty($vardefs['table']) ? $vardefs['table'] : '';
+
+        $settingModel->createController($module, $controller, $model);
+        if ($model) {
+            $table = $table ? $table : $module;
+            $settingModel->createModel($module, $model, $table);
+            $settingModel->createAPIController($module, $controller, $model);
+        }
+
         return $this->jsonData(['error' => 0]);
     }
 
