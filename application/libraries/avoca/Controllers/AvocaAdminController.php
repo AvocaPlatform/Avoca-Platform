@@ -11,7 +11,7 @@
  */
 
 
-namespace Avoca\Libraries\Controllers;
+namespace Avoca\Controllers;
 
 
 class AvocaAdminController extends AvocaController

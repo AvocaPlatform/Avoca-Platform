@@ -200,7 +200,7 @@ function recordVal($record, $field, $option = '', $default = '')
         return $default;
     }
 
-    $fieldModel = new \Avoca\Libraries\AvocaField();
+    $fieldModel = new \Avoca\AvocaField();
     return $fieldModel->format($value, $record, $option);
 }
 
@@ -245,7 +245,7 @@ function fieldLabel($field, $option = [])
  */
 function avoca_form($field, $value, $option = [])
 {
-    $fieldModel = new \Avoca\Libraries\AvocaField();
+    $fieldModel = new \Avoca\AvocaField();
     return $fieldModel->form($field, $value, $option);
 }
 

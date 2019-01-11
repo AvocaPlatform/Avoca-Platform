@@ -10,7 +10,7 @@
  */
 
 
-namespace Avoca\Libraries;
+namespace Avoca;
 
 
 $field_helper_path_c = CUSTOMPATH . 'helpers/field_func.php';

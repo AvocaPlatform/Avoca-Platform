@@ -9,18 +9,18 @@
  * Git: https://github.com/tdhungit
  */
 
-use Avoca\Libraries\Controllers\AvocaBaseController;
+use Avoca\Controllers\AvocaBaseController;
 
 class Auth extends AvocaBaseController
 {
-    /** @var \Avoca\Libraries\AvocaApiAuth */
+    /** @var \Avoca\AvocaApiAuth */
     private $server;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->server = new \Avoca\Libraries\AvocaApiAuth();
+        $this->server = new \Avoca\AvocaApiAuth();
     }
 
     /**

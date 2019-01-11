@@ -11,11 +11,11 @@
  */
 
 
-namespace Avoca\Libraries\Controllers;
+namespace Avoca\Controllers;
 
 /**
  * Class AvocaBaseController
- * @package Avoca\Libraries\Controllers
+ * @package Avoca\Controllers
  *
  * @property \AVC_Router $router
  * @property \AVC_Loader $load

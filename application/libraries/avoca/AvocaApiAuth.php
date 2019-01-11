@@ -9,7 +9,7 @@
  * Git: https://github.com/tdhungit
  */
 
-namespace Avoca\Libraries;
+namespace Avoca;
 
 
 use OAuth2;

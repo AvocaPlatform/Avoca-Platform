@@ -9,7 +9,7 @@
  * Git: https://github.com/tdhungit
  */
 
-use Avoca\Libraries\Controllers\AvocaManageController;
+use Avoca\Controllers\AvocaManageController;
 
 class Dashboard extends AvocaManageController
 {

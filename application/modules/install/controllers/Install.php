@@ -10,7 +10,7 @@
  * Facebook: https://www.facebook.com/jackytran0101
  */
 
-use Avoca\Libraries\Controllers\AvocaController;
+use Avoca\Controllers\AvocaController;
 
 class Install extends AvocaController
 {

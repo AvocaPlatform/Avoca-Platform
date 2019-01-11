@@ -11,12 +11,12 @@
  */
 
 
-namespace Avoca\Libraries\Controllers;
+namespace Avoca\Controllers;
 
 
 /**
  * Class AvocaController
- * @package Avoca\Libraries\Controllers
+ * @package Avoca\Controllers
  * @property \Twig $twig
  */
 class AvocaController extends AvocaBaseController

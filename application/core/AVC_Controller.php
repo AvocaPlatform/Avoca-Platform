@@ -9,7 +9,7 @@
  * Git: https://github.com/tdhungit
  */
 
-use Avoca\Libraries\Controllers\AvocaController;
+use Avoca\Controllers\AvocaController;
 
 /**
  * Class AVC_Controller

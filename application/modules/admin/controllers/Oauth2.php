@@ -9,7 +9,7 @@
  * Git: https://github.com/tdhungit
  */
 
-use Avoca\Libraries\Controllers\AvocaAdminController;
+use Avoca\Controllers\AvocaAdminController;
 
 class Oauth2 extends AvocaAdminController
 {
@@ -18,7 +18,7 @@ class Oauth2 extends AvocaAdminController
         parent::init();
 
         $this->addGlobals([
-            '_grant_types' => \Avoca\Libraries\AvocaApiAuth::$grant_types,
+            '_grant_types' => \Avoca\AvocaApiAuth::$grant_types,
         ]);
     }
 
@@ -33,7 +33,7 @@ class Oauth2 extends AvocaAdminController
             $client_secret = $this->getPost('client_secret');
 
             if (!$client_id || !$client_secret) {
-                $this->setError(Avoca\Libraries\AvocaRequestStatus::$InvalidParams);
+                $this->setError(Avoca\AvocaRequestStatus::$InvalidParams);
                 return $this->admin_redirect('/oauth2');
             }
 
@@ -62,7 +62,7 @@ class Oauth2 extends AvocaAdminController
                 $this->db->insert('oauth_clients', $data);
             }
 
-            $this->setSuccess(\Avoca\Libraries\AvocaRequestStatus::$SaveRecordSuccess);
+            $this->setSuccess(\Avoca\AvocaRequestStatus::$SaveRecordSuccess);
             return $this->admin_redirect('/oauth2');
         }
 
@@ -132,9 +132,9 @@ class Oauth2 extends AvocaAdminController
                     $this->db->insert('oauth_scopes', $data);
                 }
 
-                $this->setSuccess(\Avoca\Libraries\AvocaRequestStatus::$SaveRecordSuccess);
+                $this->setSuccess(\Avoca\AvocaRequestStatus::$SaveRecordSuccess);
             } else {
-                $this->setError(\Avoca\Libraries\AvocaRequestStatus::$InvalidParams);
+                $this->setError(\Avoca\AvocaRequestStatus::$InvalidParams);
             }
 
             $this->admin_redirect('/oauth2/scopes');
@@ -183,9 +183,9 @@ class Oauth2 extends AvocaAdminController
                 $this->db->where('client_id', $type_id);
                 $this->db->delete('oauth_clients');
 
-                $this->setSuccess(\Avoca\Libraries\AvocaRequestStatus::$DeleteRecordSuccess);
+                $this->setSuccess(\Avoca\AvocaRequestStatus::$DeleteRecordSuccess);
             } else {
-                $this->setError(\Avoca\Libraries\AvocaRequestStatus::$NotFoundRecord);
+                $this->setError(\Avoca\AvocaRequestStatus::$NotFoundRecord);
             }
         }
 
@@ -197,7 +197,7 @@ class Oauth2 extends AvocaAdminController
                 $this->db->where('scope', $type_id);
                 $this->db->delete('oauth_scopes');
             } else {
-                $this->setError(\Avoca\Libraries\AvocaRequestStatus::$NotFoundRecord);
+                $this->setError(\Avoca\AvocaRequestStatus::$NotFoundRecord);
             }
 
             $this->admin_redirect('/oauth2/scopes');

@@ -9,7 +9,7 @@
  * Git: https://github.com/tdhungit
  */
 
-use Avoca\Libraries\Controllers\AvocaApiV1Controller;
+use Avoca\Controllers\AvocaApiV1Controller;
 
 class Users extends AvocaApiV1Controller
 {

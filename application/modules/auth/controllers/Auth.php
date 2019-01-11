@@ -9,7 +9,7 @@
  * Git: https://github.com/tdhungit
  */
 
-use Avoca\Libraries\Controllers\AvocaController;
+use Avoca\Controllers\AvocaController;
 
 class Auth extends AvocaController
 {
@@ -55,7 +55,7 @@ class Auth extends AvocaController
                 return $this->redirect('/auth?r=' . $this->getPost('return_url'));
             }
 
-            $this->setError(\Avoca\Libraries\AvocaRequestStatus::$InvalidParams);
+            $this->setError(\Avoca\AvocaRequestStatus::$InvalidParams);
             return $this->redirect('/auth?r=' . $this->getPost('return_url'));
         }
     }

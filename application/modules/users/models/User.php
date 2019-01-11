@@ -9,7 +9,7 @@
  * Git: https://github.com/tdhungit
  */
 
-use Avoca\Libraries\Models\AvocaModel;
+use Avoca\Models\AvocaModel;
 
 class User extends AvocaModel
 {

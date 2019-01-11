@@ -10,7 +10,7 @@
  */
 
 
-namespace Avoca\Libraries;
+namespace Avoca;
 
 
 class AvocaRequestStatus

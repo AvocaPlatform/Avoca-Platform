@@ -10,7 +10,7 @@
  * Facebook: https://www.facebook.com/jackytran0101
  */
 
-use Avoca\Libraries\Models\AvocaModel;
+use Avoca\Models\AvocaModel;
 
 class Setting extends AvocaModel
 {

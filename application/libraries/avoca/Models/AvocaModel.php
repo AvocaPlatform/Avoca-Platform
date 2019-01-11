@@ -10,7 +10,7 @@
  */
 
 
-namespace Avoca\Libraries\Models;
+namespace Avoca\Models;
 
 
 /**

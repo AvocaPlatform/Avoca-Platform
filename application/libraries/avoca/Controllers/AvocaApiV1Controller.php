@@ -11,7 +11,7 @@
  */
 
 
-namespace Avoca\Libraries\Controllers;
+namespace Avoca\Controllers;
 
 
 /**
@@ -25,7 +25,7 @@ class AvocaApiV1Controller extends AvocaController
     protected $viewdefs = null;
 
     /**
-     * @var \Avoca\Libraries\AvocaApiAuth
+     * @var \Avoca\AvocaApiAuth
      */
     protected $auth;
 
@@ -48,7 +48,7 @@ class AvocaApiV1Controller extends AvocaController
 
     protected function init()
     {
-        $this->auth = new \Avoca\Libraries\AvocaApiAuth();
+        $this->auth = new \Avoca\AvocaApiAuth();
         $this->data['_start_rtime'] = microtime(true);
 
         $this->setViewType();
