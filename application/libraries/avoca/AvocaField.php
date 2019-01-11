@@ -13,17 +13,6 @@
 namespace Avoca;
 
 
-$field_helper_path_c = CUSTOMPATH . 'helpers/field_func.php';
-if (file_exists($field_helper_path_c)) {
-    include_once $field_helper_path_c;
-}
-
-$field_helper_path = APPPATH . 'helpers/field_func.php';
-if (file_exists($field_helper_path)) {
-    include_once $field_helper_path;
-}
-
-
 class AvocaField
 {
     public function format($value, $record, $option = '')
@@ -34,8 +23,10 @@ class AvocaField
 
         if (is_array($option) && !empty($option['type'])) {
             $type = $option['type'];
-        } else {
+        } else if (is_string($option)) {
             $type = $option;
+        } else {
+            $type = 'text';
         }
 
         $type = strtolower($type);
