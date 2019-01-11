@@ -295,7 +295,7 @@
                                                         </div>
                                                         <button type="button" disabled
                                                                 class="btn btn-outline-dark btn-block"
-                                                                v-if="!field.name"
+                                                                v-else
                                                                 v-bind:idx1="idx1"
                                                                 v-bind:idx2="idx2">
                                                             {{ 'Drop here'|lang }}
@@ -579,13 +579,17 @@
                 });
                 // record_choose_fields
                 _.forEach(this.record_fields, (line, key0) => {
-                    _.forEach(line, (field, key1) => {
+                    _.forEach(line, (field) => {
                         let field_name = field.name || '';
                         if (field_name) {
                             let choose_idx = _.findIndex(this.record_choose_fields, {name: field_name});
                             this.record_choose_fields.splice(choose_idx, 1);
                         }
                     });
+
+                    if (_.size(line) === 1) {
+                        this.record_fields[key0]['zzz'] = {name: '', label: ''};
+                    }
                 });
             },
             computed: {
