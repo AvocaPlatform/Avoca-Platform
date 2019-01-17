@@ -70,12 +70,12 @@ class AVC_Router extends CI_Router
         // Load the routes.php file. It would be great if we could
         // skip this for enable_query_strings = TRUE, but then
         // default_controller would be empty ...
-        if (file_exists(APPPATH . 'Config/routes.php')) {
-            include(APPPATH . 'Config/routes.php');
+        if (file_exists(APPPATH . 'config/routes.php')) {
+            include(APPPATH . 'config/routes.php');
         }
 
-        if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/routes.php')) {
-            include(APPPATH . 'Config/' . ENVIRONMENT . '/routes.php');
+        if (file_exists(APPPATH . 'config/' . ENVIRONMENT . '/routes.php')) {
+            include(APPPATH . 'config/' . ENVIRONMENT . '/routes.php');
         }
 
         // API

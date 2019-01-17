@@ -3,7 +3,7 @@
 !index.html
 !.htaccess
 
-application/cache/*
+cache/*
 application/logs/*
 
 composer.lock

@@ -24,12 +24,12 @@ const CI_VERSION = '3.1.9';
  *  Load the framework constants
  * ------------------------------------------------------
  */
-if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/constants.php')) {
-    require_once(APPPATH . 'Config/' . ENVIRONMENT . '/constants.php');
+if (file_exists(APPPATH . 'config/' . ENVIRONMENT . '/constants.php')) {
+    require_once(APPPATH . 'config/' . ENVIRONMENT . '/constants.php');
 }
 
-if (file_exists(APPPATH . 'Config/constants.php')) {
-    require_once(APPPATH . 'Config/constants.php');
+if (file_exists(APPPATH . 'config/constants.php')) {
+    require_once(APPPATH . 'config/constants.php');
 }
 
 /*
@@ -309,7 +309,7 @@ function &get_instance()
     return CI_Controller::get_instance();
 }
 
-require_once APPPATH . 'Core/AVC_Controller.php';
+require_once APPPATH . 'core/AVC_Controller.php';
 
 // Set a mark point for benchmarking
 $BM->mark('loading_time:_base_classes_end');
@@ -337,12 +337,12 @@ $BM->mark('loading_time:_base_classes_end');
 
 $e404 = FALSE;
 $class = $RTR->class;
-$class_path = APPPATH . 'Modules/' . $RTR->directory . $class . '.php';
+$class_path = APPPATH . 'modules/' . $RTR->directory . $class . '.php';
 $method = $RTR->method;
 
 // check controller custom
 $custom_class = $class . 'Controller';
-$custom_class_path = CUSTOMPATH . 'Modules/' . $RTR->directory . $class . '.php';
+$custom_class_path = CUSTOMPATH . 'modules/' . $RTR->directory . $class . '.php';
 if (file_exists($custom_class_path)) {
     require_once $class_path;
     $class = $custom_class;

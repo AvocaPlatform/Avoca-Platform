@@ -29,7 +29,7 @@ function avoca_log($data, $log_name = 'debug')
     }
 
     $str = "\n" . date('Y-m-d H:i:s') . ": " . $message;
-    return write_file(APPPATH . 'logs' . DIRECTORY_SEPARATOR . $log_name . '.log', $str, 'a+');
+    return write_file(APPPATH . '../logs' . DIRECTORY_SEPARATOR . $log_name . '.log', $str, 'a+');
 }
 
 function avoca_theme()

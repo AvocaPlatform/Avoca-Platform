@@ -23,12 +23,12 @@ class AVC_Loader extends CI_Loader
 
     protected function _ci_autoloader()
     {
-        if (file_exists(APPPATH . 'Config/autoload.php')) {
-            include(APPPATH . 'Config/autoload.php');
+        if (file_exists(APPPATH . 'config/autoload.php')) {
+            include(APPPATH . 'config/autoload.php');
         }
 
-        if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/autoload.php')) {
-            include(APPPATH . 'Config/' . ENVIRONMENT . '/autoload.php');
+        if (file_exists(APPPATH . 'config/' . ENVIRONMENT . '/autoload.php')) {
+            include(APPPATH . 'config/' . ENVIRONMENT . '/autoload.php');
         }
 
         if (!isset($autoload)) {
@@ -136,7 +136,7 @@ class AVC_Loader extends CI_Loader
         //       MY_Model from being an abstract class and is
         //       sub-optimal otherwise anyway.
         if (!class_exists('CI_Model', FALSE)) {
-            $app_path = APPPATH . 'Core' . DIRECTORY_SEPARATOR;
+            $app_path = APPPATH . 'core' . DIRECTORY_SEPARATOR;
             if (file_exists($app_path . 'Model.php')) {
                 require_once($app_path . 'Model.php');
                 if (!class_exists('CI_Model', FALSE)) {
@@ -145,7 +145,7 @@ class AVC_Loader extends CI_Loader
 
                 log_message('info', 'CI_Model class loaded');
             } elseif (!class_exists('CI_Model', FALSE)) {
-                require_once(BASEPATH . 'Core' . DIRECTORY_SEPARATOR . 'Model.php');
+                require_once(BASEPATH . 'core' . DIRECTORY_SEPARATOR . 'Model.php');
             }
 
             $class = 'AVC_Model';
@@ -155,7 +155,7 @@ class AVC_Loader extends CI_Loader
         $model = ucfirst($model);
         if (!class_exists($model, FALSE)) {
             foreach ($this->_ci_model_paths as $mod_path) {
-                $model_path = $mod_path . 'Modules/' . $path . 'Models/' . $model . '.php';
+                $model_path = $mod_path . 'modules/' . $path . 'Models/' . $model . '.php';
                 if (!file_exists($model_path)) {
                     continue;
                 }

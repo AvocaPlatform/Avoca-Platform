@@ -13,7 +13,7 @@ global $CFG;
 
 /* get module locations from config settings or use the default module location and offset */
 Modules::$locations = array(
-    APPPATH . 'Modules/' => '../Modules/',
+    APPPATH . 'modules/' => '../modules/',
 );
 
 /* PHP5 spl_autoload */
@@ -92,13 +92,13 @@ class Modules
         if (strstr($class, 'CI_') OR strstr($class, config_item('subclass_prefix'))) return;
 
         /* autoload core classes */
-        if (is_file($location = APPPATH . 'Core/' . $class . EXT)) {
+        if (is_file($location = APPPATH . 'core/' . $class . EXT)) {
             include_once $location;
             return;
         }
 
         /* autoload library classes */
-        if (is_file($location = APPPATH . 'Libraries/' . $class . EXT)) {
+        if (is_file($location = APPPATH . 'libraries/' . $class . EXT)) {
             include_once $location;
             return;
         }
@@ -178,7 +178,7 @@ class Modules
     {
         /* load the route file */
         if (!isset(self::$routes[$module])) {
-            if (list($path) = self::find('routes', $module, 'Config/')) {
+            if (list($path) = self::find('routes', $module, 'config/')) {
                 $path && self::$routes[$module] = self::load_file('routes', $path, 'route');
             }
         }
