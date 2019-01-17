@@ -6,7 +6,4 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 // UI
-$route['admin'] = 'Admin/Dashboard';
-
-// MANAGE
-$route['manage'] = 'Dashboard';
+$route['Admin'] = 'Admin/Dashboard';
