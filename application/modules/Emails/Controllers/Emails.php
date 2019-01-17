@@ -13,7 +13,7 @@ use Avoca\Controllers\AvocaManageController;
 
 class Emails extends AvocaManageController
 {
-    protected $model = 'mailsend';
+    protected $model = 'Mailsend';
 
     public function save($ajax = null)
     {

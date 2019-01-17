@@ -26,10 +26,10 @@
                     <a class="nav-link" href="{{ avoca_url('/') }}">Dashboard</a>
                 </li>
                 <li class="nav-item px-3">
-                    <a class="nav-link" href="{{ avoca_url('/users') }}">Users</a>
+                    <a class="nav-link" href="{{ avoca_url('/Users') }}">Users</a>
                 </li>
                 <li class="nav-item px-3">
-                    <a class="nav-link" href="{{ avoca_admin('/settings') }}">Settings</a>
+                    <a class="nav-link" href="{{ avoca_admin('/Settings') }}">Settings</a>
                 </li>
             </ul>
         {% endblock %}
@@ -123,7 +123,7 @@
 
                         <li class="nav-title">{{ __('Settings') }}</li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ avoca_admin('/settings') }}">
+                            <a class="nav-link" href="{{ avoca_admin('/Settings') }}">
                                 <i class="nav-icon icon-drop"></i> App config
                             </a>
                         </li>
@@ -131,17 +131,17 @@
                         <li class="nav-title">{{ __('Modules') }}</li>
 
                         <li class="nav-item nav-dropdown">
-                            <a class="nav-link nav-dropdown-toggle" href="{{ avoca_url('/users') }}">
+                            <a class="nav-link nav-dropdown-toggle" href="{{ avoca_url('/Users') }}">
                                 <i class="nav-icon icon-puzzle"></i> {{ __('Users') }}
                             </a>
                             <ul class="nav-dropdown-items">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ avoca_url('/users') }}">
+                                    <a class="nav-link" href="{{ avoca_url('/Users') }}">
                                         <i class="nav-icon icon-puzzle"></i> {{ __('View users') }}
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ avoca_url('/users/edit') }}">
+                                    <a class="nav-link" href="{{ avoca_url('/Users/edit') }}">
                                         <i class="nav-icon icon-puzzle"></i> {{ __('Create user') }}
                                     </a>
                                 </li>
@@ -149,7 +149,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ avoca_url('/emails') }}" class="nav-link">
+                            <a href="{{ avoca_url('/Emails') }}" class="nav-link">
                                 <i class="nav-icon icon-puzzle"></i> {{ 'Emails'|lang }}
                             </a>
                         </li>

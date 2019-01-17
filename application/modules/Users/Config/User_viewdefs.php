@@ -26,7 +26,7 @@ return [
                 'name' => 'username',
                 'label' => 'Username',
                 'type' => 'link',
-                'controller' => 'users',
+                'controller' => 'Users',
                 //'label' => 'Username',
                 //'nosort' => true,
                 'search' => true,

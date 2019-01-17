@@ -10,8 +10,8 @@
  */
 
 return array(
-    'module' => 'users',
-    'model' => 'user',
+    'module' => 'Users',
+    'model' => 'User',
     'table' => 'users',
     'fields' => [
         'id' => [

@@ -8,7 +8,7 @@
                     {{ __('Client') }}
 
                     <div class="card-header-actions">
-                        <a class="card-header-action btn-setting" href="{{ avoca_admin('/oauth2/edit_client') }}">
+                        <a class="card-header-action btn-setting" href="{{ avoca_admin('/Oauth2/edit_client') }}">
                             <i class="fa fa-plus"></i>
                         </a>
                     </div>
@@ -29,7 +29,7 @@
                             {% for record in records %}
                                 <tr>
                                     <td>
-                                        <a href="{{ avoca_admin('/oauth2/edit_client/' ~ record.client_id) }}">
+                                        <a href="{{ avoca_admin('/Oauth2/edit_client/' ~ record.client_id) }}">
                                             {{ record.client_id }}
                                         </a>
                                     </td>
@@ -37,11 +37,11 @@
                                     <td>{{ record.grant_types }}</td>
                                     <td>{{ record.scope }}</td>
                                     <td>
-                                        <a href="{{ avoca_admin('/oauth2/edit_client/' ~ record.client_id) }}"
+                                        <a href="{{ avoca_admin('/Oauth2/edit_client/' ~ record.client_id) }}"
                                            class="btn btn-sm btn-warning">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a href="{{ avoca_admin('/oauth2/delete/client/' ~ record.client_id) }}"
+                                        <a href="{{ avoca_admin('/Oauth2/delete/client/' ~ record.client_id) }}"
                                            class="btn btn-sm btn-danger">
                                             <i class="fa fa-trash"></i>
                                         </a>

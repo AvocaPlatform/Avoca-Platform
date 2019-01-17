@@ -31,7 +31,7 @@ class Users extends AvocaApiV1Controller
                 $username = $oauth_token['user_id'];
 
                 /** @var \User $userModel */
-                $userModel = $this->getModel('users/user');
+                $userModel = $this->getModel('Users/User');
                 $this->data['user'] = $userModel->getByUsername($username);
             }
         }

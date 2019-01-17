@@ -10,14 +10,14 @@
  */
 
 return array (
-  'users' => 
+  'Users' =>
   array (
-    'module' => 'users',
-    'model' => 'user',
+    'module' => 'Users',
+    'model' => 'User',
   ),
-  'emails' => 
+  'Emails' =>
   array (
-    'module' => 'emails',
-    'model' => 'mailsend',
+    'module' => 'Emails',
+    'model' => 'Mailsend',
   ),
 );

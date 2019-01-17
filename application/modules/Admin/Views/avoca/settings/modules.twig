@@ -8,7 +8,7 @@
                     {{ __('Module management') }}
 
                     <div class="card-header-actions">
-                        <a class="card-header-action btn-setting" href="{{ avoca_admin('/settings/create_module') }}">
+                        <a class="card-header-action btn-setting" href="{{ avoca_admin('/Settings/create_module') }}">
                             <i class="fa fa-plus-circle"></i>
                         </a>
                     </div>
@@ -42,10 +42,10 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        <a href="{{ avoca_admin('/settings/create_module/' ~ module.module) }}" class="badge badge-warning">
+                                        <a href="{{ avoca_admin('/Settings/create_module/' ~ module.module) }}" class="badge badge-warning">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a href="{{ avoca_admin('/settings/remove_module/' ~ module.module) }}" class="badge badge-danger">
+                                        <a href="{{ avoca_admin('/Settings/remove_module/' ~ module.module) }}" class="badge badge-danger">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </td>

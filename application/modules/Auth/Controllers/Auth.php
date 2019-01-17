@@ -32,7 +32,7 @@ class Auth extends AvocaController
             $this->disableView();
 
             /** @var User $userModel */
-            $userModel = $this->getModel('users/user');
+            $userModel = $this->getModel('Users/User');
 
             $username = $this->getPost('username');
             $password = $this->getPost('password');
@@ -52,11 +52,11 @@ class Auth extends AvocaController
                 }
 
                 $this->setError('Login error');
-                return $this->redirect('/auth?r=' . $this->getPost('return_url'));
+                return $this->redirect('/Auth?r=' . $this->getPost('return_url'));
             }
 
             $this->setError(\Avoca\AvocaRequestStatus::$InvalidParams);
-            return $this->redirect('/auth?r=' . $this->getPost('return_url'));
+            return $this->redirect('/Auth?r=' . $this->getPost('return_url'));
         }
     }
 

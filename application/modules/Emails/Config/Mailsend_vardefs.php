@@ -10,8 +10,8 @@
  */
 
 return array(
-    'module' => 'emails',
-    'model' => 'mailsend',
+    'module' => 'Emails',
+    'model' => 'Mailsend',
     'table' => 'emails',
     'fields' => [
         'id' => [

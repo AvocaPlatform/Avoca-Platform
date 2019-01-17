@@ -13,7 +13,7 @@ use Avoca\Controllers\AvocaAdminController;
 
 class Settings extends AvocaAdminController
 {
-    protected $model = 'admin/setting';
+    protected $model = 'Admin/Setting';
 
     // ACTION
     public function index()
@@ -21,7 +21,7 @@ class Settings extends AvocaAdminController
 
     }
 
-    // ACTION - Create/Update database from modules/admin/config/databases.php
+    // ACTION - Create/Update database from modules/Admin/Config/databases.php
     public function repair_database()
     {
         $this->disableView();
@@ -80,14 +80,14 @@ class Settings extends AvocaAdminController
         }
 
         $this->setSuccess('Repair database success!');
-        return $this->admin_redirect('/settings');
+        return $this->admin_redirect('/Settings');
     }
 
     // ACTION
     public function create_module($module_name = null)
     {
         /** @var Setting $settingModel */
-        $settingModel = $this->getModel('admin/setting');
+        $settingModel = $this->getModel('Admin/Setting');
         $modules = $settingModel->getModules(true);
 
         // process create module
@@ -106,11 +106,11 @@ class Settings extends AvocaAdminController
                     'model' => $model,
                 ];
 
-                // write to modules/admin/config/modules.php
+                // write to modules/Admin/Config/modules.php
                 $modules[$controller] = $module;
-                write_array2file('modules/admin/config/modules.php', $modules);
+                write_array2file('modules/Admin/Config/modules.php', $modules);
 
-                $package_folder = APPPATH . 'modules/admin/config/module_builders/' . $module_name;
+                $package_folder = APPPATH . 'modules/Admin/Config/module_builders/' . $module_name;
                 if (!is_dir($package_folder)) {
                     mkdir($package_folder, 0775, true);
                 }
@@ -147,8 +147,8 @@ class Settings extends AvocaAdminController
                     ];
                 }
 
-                write_array2file('modules/admin/config/module_builders/' . $module_name . '/vardefs.php', $var_defs);
-                return $this->admin_redirect('/settings/create_module/' . $module_name . '?tab=ModuleFieldInfo');
+                write_array2file('modules/Admin/Config/module_builders/' . $module_name . '/vardefs.php', $var_defs);
+                return $this->admin_redirect('/Settings/create_module/' . $module_name . '?tab=ModuleFieldInfo');
             }
         }
 
@@ -196,12 +196,12 @@ class Settings extends AvocaAdminController
             $this->data['create_module'] = false;
             if (is_dir(APPPATH . 'modules/' . $module_name)) {
                 $this->data['module_created'] = 1;
-                $module = include APPPATH . 'modules/' . $module_name . '/config/' . $modules[$module_name]['model'] . '_vardefs.php';
-                $viewdefs = include APPPATH . 'modules/' . $module_name . '/config/' . $modules[$module_name]['model'] . '_viewdefs.php';
+                $module = include APPPATH . 'modules/' . $module_name . '/Config/' . $modules[$module_name]['model'] . '_vardefs.php';
+                $viewdefs = include APPPATH . 'modules/' . $module_name . '/Config/' . $modules[$module_name]['model'] . '_viewdefs.php';
             } else {
                 $this->data['module_created'] = 0;
-                $module = include APPPATH . 'modules/admin/config/module_builders/' . $module_name . '/vardefs.php';
-                $viewdefs = include APPPATH . 'modules/admin/config/module_builders/' . $module_name . '/viewdefs.php';
+                $module = include APPPATH . 'modules/Admin/Config/module_builders/' . $module_name . '/vardefs.php';
+                $viewdefs = include APPPATH . 'modules/Admin/Config/module_builders/' . $module_name . '/viewdefs.php';
             }
 
             // clean up module defined
@@ -214,7 +214,7 @@ class Settings extends AvocaAdminController
             }
 
             /** @var Setting $settingModel */
-            $settingModel = $this->getModel('admin/setting');
+            $settingModel = $this->getModel('Admin/Setting');
             $relationships = [];
             // clean up relationship data
             foreach ($module['relationships'] as $relationship) {
@@ -234,7 +234,7 @@ class Settings extends AvocaAdminController
         }
 
         // field types
-        $dbTypes = include APPPATH . 'modules/admin/config/database_types.php';
+        $dbTypes = include APPPATH . 'modules/Admin/Config/database_types.php';
         $types = [];
         foreach ($dbTypes['defined'] as $type => $type_value) {
             $types[] = $type;
@@ -296,10 +296,10 @@ class Settings extends AvocaAdminController
 
         // layout defined
         $viewdefs = [];
-        if (file_exists(APPPATH . 'modules/' . $data['module'] . '/config/' . $data['model'] . '_viewdefs.php')) {
-            $viewdefs = include APPPATH . 'modules/' . $data['module'] . '/config/' . $data['model'] . '_viewdefs.php';
-        } else if (file_exists(APPPATH . 'modules/admin/config/module_builders/' . $data['module'] . '/viewdefs.php')) {
-            $viewdefs = include APPPATH . 'modules/admin/config/module_builders/' . $data['module'] . '/viewdefs.php';
+        if (file_exists(APPPATH . 'modules/' . $data['module'] . '/Config/' . $data['model'] . '_viewdefs.php')) {
+            $viewdefs = include APPPATH . 'modules/' . $data['module'] . '/Config/' . $data['model'] . '_viewdefs.php';
+        } else if (file_exists(APPPATH . 'modules/Admin/Config/module_builders/' . $data['module'] . '/viewdefs.php')) {
+            $viewdefs = include APPPATH . 'modules/Admin/Config/module_builders/' . $data['module'] . '/viewdefs.php';
         }
 
         $list = [];
@@ -327,12 +327,12 @@ class Settings extends AvocaAdminController
         $viewdefs['record']['fields'] = $record;
 
         // write defined module
-        if (file_exists(APPPATH . 'modules/' . $data['module'] . '/config/' . $data['model'] . '_vardefs.php')) {
-            write_array2file('modules/' . $data['module'] . '/config/' . $data['model'] . '_vardefs.php', $data);
-            write_array2file('modules/' . $data['module'] . '/config/' . $data['model'] . '_viewdefs.php', $viewdefs);
-        } else if (file_exists(APPPATH . 'modules/admin/config/module_builders/' . $data['module'] . '/vardefs.php')) {
-            write_array2file('modules/admin/config/module_builders/' . $data['module'] . '/vardefs.php', $data);
-            write_array2file('modules/admin/config/module_builders/' . $data['module'] . '/viewdefs.php', $viewdefs);
+        if (file_exists(APPPATH . 'modules/' . $data['module'] . '/Config/' . $data['model'] . '_vardefs.php')) {
+            write_array2file('modules/' . $data['module'] . '/Config/' . $data['model'] . '_vardefs.php', $data);
+            write_array2file('modules/' . $data['module'] . '/Config/' . $data['model'] . '_viewdefs.php', $viewdefs);
+        } else if (file_exists(APPPATH . 'modules/Admin/Config/module_builders/' . $data['module'] . '/vardefs.php')) {
+            write_array2file('modules/Admin/Config/module_builders/' . $data['module'] . '/vardefs.php', $data);
+            write_array2file('modules/Admin/Config/module_builders/' . $data['module'] . '/viewdefs.php', $viewdefs);
         }
 
         return $this->jsonData([
@@ -355,8 +355,8 @@ class Settings extends AvocaAdminController
         }
 
         // check source
-        $vardefs_source = APPPATH . "modules/admin/config/module_builders/{$module}/vardefs.php";
-        $viewdefs_source = APPPATH . "modules/admin/config/module_builders/{$module}/viewdefs.php";
+        $vardefs_source = APPPATH . "modules/Admin/Config/module_builders/{$module}/vardefs.php";
+        $viewdefs_source = APPPATH . "modules/Admin/Config/module_builders/{$module}/viewdefs.php";
         if (!file_exists($vardefs_source)) {
             return $this->jsonData(['error' => 1]);
         }
@@ -371,15 +371,15 @@ class Settings extends AvocaAdminController
         }
 
         /** @var Setting $settingModel */
-        $settingModel = $this->getModel('admin/setting');
+        $settingModel = $this->getModel('Admin/Setting');
         $settingModel->createModule($module);
 
         // create vardefs file
-        write_array2file(APPPATH . "modules/$module/config/{$vardefs['model']}_vardefs.php", $vardefs);
+        write_array2file(APPPATH . "modules/$module/Config/{$vardefs['model']}_vardefs.php", $vardefs);
         // create view source
         if (file_exists($viewdefs_source)) {
             $viewdefs = include $viewdefs_source;
-            write_array2file(APPPATH . "modules/$module/config/{$vardefs['model']}_viewdefs.php", $viewdefs);
+            write_array2file(APPPATH . "modules/$module/Config/{$vardefs['model']}_viewdefs.php", $viewdefs);
         }
 
         // create required files
@@ -445,7 +445,7 @@ class Settings extends AvocaAdminController
         $this->disableView();
 
         /** @var Setting $settingModel */
-        $settingModel = $this->getModel('admin/setting');
+        $settingModel = $this->getModel('Admin/Setting');
         $fields = $settingModel->getModuleFields($module);
 
         if (empty($fields)) {
@@ -464,13 +464,13 @@ class Settings extends AvocaAdminController
     public function modules()
     {
         /** @var Setting $settingModel */
-        $settingModel = $this->getModel('admin/setting');
+        $settingModel = $this->getModel('Admin/Setting');
         $modules = $settingModel->getModules();
         $this->data['modules'] = $modules;
 
 //        $this->disableView();
 //        echo '<pre>';
-//        print_r($settingModel->transferVardefs2DBConfig(APPPATH . 'modules/admin/config/module_builders/usergroups/vardefs.php'));
+//        print_r($settingModel->transferVardefs2DBConfig(APPPATH . 'modules/Admin/Config/module_builders/usergroups/vardefs.php'));
     }
 
     public function remove_module($module)
@@ -480,26 +480,26 @@ class Settings extends AvocaAdminController
         // not allow module deployed
         if (is_dir(APPPATH . "modules/{$module}")) {
             $this->setError('Can not delete module deployed');
-            return $this->admin_redirect('/settings/modules');
+            return $this->admin_redirect('/Settings/modules');
         }
 
         /** @var Setting $settingModel */
-        $settingModel = $this->getModel('admin/setting');
+        $settingModel = $this->getModel('Admin/Setting');
 
         // get all modules
         $allModules = $settingModel->getModules(true);
         if (!empty($allModules[$module])) {
             unset($allModules[$module]);
-            write_array2file('modules/admin/config/modules.php', $allModules);
+            write_array2file('modules/Admin/Config/modules.php', $allModules);
         }
 
-        if (is_dir(APPPATH . "modules/admin/config/module_builders/$module")) {
-            delete_files(APPPATH . "modules/admin/config/module_builders/$module", true);
-            rmdir(APPPATH . "modules/admin/config/module_builders/$module");
+        if (is_dir(APPPATH . "modules/Admin/Config/module_builders/$module")) {
+            delete_files(APPPATH . "modules/Admin/Config/module_builders/$module", true);
+            rmdir(APPPATH . "modules/Admin/Config/module_builders/$module");
         }
 
         $this->setSuccess("Remove module: {$module} successful");
-        return $this->admin_redirect('/settings/modules');
+        return $this->admin_redirect('/Settings/modules');
     }
 
     // ACTION
@@ -522,7 +522,7 @@ class Settings extends AvocaAdminController
             fclose($handle);
 
             $this->setSuccess('Save mail setting successful!');
-            return $this->admin_redirect('/settings/mail_setting');
+            return $this->admin_redirect('/Settings/mail_setting');
         }
 
         $this->load->config('mail');

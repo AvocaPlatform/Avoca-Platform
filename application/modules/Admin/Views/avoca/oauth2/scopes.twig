@@ -8,7 +8,7 @@
                     {{ __('Scope') }}
 
                     <div class="card-header-actions">
-                        <a class="card-header-action btn-setting" href="{{ avoca_admin('/oauth2/edit_scope') }}">
+                        <a class="card-header-action btn-setting" href="{{ avoca_admin('/Oauth2/edit_scope') }}">
                             <i class="fa fa-plus"></i>
                         </a>
                     </div>
@@ -29,7 +29,7 @@
                                 <td>{{ record.scope }}</td>
                                 <td>{{ record.is_default }}</td>
                                 <td>
-                                    <a href="{{ avoca_admin('/oauth2/delete/scope/' ~ record.scope) }}"
+                                    <a href="{{ avoca_admin('/Oauth2/delete/scope/' ~ record.scope) }}"
                                        class="btn btn-sm btn-danger">
                                         <i class="fa fa-trash"></i>
                                     </a>

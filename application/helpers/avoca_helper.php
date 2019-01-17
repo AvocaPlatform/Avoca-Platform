@@ -126,7 +126,7 @@ function write_array2file($file, $array, $app_folder = true)
         $file = APPPATH . $file;
     }
 
-    $template = file_get_contents(APPPATH . 'modules/admin/config/builders/file_header.avc');
+    $template = file_get_contents(APPPATH . 'modules/Admin/Config/builders/file_header.avc');
 
     $array_str = var_export($array, true);
     $data = "<?php\n" . $template . "\n\nreturn " . $array_str . ";\n";

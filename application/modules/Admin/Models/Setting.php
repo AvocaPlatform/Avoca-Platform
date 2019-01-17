@@ -24,7 +24,7 @@ class Setting extends AvocaModel
      */
     public function readDatabaseStructure()
     {
-        $databases = include APPPATH . 'modules/admin/config/databases.php';
+        $databases = include APPPATH . 'modules/Admin/Config/databases.php';
         $database_structures = [];
 
         foreach ($databases as $table => $options) {
@@ -129,7 +129,7 @@ class Setting extends AvocaModel
         }
 
         $vardefs = include $vardef_path;
-        $db_types = include APPPATH . 'modules/admin/config/database_types.php';
+        $db_types = include APPPATH . 'modules/Admin/Config/database_types.php';
         $defined_types = $db_types['defined'];
 
         $fields = [];
@@ -184,7 +184,7 @@ class Setting extends AvocaModel
 
     public function getModules($raw = false)
     {
-        $modules = include APPPATH . 'modules/admin/config/modules.php';
+        $modules = include APPPATH . 'modules/Admin/Config/modules.php';
         if ($raw) {
             return $modules;
         }
@@ -214,9 +214,9 @@ class Setting extends AvocaModel
 
         $module_info = $modules[$module];
         if ($module_info['is_created']) {
-            $vardefs = include APPPATH . 'modules/' . $module . '/config/' . $module_info['model'] . '_vardefs.php';
-        } else if (file_exists(APPPATH . 'modules/admin/config/module_builders/' . $module . '/vardefs.php')) {
-            $vardefs = include APPPATH . 'modules/admin/config/module_builders/' . $module . '/vardefs.php';
+            $vardefs = include APPPATH . 'modules/' . $module . '/Config/' . $module_info['model'] . '_vardefs.php';
+        } else if (file_exists(APPPATH . 'modules/Admin/Config/module_builders/' . $module . '/vardefs.php')) {
+            $vardefs = include APPPATH . 'modules/Admin/Config/module_builders/' . $module . '/vardefs.php';
         } else {
             return [];
         }
@@ -246,10 +246,10 @@ class Setting extends AvocaModel
     public function createModel($module, $model, $table)
     {
         $model_name = ucfirst(strtolower($model));
-        $model_path = APPPATH . 'modules/' . $module . '/models/' . $model_name . '.php';
+        $model_path = APPPATH . 'modules/' . $module . '/Models/' . $model_name . '.php';
 
         if (!file_exists($model_path)) {
-            $template = file_get_contents(APPPATH . 'modules/admin/config/builders/model.avc');
+            $template = file_get_contents(APPPATH . 'modules/Admin/Config/builders/model.avc');
             $data = str_replace(
                 ['$$MODEL_CLASS$$', '$$TABLE_NAME$$'],
                 [$model_name, strtolower($table)],
@@ -263,10 +263,10 @@ class Setting extends AvocaModel
     {
         $model_name = ucfirst(strtolower($model));
         $controller_name = ucfirst(strtolower($controller));
-        $controller_path = APPPATH . 'modules/' . $module . '/controllers/' . $controller_name . '.php';
+        $controller_path = APPPATH . 'modules/' . $module . '/Controllers/' . $controller_name . '.php';
 
         if (!file_exists($controller_path)) {
-            $template = file_get_contents(APPPATH . 'modules/admin/config/builders/controller.avc');
+            $template = file_get_contents(APPPATH . 'modules/Admin/Config/builders/controller.avc');
             $data = str_replace(
                 ['$$CONTROLLER_CLASS$$', '$$MODEL_NAME$$'],
                 [$controller_name, strtolower($model_name)],
@@ -280,10 +280,10 @@ class Setting extends AvocaModel
     {
         $model_name = strtolower($module) . '' . strtolower($model);
         $controller_name = ucfirst(strtolower($controller));
-        $controller_path = APPPATH . "modules/api_ver1/controllers/{$controller_name}.php";
+        $controller_path = APPPATH . "modules/ApiVer1/Controllers/{$controller_name}.php";
 
         if (!file_exists($controller_path)) {
-            $template = file_get_contents(APPPATH . 'modules/admin/config/builders/api_controller.avc');
+            $template = file_get_contents(APPPATH . 'modules/Admin/Config/builders/api_controller.avc');
             $data = str_replace(
                 ['$$CONTROLLER_CLASS$$', '$$MODEL_NAME$$'],
                 [$controller_name, $model_name],
@@ -316,20 +316,20 @@ class Setting extends AvocaModel
             'indexes' => $index
         ];
 
-        $tables = include APPPATH . 'modules/admin/config/databases.php';
+        $tables = include APPPATH . 'modules/Admin/Config/databases.php';
         $tables[$table_name] = $table;
 
-        write_array2file('modules/admin/config/databases.php', $tables);
+        write_array2file('modules/Admin/Config/databases.php', $tables);
     }
 
     public function createModule($module)
     {
-        if (!file_exists(APPPATH . 'modules/admin/module_builders/' . $module . '/vardefs.php')) {
+        if (!file_exists(APPPATH . 'modules/Admin/Config/module_builders/' . $module . '/vardefs.php')) {
             return false;
         }
 
         $controller = ucfirst($module);
-        $controller_path = APPPATH . 'modules/' . $module . '/controllers/' . $controller . '.php';
+        $controller_path = APPPATH . 'modules/' . $module . '/Controllers/' . $controller . '.php';
 
         // not yet create module
         if (!file_exists($controller_path)) {
@@ -338,30 +338,30 @@ class Setting extends AvocaModel
                 mkdir(APPPATH . 'modules/' . $module, 0775);
             }
 
-            if (!is_dir(APPPATH . 'modules/' . $module . '/controllers')) {
-                mkdir(APPPATH . 'modules/' . $module . '/controllers', 0775);
+            if (!is_dir(APPPATH . 'modules/' . $module . '/Controllers')) {
+                mkdir(APPPATH . 'modules/' . $module . '/Controllers', 0775);
             }
 
-            if (!is_dir(APPPATH . 'modules/' . $module . '/models')) {
-                mkdir(APPPATH . 'modules/' . $module . '/models', 0775);
+            if (!is_dir(APPPATH . 'modules/' . $module . '/Models')) {
+                mkdir(APPPATH . 'modules/' . $module . '/Models', 0775);
             }
 
-            if (!is_dir(APPPATH . 'modules/' . $module . '/config')) {
-                mkdir(APPPATH . 'modules/' . $module . '/config', 0775);
+            if (!is_dir(APPPATH . 'modules/' . $module . '/Config')) {
+                mkdir(APPPATH . 'modules/' . $module . '/Config', 0775);
             }
 
-            if (!is_dir(APPPATH . 'modules/' . $module . '/views')) {
-                mkdir(APPPATH . 'modules/' . $module . '/views', 0775);
+            if (!is_dir(APPPATH . 'modules/' . $module . '/Views')) {
+                mkdir(APPPATH . 'modules/' . $module . '/Views', 0775);
             }
         } else {
             // module exist
         }
 
-        $module_info = include APPPATH . 'modules/admin/module_builders/' . $module . '/vardefs.php';
+        $module_info = include APPPATH . 'modules/Admin/Config/module_builders/' . $module . '/vardefs.php';
 
         // create config
-        if (!file_exists(APPPATH . 'modules/' . $module . '/config/' . $module_info['model'] . '_vardef.php')) {
-            write_array2file('modules/' . $module . '/config/' . $module_info['model'] . '_vardef.php', $module_info);
+        if (!file_exists(APPPATH . 'modules/' . $module . '/Config/' . $module_info['model'] . '_vardef.php')) {
+            write_array2file('modules/' . $module . '/Config/' . $module_info['model'] . '_vardef.php', $module_info);
         }
 
         // create controller

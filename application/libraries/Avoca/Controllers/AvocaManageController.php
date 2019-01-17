@@ -112,7 +112,7 @@ class AvocaManageController extends AvocaController
             $model = $arr[1];
         }
 
-        $uri_viewdef = 'modules/' . $module . '/config/' . $model . '_viewdefs.php';
+        $uri_viewdef = 'modules/' . $module . '/Config/' . $model . '_viewdefs.php';
         $layout_path = $this->getFilePath($uri_viewdef);
         if (file_exists($layout_path)) {
             $viewdefs = include $layout_path;
@@ -295,7 +295,7 @@ class AvocaManageController extends AvocaController
         }
 
         // pagination
-        $pagination_config = include APPPATH . 'modules/admin/config/pagination.php';
+        $pagination_config = include APPPATH . 'modules/Admin/Config/pagination.php';
         $pagination_config['base_url'] = avoca_url($this->data['list_link']);
         $pagination_config['uri_segment'] = 4;
         $pagination_config['total_rows'] = $list['total'];

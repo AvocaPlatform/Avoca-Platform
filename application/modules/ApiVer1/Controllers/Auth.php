@@ -33,7 +33,7 @@ class Auth extends AvocaBaseController
         $userAuth = [];
 
         /** @var User $userModel */
-        $userModel = $this->getModel('users/user');
+        $userModel = $this->getModel('Users/User');
 
         $username = $this->getPost('username');
         $password = $this->getPost('password');
