@@ -13,7 +13,7 @@ use Avoca\Controllers\AvocaApiV1Controller;
 
 class Users extends AvocaApiV1Controller
 {
-    protected $model = 'users/user';
+    protected $model = 'Users/User';
 
     /**
      * Action
