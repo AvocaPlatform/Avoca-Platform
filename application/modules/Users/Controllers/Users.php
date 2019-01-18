@@ -9,6 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
+namespace App\Modules\Users\Controllers;
+
+
 use Avoca\Controllers\AvocaManageController;
 
 class Users extends AvocaManageController

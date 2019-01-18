@@ -42,7 +42,7 @@ class AvocaAdminController extends AvocaController
         }
 
         $this->setError('Please login!');
-        return $this->redirect('/auth');
+        return $this->redirect('/Auth');
     }
 
     protected function display($return = false)

@@ -9,6 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
+namespace App\Modules\Admin\Controllers;
+
+
 use Avoca\Controllers\AvocaAdminController;
 
 class Oauth2 extends AvocaAdminController

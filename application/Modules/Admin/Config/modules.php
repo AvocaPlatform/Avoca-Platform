@@ -18,6 +18,6 @@ return array (
   'Emails' =>
   array (
     'module' => 'Emails',
-    'model' => 'Mailsend',
+    'model' => 'Email',
   ),
 );

@@ -336,25 +336,18 @@ $BM->mark('loading_time:_base_classes_end');
  */
 
 $e404 = FALSE;
-$class = $RTR->class;
-$class_path = APPPATH . 'modules/' . $RTR->directory . $class . '.php';
+$class = 'App\\Modules\\' . $RTR->module . '\\Controllers\\' . $RTR->class;
+$custom_class = 'Custom\\Modules\\' . $RTR->module . '\\Controllers\\' . $RTR->class;
 $method = $RTR->method;
 
-// check controller custom
-$custom_class = $class . 'Controller';
-$custom_class_path = CUSTOMPATH . 'modules/' . $RTR->directory . $class . '.php';
-if (file_exists($custom_class_path)) {
-    require_once $class_path;
+if (class_exists($custom_class)) {
     $class = $custom_class;
-    $class_path = $custom_class_path;
 }
 
-if (empty($class) OR !file_exists($class_path)) {
+if (empty($class)) {
     $e404 = TRUE;
 } else {
-    require_once $class_path;
-
-    if (!class_exists($class, FALSE) OR $method[0] === '_' OR method_exists('CI_Controller', $method)) {
+    if (!class_exists($class) OR $method[0] === '_' OR method_exists('CI_Controller', $method)) {
         $e404 = TRUE;
     } elseif (method_exists($class, '_remap')) {
         $params = array(
@@ -387,41 +380,7 @@ if (empty($class) OR !file_exists($class_path)) {
 }
 
 if ($e404) {
-    if (!empty($RTR->routes['404_override'])) {
-        if (sscanf($RTR->routes['404_override'], '%[^/]/%s', $error_class, $error_method) !== 2) {
-            $error_method = 'index';
-        }
-
-        $error_class = ucfirst($error_class);
-
-        if (!class_exists($error_class, FALSE)) {
-            if (file_exists(APPPATH . 'Controllers/' . $RTR->directory . $error_class . '.php')) {
-                require_once(APPPATH . 'Controllers/' . $RTR->directory . $error_class . '.php');
-                $e404 = !class_exists($error_class, FALSE);
-            } // Were we in a directory? If so, check for a global override
-            elseif (!empty($RTR->directory) && file_exists(APPPATH . 'Controllers/' . $error_class . '.php')) {
-                require_once(APPPATH . 'Controllers/' . $error_class . '.php');
-                if (($e404 = !class_exists($error_class, FALSE)) === FALSE) {
-                    $RTR->directory = '';
-                }
-            }
-        } else {
-            $e404 = FALSE;
-        }
-    }
-
-    // Did we reset the $e404 flag? If so, set the rsegments, starting from index 1
-    if (!$e404) {
-        $class = $error_class;
-        $method = $error_method;
-
-        $URI->rsegments = array(
-            1 => $class,
-            2 => $method
-        );
-    } else {
-        show_404($RTR->directory . $class . '/' . $method);
-    }
+    show_404($RTR->directory . $class . '/' . $method);
 }
 
 if ($method !== '_remap') {

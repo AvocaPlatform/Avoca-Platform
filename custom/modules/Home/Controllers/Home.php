@@ -10,8 +10,12 @@
  * Facebook: https://www.facebook.com/jackytran0101
  */
 
+namespace Custom\Modules\Home\Controllers;
 
-class HomeController extends Home
+
+use App\Modules\Home\Controllers\Home as HomeController;
+
+class Home extends HomeController
 {
     public function index()
     {

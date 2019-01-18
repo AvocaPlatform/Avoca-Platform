@@ -10,6 +10,9 @@
  * Facebook: https://www.facebook.com/jackytran0101
  */
 
+namespace App\Modules\Admin\Models;
+
+
 use Avoca\Models\AvocaModel;
 
 class Setting extends AvocaModel

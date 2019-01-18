@@ -9,6 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
+namespace App\Modules\Auth\Controllers;
+
+
 use Avoca\Controllers\AvocaController;
 
 class Auth extends AvocaController

@@ -9,6 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
+namespace App\Modules\Home\Controllers;
+
+
 use Avoca\Controllers\AvocaController;
 
 class Home extends AvocaController

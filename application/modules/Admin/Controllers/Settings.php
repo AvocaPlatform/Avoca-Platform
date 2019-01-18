@@ -9,6 +9,10 @@
  * Git: https://github.com/tdhungit
  */
 
+namespace App\Modules\Admin\Controllers;
+
+
+use App\Modules\Admin\Models\Setting;
 use Avoca\Controllers\AvocaAdminController;
 
 class Settings extends AvocaAdminController
@@ -176,13 +180,13 @@ class Settings extends AvocaAdminController
         // default value to view
         $this->data['tab'] = $tab;
         $this->data['module'] = [
-            'relationships' => new stdClass(),
-            'indexes' => new stdClass()
+            'relationships' => new \stdClass(),
+            'indexes' => new \stdClass()
         ];
         $this->data['create_module'] = true;
         $this->data['module_created'] = 0;
         $this->data['all_fields'] = [];
-        $this->data['viewdefs'] = new stdClass();
+        $this->data['viewdefs'] = new \stdClass();
 
         if ($module_name) {
             // check exist module
@@ -206,11 +210,11 @@ class Settings extends AvocaAdminController
 
             // clean up module defined
             if (!isset($module['relationships'])) {
-                $module['relationships'] = new stdClass();
+                $module['relationships'] = new \stdClass();
             }
 
             if (!isset($module['indexes'])) {
-                $module['indexes'] = new stdClass();
+                $module['indexes'] = new \stdClass();
             }
 
             /** @var Setting $settingModel */

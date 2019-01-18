@@ -9,6 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
+namespace App\Modules\Users\Models;
+
+
 use Avoca\Models\AvocaModel;
 
 class User extends AvocaModel

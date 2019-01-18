@@ -9,13 +9,16 @@
  * Git: https://github.com/tdhungit
  */
 
+namespace App\Modules\Emails\Models;
+
+
 use Avoca\Models\AvocaModel;
 
 /**
  * Class Mailsend
  * @property CI_Email $email
  */
-class Mailsend extends AvocaModel
+class Email extends AvocaModel
 {
     protected $table = 'emails';
 

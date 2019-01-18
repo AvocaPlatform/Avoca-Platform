@@ -10,14 +10,15 @@
  * Facebook: https://www.facebook.com/jackytran0101
  */
 
-
 namespace Avoca\Controllers;
 
+
+use Avoca\Twig;
 
 /**
  * Class AvocaController
  * @package Avoca\Controllers
- * @property \Twig $twig
+ * @property Twig $twig
  */
 class AvocaController extends AvocaBaseController
 {
@@ -93,7 +94,7 @@ class AvocaController extends AvocaBaseController
             'functions_safe' => $twig['functions_safe'],
         ];
 
-        $this->load->library('twig', $config);
+        $this->twig = new Twig($config);
     }
 
     /**

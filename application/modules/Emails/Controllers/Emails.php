@@ -9,11 +9,14 @@
  * Git: https://github.com/tdhungit
  */
 
+namespace App\Modules\Emails\Controllers;
+
+
 use Avoca\Controllers\AvocaManageController;
 
 class Emails extends AvocaManageController
 {
-    protected $model = 'Mailsend';
+    protected $model = 'Email';
 
     public function save($ajax = null)
     {

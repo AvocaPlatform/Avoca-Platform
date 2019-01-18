@@ -97,11 +97,9 @@ class AVC_Loader extends CI_Loader
 
         // Is the model in a sub-folder? If so, parse out the filename and path.
         if (($last_slash = strrpos($model, '/')) !== FALSE) {
-            // The path is in front of the last slash
-            $path = substr($model, 0, ++$last_slash);
-
-            // And the model name behind it
-            $model = substr($model, $last_slash);
+            $model_arr = explode('/', $model);
+            $module = $model_arr[0];
+            $model = $model_arr[1];
         } else {
             throw new RuntimeException('Unable to locate the model you have specified: ' . $model . '. Need load model: module/model_name');
         }
@@ -152,27 +150,14 @@ class AVC_Loader extends CI_Loader
             require_once($app_path . $class . '.php');
         }
 
-        $model = ucfirst($model);
-        if (!class_exists($model, FALSE)) {
-            foreach ($this->_ci_model_paths as $mod_path) {
-                $model_path = $mod_path . 'modules/' . $path . 'Models/' . $model . '.php';
-                if (!file_exists($model_path)) {
-                    continue;
-                }
+        $model = "App\\Modules\\$module\\Models\\$model";
+        if (!class_exists($model)) {
+            throw new RuntimeException('Unable to locate the model you have specified: ' . $model);
+        }
 
-                require_once($model_path);
-                if (!class_exists($model, FALSE)) {
-                    throw new RuntimeException($model_path . " exists, but doesn't declare class " . $model);
-                }
-
-                break;
-            }
-
-            if (!class_exists($model, FALSE)) {
-                throw new RuntimeException('Unable to locate the model you have specified: ' . $model);
-            }
-        } elseif (!is_subclass_of($model, 'CI_Model')) {
-            throw new RuntimeException("Class " . $model . " already exists and doesn't extend CI_Model");
+        $model_custom = "Custom\\Modules\\$module\\Models\\$model";
+        if (class_exists($model_custom)) {
+            $model = $model_custom;
         }
 
         $this->_ci_models[] = $name;

@@ -10,6 +10,9 @@
  * Facebook: https://www.facebook.com/jackytran0101
  */
 
+namespace App\Modules\Install\Controllers;
+
+
 use Avoca\Controllers\AvocaController;
 
 class Install extends AvocaController

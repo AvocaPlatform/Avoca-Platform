@@ -9,6 +9,9 @@
  * Git: https://github.com/tdhungit
  */
 
+namespace App\Modules\ApiVer1\Controllers;
+
+
 use Avoca\Controllers\AvocaApiV1Controller;
 
 class Users extends AvocaApiV1Controller
