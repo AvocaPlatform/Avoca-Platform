@@ -43,7 +43,6 @@ class Auth extends AvocaBaseController
 
         if ($username && $password) {
             $user = $userModel->userLogin($username, $password);
-            avoca_log($user);
 
             if ($user) {
                 $userAuth = [

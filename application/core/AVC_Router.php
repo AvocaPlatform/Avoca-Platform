@@ -80,8 +80,8 @@ class AVC_Router extends CI_Router
 
         // API
         # Authenticate
-        $route['api/v(:num)/auth'] = "ApiVer$1/auth/index";
-        $route['api/v(:num)/auth/(:any)'] = "ApiVer$1/auth/$2";
+        $route['api/v(:num)/Auth'] = "ApiVer$1/Auth/index";
+        $route['api/v(:num)/Auth/(:any)'] = "ApiVer$1/Auth/$2";
 
         # GET --> list records
         # POST --> create record
