@@ -11,7 +11,7 @@
 
 return array(
     'module' => 'Emails',
-    'model' => 'Mailsend',
+    'model' => 'Email',
     'table' => 'emails',
     'fields' => [
         'id' => [
