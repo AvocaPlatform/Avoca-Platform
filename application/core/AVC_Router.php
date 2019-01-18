@@ -80,23 +80,23 @@ class AVC_Router extends CI_Router
 
         // API
         # Authenticate
-        $route['api/v(:num)/Auth'] = "ApiVer$1/Auth/index";
-        $route['api/v(:num)/Auth/(:any)'] = "ApiVer$1/Auth/$2";
+        $route['api/v(:num)/Auth'] = "Auth/ApiV$1/index";
+        $route['api/v(:num)/Auth/(:any)'] = "Auth/ApiV$1/$2";
 
         # GET --> list records
         # POST --> create record
         # example: /api/v1/users --> api_ver1/Users/records
-        $route['api/v(:num)/(:any)'] = "ApiVer$1/$2/records";
+        $route['api/v(:num)/(:any)'] = "$2/ApiV$1/records";
 
         # GET --> detail record
         # PUT --> edit record
         # DELETE --> delete record
         # example: /api/v1/users/1 --> api_ver1/Users/record
-        $route['api/v(:num)/(:any)/(:num)'] = "ApiVer$1/$2/record/$3";
+        $route['api/v(:num)/(:any)/(:num)'] = "$2/ApiV$1/record/$3";
 
         // Controllers
-        $route['api/v(:num)/(:any)/(:any)'] = "ApiVer$1/$2/$3";
-        $route['api/v(:num)/(:any)/(:any)/(.+)'] = "ApiVer$1/$2/$3/$4";
+        $route['api/v(:num)/(:any)/(:any)'] = "$2/ApiV$1/$3";
+        $route['api/v(:num)/(:any)/(:any)/(.+)'] = "$2/ApiV$1/$3/$4";
         ##################################################
 
         // Validate & get reserved routes

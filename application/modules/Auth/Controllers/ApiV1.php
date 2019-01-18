@@ -9,12 +9,13 @@
  * Git: https://github.com/tdhungit
  */
 
-namespace App\Modules\ApiVer1\Controllers;
+
+namespace App\Modules\Auth\Controllers;
 
 
 use Avoca\Controllers\AvocaBaseController;
 
-class Auth extends AvocaBaseController
+class ApiV1 extends AvocaBaseController
 {
     /** @var \Avoca\AvocaApiAuth */
     private $server;

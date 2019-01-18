@@ -1,20 +1,22 @@
 <?php
 /**
- * Created by AVOCA.IO
- * Website: http://avoca.io
- * User: Jacky
- * Email: hungtran@up5.vn | jacky@youaddon.com
- * Person: tdhungit@gmail.com
+ * Created by Jacky.
+ * Developer
+ * Email: jacky@youaddon.com / hungtran@up5.vn
+ * Phone: +84 972014011
  * Skype: tdhungit
- * Git: https://github.com/tdhungit
+ * Site: https://youaddon.com / https://up5.vn
+ * Github: https://github.com/teamcarodev / https://github.com/youaddon
+ * Facebook: https://www.facebook.com/jackytran0101
  */
 
-namespace App\Modules\ApiVer1\Controllers;
+
+namespace App\Modules\Users\Controllers;
 
 
 use Avoca\Controllers\AvocaApiV1Controller;
 
-class Users extends AvocaApiV1Controller
+class ApiV1 extends AvocaApiV1Controller
 {
     protected $model = 'Users/User';
 

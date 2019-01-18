@@ -13,6 +13,7 @@
 
 namespace Avoca\Controllers;
 
+
 /**
  * Class AvocaBaseController
  * @package Avoca\Controllers

@@ -9,9 +9,12 @@
  * Git: https://github.com/tdhungit
  */
 
+namespace App\Modules\$$MODULE$$\Controllers;
+
+
 use Avoca\Libraries\Controllers\AvocaApiV1Controller;
 
-class $$CONTROLLER_CLASS$$ extends AvocaApiV1Controller
+class ApiV1 extends AvocaApiV1Controller
 {
     protected $model = '$$MODEL_NAME$$';
 }
