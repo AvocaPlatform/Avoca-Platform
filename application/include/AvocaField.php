@@ -33,7 +33,10 @@ class AvocaField
         $class = "\\Avoca\\Fields\\$type";
         $custom = "\\Custom\\Fields\\$type";
         $module = "\\App\\Modules\\Fields\\$type";
-        if (class_exists($module)) {
+        $module_custom = "\\Custom\\Modules\\Fields\\$type";
+        if (class_exists($module_custom)) {
+            $class = $module_custom;
+        } else if (class_exists($module)) {
             $class = $module;
         } else if (class_exists($custom)) {
             $class = $custom;
@@ -75,7 +78,10 @@ class AvocaField
         $class = "\\Avoca\\Fields\\$typeClass";
         $custom = "\\Custom\\Fields\\$typeClass";
         $module = "\\App\\Modules\\Fields\\$typeClass";
-        if (class_exists($module)) {
+        $module_custom = "\\Custom\\Modules\\Fields\\$typeClass";
+        if (class_exists($module_custom)) {
+            $class = $module_custom;
+        } else if (class_exists($module)) {
             $class = $module;
         } else if (class_exists($custom)) {
             $class = $custom;
