@@ -249,14 +249,14 @@ class Setting extends AvocaModel
 
     public function createModel($module, $model, $table)
     {
-        $model_name = ucfirst(strtolower($model));
+        $model_name = $model;
         $model_path = APPPATH . 'modules/' . $module . '/Models/' . $model_name . '.php';
 
         if (!file_exists($model_path)) {
             $template = file_get_contents(APPPATH . 'modules/Admin/Config/builders/model.avc');
             $data = str_replace(
-                ['$$MODEL_CLASS$$', '$$TABLE_NAME$$'],
-                [$model_name, strtolower($table)],
+                ['$$MODULE$$', '$$MODEL_CLASS$$', '$$TABLE_NAME$$'],
+                [$module, $model_name, strtolower($table)],
                 $template);
 
             write_file($model_path, $data, 'w');
@@ -265,32 +265,32 @@ class Setting extends AvocaModel
 
     public function createController($module, $controller, $model)
     {
-        $model_name = ucfirst(strtolower($model));
-        $controller_name = ucfirst(strtolower($controller));
+        $model_name = $model;
+        $controller_name = $controller;
         $controller_path = APPPATH . 'modules/' . $module . '/Controllers/' . $controller_name . '.php';
 
         if (!file_exists($controller_path)) {
             $template = file_get_contents(APPPATH . 'modules/Admin/Config/builders/controller.avc');
             $data = str_replace(
-                ['$$CONTROLLER_CLASS$$', '$$MODEL_NAME$$'],
-                [$controller_name, strtolower($model_name)],
+                ['$$MODULE$$', '$$CONTROLLER_CLASS$$', '$$MODEL_NAME$$'],
+                [$module, $controller_name, $model_name],
                 $template);
 
             write_file($controller_path, $data, 'w');
         }
     }
 
-    public function createAPIController($module, $controller, $model)
+    public function createAPIController($module, $controller, $model, $version = 1)
     {
-        $model_name = strtolower($module) . '' . strtolower($model);
-        $controller_name = ucfirst(strtolower($controller));
-        $controller_path = APPPATH . "modules/ApiVer1/Controllers/{$controller_name}.php";
+        $model_name = "$module/$model";
+        $controller_name = $controller;
+        $controller_path = APPPATH . "modules/$module/Controllers/ApiV{$version}.php";
 
         if (!file_exists($controller_path)) {
             $template = file_get_contents(APPPATH . 'modules/Admin/Config/builders/api_controller.avc');
             $data = str_replace(
-                ['$$CONTROLLER_CLASS$$', '$$MODEL_NAME$$'],
-                [$controller_name, $model_name],
+                ['$$MODULE$$', '$$CONTROLLER_CLASS$$', '$$MODEL_NAME$$'],
+                [$module, $controller_name, $model_name],
                 $template);
 
             write_file($controller_path, $data, 'w');
