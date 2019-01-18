@@ -336,8 +336,8 @@ $BM->mark('loading_time:_base_classes_end');
  */
 
 $e404 = FALSE;
-$class = 'App\\Modules\\' . $RTR->module . '\\Controllers\\' . $RTR->class;
-$custom_class = 'Custom\\Modules\\' . $RTR->module . '\\Controllers\\' . $RTR->class;
+$class = '\\App\\Modules\\' . $RTR->module . '\\Controllers\\' . $RTR->class;
+$custom_class = '\\Custom\\Modules\\' . $RTR->module . '\\Controllers\\' . $RTR->class;
 $method = $RTR->method;
 
 if (class_exists($custom_class)) {

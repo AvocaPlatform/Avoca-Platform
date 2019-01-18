@@ -29,15 +29,20 @@ class AvocaField
             $type = 'text';
         }
 
-        $type = strtolower($type);
-        $function_name = 'fieldFormat_' . $type;
-        if (function_exists($function_name)) {
-            return $function_name($value, $record, $option);
+        $type = ucfirst($type);
+        $class = "\\Avoca\\Fields\\$type";
+        $custom = "\\Custom\\Fields\\$type";
+        $module = "\\App\\Modules\\Fields\\$type";
+        if (class_exists($module)) {
+            $class = $module;
+        } else if (class_exists($custom)) {
+            $class = $custom;
         }
 
-        $method_name = 'format_' . $type;
-        if (method_exists($this, $method_name)) {
-            return $this->$method_name($value, $record, $option);
+        if (class_exists($class)
+            && method_exists($class, 'format')) {
+            $fieldModel = new $class();
+            $fieldModel->format($value, $record, $option);
         }
 
         return $value;
@@ -65,6 +70,24 @@ class AvocaField
             ];
         }
 
+        // custom form
+        $typeClass = ucfirst($type);
+        $class = "\\Avoca\\Fields\\$typeClass";
+        $custom = "\\Custom\\Fields\\$typeClass";
+        $module = "\\App\\Modules\\Fields\\$typeClass";
+        if (class_exists($module)) {
+            $class = $module;
+        } else if (class_exists($custom)) {
+            $class = $custom;
+        }
+
+        if (class_exists($class)
+            && method_exists($class, 'form')) {
+            $fieldModel = new $class();
+            return $fieldModel->form($field, $value, $extra);
+        }
+
+        // default form
         switch ($type) {
             case 'number':
             case 'text':
@@ -87,26 +110,7 @@ class AvocaField
                 return form_password($field, $value, $extra);
 
             default:
-                $function_name = 'fieldForm_' . $type;
-                if (function_exists($function_name)) {
-                    return $function_name($field, $value, $extra);
-                }
-
-                $method_name = 'form_' . $type;
-                if (method_exists($this, $method_name)) {
-                    return $this->$method_name($value, $value, $extra);
-                }
-
                 return form_input($field, $value, $extra);
         }
-    }
-
-    protected function format_link($value, $record, $option)
-    {
-        if (!empty($option['controller'])) {
-            return '<a href="' . avoca_url('/' . $option['controller'] . '/record/' . recordFVal($record, 'id')) . '">' . $value . '</a>';
-        }
-
-        return $value;
     }
 }

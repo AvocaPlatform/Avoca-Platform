@@ -150,12 +150,12 @@ class AVC_Loader extends CI_Loader
             require_once($app_path . $class . '.php');
         }
 
-        $model = "App\\Modules\\$module\\Models\\$model";
+        $model = "\\App\\Modules\\$module\\Models\\$model";
         if (!class_exists($model)) {
             throw new RuntimeException('Unable to locate the model you have specified: ' . $model);
         }
 
-        $model_custom = "Custom\\Modules\\$module\\Models\\$model";
+        $model_custom = "\\Custom\\Modules\\$module\\Models\\$model";
         if (class_exists($model_custom)) {
             $model = $model_custom;
         }
