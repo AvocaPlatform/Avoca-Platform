@@ -120,18 +120,41 @@ function avoca_currentUrl()
     return $_SERVER['QUERY_STRING'] ? $url . '?' . $_SERVER['QUERY_STRING'] : $url;
 }
 
-function write_array2file($file, $array, $app_folder = true)
+/**
+ * @param $file
+ * @param $array
+ * @param int $folder 1:custom, 2:application
+ * @return bool
+ */
+function write_array2file($file, $array, $folder = 1)
 {
-    if ($app_folder) {
+    if ($folder === 1) {
+        $file = CUSTOMPATH . $file;
+    } else if ($folder === 2) {
         $file = APPPATH . $file;
     }
 
     $template = file_get_contents(APPPATH . 'modules/Admin/Config/builders/file_header.avc');
-
     $array_str = var_export($array, true);
     $data = "<?php\n" . $template . "\n\nreturn " . $array_str . ";\n";
-
     return write_file($file, $data, 'w');
+}
+
+function get_file_array($file, $default = [])
+{
+    if (file_exists($file)) {
+        return include $file;
+    }
+
+    if (file_exists(CUSTOMPATH . $file)) {
+        return include CUSTOMPATH . $file;
+    }
+
+    if (file_exists(APPPATH . $file)) {
+        return include APPPATH . $file;
+    }
+
+    return $default;
 }
 
 /**

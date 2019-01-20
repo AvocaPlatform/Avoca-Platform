@@ -9,26 +9,26 @@
  * Git: https://github.com/tdhungit
  */
 
-return array(
-    'users' => array(
+$db = [
+    'users' => [
         'name' => 'users',
         'ENGINE' => 'InnoDB',
-        'fields' => array(
+        'fields' => [
             'id INT 10 unsigned:true auto_increment:true',
             'date_created DATETIME',
             'username VARCHAR 255',
             'password CHAR 32',
             'is_admin TINYINT 1 default:0',
-        ),
-        'indexes' => array(
+        ],
+        'indexes' => [
             'PK id',
             'UNIQUE username username',
-        ),
-    ),
-    'emails' => array(
+        ],
+    ],
+    'emails' => [
         'name' => 'emails',
         'ENGINE' => 'InnoDB',
-        'fields' => array(
+        'fields' => [
             'id INT 10 unsigned:true auto_increment:true',
             'date_created DATETIME',
             'from VARCHAR 255',
@@ -37,9 +37,16 @@ return array(
             'subject VARCHAR 255',
             'message TEXT',
             'attachments TEXT',
-        ),
-        'indexes' => array(
+        ],
+        'indexes' => [
             'PK id',
-        ),
-    ),
-);
+        ],
+    ],
+];
+
+$custom = [];
+if (file_exists(CUSTOMPATH . 'modules/Admin/Config/databases.php')) {
+    $custom = include CUSTOMPATH . 'modules/Admin/Config/databases.php';
+}
+
+return array_merge($custom, $db);

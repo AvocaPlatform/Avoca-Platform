@@ -9,15 +9,20 @@
  * Git: https://github.com/tdhungit
  */
 
-return array (
-  'Users' =>
-  array (
-    'module' => 'Users',
-    'model' => 'User',
-  ),
-  'Emails' =>
-  array (
-    'module' => 'Emails',
-    'model' => 'Email',
-  ),
-);
+$module = [
+    'Users' => [
+        'module' => 'Users',
+        'model' => 'User',
+    ],
+    'Emails' => [
+        'module' => 'Emails',
+        'model' => 'Email',
+    ],
+];
+
+$custom = [];
+if (file_exists(CUSTOMPATH . 'modules/Admin/Config/modules.php')) {
+    $custom = include CUSTOMPATH . 'modules/Admin/Config/modules.php';
+}
+
+return array_merge($custom, $module);
