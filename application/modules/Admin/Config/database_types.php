@@ -13,6 +13,7 @@ return [
     'default' => [
         'int',
         'varchar',
+        'char',
         'float',
         'double',
         'text',

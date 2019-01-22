@@ -227,9 +227,15 @@ class Setting extends AvocaModel
 
         $module_info = $modules[$module];
         if ($module_info['is_created']) {
-            $vardefs = include APPPATH . 'modules/' . $module . '/Config/' . $module_info['model'] . '_vardefs.php';
-        } else if (file_exists(APPPATH . 'modules/Admin/Config/module_builders/' . $module . '/vardefs.php')) {
-            $vardefs = include APPPATH . 'modules/Admin/Config/module_builders/' . $module . '/vardefs.php';
+            if (file_exists(CUSTOMPATH . "modules/{$module}/Config/{$module_info['model']}_vardefs.php")) {
+                $vardefs = include CUSTOMPATH . "modules/{$module}/Config/{$module_info['model']}_vardefs.php";
+            } else if (file_exists(APPPATH . "modules/{$module}/Config/{$module_info['model']}_vardefs.php")) {
+                $vardefs = include APPPATH . "modules/{$module}/Config/{$module_info['model']}_vardefs.php";
+            } else {
+                return [];
+            }
+        } else if (file_exists(CUSTOMPATH . "modules/Admin/Config/ModuleBuilders/{$module}/vardefs.php")) {
+            $vardefs = include CUSTOMPATH . "modules/Admin/Config/ModuleBuilders/{$module}/vardefs.php";
         } else {
             return [];
         }

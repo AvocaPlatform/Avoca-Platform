@@ -560,13 +560,19 @@
                 list_choose_fields: {{ all_fields|json_encode|raw }},
 
                 record_title: viewdefs.title || '',
-                record_fields: viewdefs.record && viewdefs.record.fields && Object.values(viewdefs.record.fields) || [[{name: '', label: ''}, {name: '', label: ''}]],
+                record_fields: [[{name: '', label: ''}, {name: '', label: ''}]],
                 record_choose_fields: {{ all_fields|json_encode|raw }},
             },
             created: function () {
                 if (this.moduleData.relationships) {
                     if (!Array.isArray(this.moduleData.relationships)) {
                         this.moduleData.relationships = Object.values(this.moduleData.relationships);
+                    }
+                }
+                if (viewdefs.record && viewdefs.record.fields) {
+                    const record_fields = Object.values(viewdefs.record.fields);
+                    if (record_fields.length > 0) {
+                        this.record_fields = record_fields;
                     }
                 }
                 // list_choose_fields

@@ -15,33 +15,41 @@ return array(
     'table' => 'emails',
     'fields' => [
         'id' => [
-            'type' => 'ID',
+            'name' => 'id',
+            'type' => 'id',
         ],
         'date_created' => [
-            'type' => 'DATETIME',
+            'name' => 'date_created',
+            'type' => 'datetime',
         ],
         'from' => [
-            'type' => 'VARCHAR',
+            'name' => 'from',
+            'type' => 'varchar',
             'constraint' => 255,
         ],
         'to' => [
-            'type' => 'VARCHAR',
+            'name' => 'to',
+            'type' => 'varchar',
             'constraint' => 255,
         ],
         'status' => [
-            'type' => 'TINYINT',
+            'name' => 'status',
+            'type' => 'tinyint',
             'constraint' => 1,
             'default' => 0,
         ],
         'subject' => [
-            'type' => 'VARCHAR',
+            'name' => 'subject',
+            'type' => 'varchar',
             'constraint' => 255,
         ],
         'message' => [
-            'type' => 'VARCHAR',
+            'name' => 'message',
+            'type' => 'text',
         ],
         'attachments' => [
-            'type' => 'VARCHAR',
+            'name' => 'attachments',
+            'type' => 'text',
         ],
     ],
     'indexes' => [

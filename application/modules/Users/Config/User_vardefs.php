@@ -15,21 +15,26 @@ return array(
     'table' => 'users',
     'fields' => [
         'id' => [
-            'type' => 'ID',
+            'name' => 'id',
+            'type' => 'id',
         ],
         'date_created' => [
-            'type' => 'DATETIME',
+            'name' => 'date_created',
+            'type' => 'datetime',
         ],
         'username' => [
-            'type' => 'VARCHAR',
+            'name' => 'username',
+            'type' => 'varchar',
             'constraint' => 255,
         ],
         'password' => [
-            'type' => 'CHAR',
+            'name' => 'password',
+            'type' => 'char',
             'constraint' => 32,
         ],
         'is_admin' => [
-            'type' => 'TINYINT',
+            'name' => 'is_admin',
+            'type' => 'tinyint',
             'constraint' => 1,
             'default' => 0,
         ],
