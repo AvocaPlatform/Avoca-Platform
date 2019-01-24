@@ -9,7 +9,7 @@
  * Git: https://github.com/tdhungit
  */
 
-$config['public_folder'] = '';
+$config['public_folder'] = 'public';
 $config['theme_folder'] = 'avoca';
 $config['view_folder'] = 'avoca';
 $config['error_views_path'] = VIEWPATH . $config['view_folder'] . DIRECTORY_SEPARATOR . 'errors' . DIRECTORY_SEPARATOR;

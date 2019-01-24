@@ -47,7 +47,7 @@ class Install extends AvocaController
         $base_url = $this->getPost('base_url');
 
         if ($db_host && $db_username && $db_database) {
-            $template = file_get_contents(APPPATH . 'config/avoca/builders/config_database.avc');
+            $template = file_get_contents(APPPATH . 'modules/Admin/Config/builders/config_database.avc');
 
             $template = str_replace([
                 '$$HOST$$',
@@ -64,9 +64,12 @@ class Install extends AvocaController
             write_file(APPPATH . 'config/database.php', $template, 'w');
         }
 
+        $autoload = file_get_contents(APPPATH . 'modules/Admin/Config/builders/config_autoload.avc');
+        write_file(APPPATH . 'config/autoload.php', $autoload, 'w');
+
         // create database
-        $install_sql = file_get_contents(APPPATH . 'config/avoca/upgrade/install_database.sql');
-        $oauth2_sql = file_get_contents(APPPATH . 'config/avoca/upgrade/oauth2_database.sql');
+        $install_sql = file_get_contents(APPPATH . 'modules/Admin/Config/upgrade/install_database.sql');
+        $oauth2_sql = file_get_contents(APPPATH . 'modules/Admin/Config/upgrade/oauth2_database.sql');
 
         $this->importSQL($install_sql);
         $this->importSQL($oauth2_sql);
@@ -95,7 +98,7 @@ class Install extends AvocaController
         ]);
 
         $this->setSuccess('Install successful');
-        return $this->redirect('/auth');
+        return $this->redirect('/Auth');
     }
 
     private function importSQL($sql)
