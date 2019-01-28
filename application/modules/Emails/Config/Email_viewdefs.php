@@ -17,15 +17,12 @@ return [
         'fields' => [
             'subject' => [
                 'name' => 'subject',
-                'label' => 'Subject',
             ],
             'from' => [
                 'name' => 'from',
-                'label' => 'From',
             ],
             'to' => [
-                'name' => 'name',
-                'label' => 'To',
+                'name' => 'to',
             ],
         ]
     ],
@@ -34,31 +31,26 @@ return [
             [
                 'from' => [
                     'name' => 'from',
-                    'label' => 'From',
                 ],
                 'to' => [
                     'name' => 'to',
-                    'label' => 'To',
                 ],
             ],
             [
                 'subject' => [
                     'name' => 'subject',
-                    'label' => 'Subject',
                 ],
             ],
             [
                 'message' => [
                     'type' => 'textarea',
                     'name' => 'message',
-                    'label' => 'Message',
                 ]
             ],
             [
                 'attachments' => [
                     'type' => 'files',
                     'name' => 'attachments',
-                    'label' => 'Attachments',
                 ]
             ],
         ],

@@ -16,24 +16,29 @@ return array(
     'fields' => [
         'id' => [
             'name' => 'id',
+            'label' => 'Id',
             'type' => 'id',
         ],
         'date_created' => [
             'name' => 'date_created',
+            'label' => 'Date created',
             'type' => 'datetime',
         ],
         'username' => [
             'name' => 'username',
+            'label' => 'Username',
             'type' => 'varchar',
             'constraint' => 255,
         ],
         'password' => [
             'name' => 'password',
+            'label' => 'Password',
             'type' => 'char',
             'constraint' => 32,
         ],
         'is_admin' => [
             'name' => 'is_admin',
+            'label' => 'Is admin',
             'type' => 'tinyint',
             'constraint' => 1,
             'default' => 0,

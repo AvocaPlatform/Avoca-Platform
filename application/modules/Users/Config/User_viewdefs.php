@@ -20,11 +20,9 @@ return [
             'id' => [
                 'name' => 'id',
                 'type' => 'int',
-                'label' => 'ID',
             ],
             'username' => [
                 'name' => 'username',
-                'label' => 'Username',
                 'type' => 'link',
                 'controller' => 'Users',
                 //'label' => 'Username',
@@ -39,12 +37,10 @@ return [
             [
                 'id' => [
                     'name' => 'id',
-                    'label' => 'ID',
                     'type' => 'disabled'
                 ],
                 'username' => [
                     'name' => 'username',
-                    'label' => 'Username',
                 ],
             ],
         ],
