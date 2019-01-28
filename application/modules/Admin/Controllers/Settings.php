@@ -224,10 +224,12 @@ class Settings extends AvocaAdminController
                 $var_defs['fields'] = [
                     'id' => [
                         'name' => 'id',
+                        'label' => 'Id',
                         'type' => 'id',
                     ],
                     'date_created' => [
                         'name' => 'date_created',
+                        'label' => 'Date created',
                         'type' => 'datetime',
                     ],
                 ];
@@ -317,6 +319,7 @@ class Settings extends AvocaAdminController
         $list_view = $this->getPost('list_view');
         foreach ($list_view as $field) {
             if (!empty($field['name'])) {
+                unset($field['label']);
                 $list[$field['name']] = $field;
             }
         }
@@ -327,6 +330,7 @@ class Settings extends AvocaAdminController
         foreach ($record_view as $line) {
             foreach ($line as $field) {
                 if (!empty($field['name'])) {
+                    unset($field['label']);
                     $record[$i][$field['name']] = $field;
                 }
             }

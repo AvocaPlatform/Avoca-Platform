@@ -220,7 +220,7 @@
                                     <draggable v-model="list_fields" :options="dragListOptions">
                                         <transition-group name="drag-list" class="dragDrop list-group" tag="ul">
                                             <li class="list-group-item list-group-item-info" v-for="field in list_fields" :key="field.name">
-                                                {{ '{{ field.label }}' }}
+                                                {{ 'moduleData.fields[field.name].label'|ajs }}
                                             </li>
                                         </transition-group>
                                     </draggable>
@@ -236,7 +236,7 @@
                                     <draggable v-model="list_choose_fields" :options="dragListOptions">
                                         <transition-group name="drag-list" class="dragDrop list-group" tag="ul">
                                             <li class="list-group-item list-group-item-light" v-for="field in list_choose_fields" :key="field.name">
-                                                {{ '{{ field.label }}' }}
+                                                {{ 'field.label'|ajs }}
                                             </li>
                                         </transition-group>
                                     </draggable>
@@ -285,7 +285,7 @@
                                                                     v-bind:idx1="idx1"
                                                                     v-bind:idx2="idx2"
                                                                     @click="">
-                                                                {{ '{{ field.label }}' }}
+                                                                {{ 'moduleData.fields[field.name].label'|ajs }}
                                                             </button>
                                                             <button type="button"
                                                                     class="btn btn-danger"
@@ -317,7 +317,7 @@
                                     <div class="" v-for="field in record_choose_fields">
                                         <drag class="mb-2" :transfer-data="field">
                                             <button type="button" class="btn btn-light btn-block">
-                                                {{ '{{ field.label }}' }}
+                                                {{ 'field.label'|ajs }}
                                             </button>
                                         </drag>
                                     </div>
@@ -557,13 +557,16 @@
                 },
 
                 list_fields: viewdefs.list && viewdefs.list.fields && Object.values(viewdefs.list.fields) || [],
-                list_choose_fields: {{ all_fields|json_encode|raw }},
+                list_choose_fields: [],
 
                 record_title: viewdefs.title || '',
                 record_fields: [[{name: '', label: ''}, {name: '', label: ''}]],
-                record_choose_fields: {{ all_fields|json_encode|raw }},
+                record_choose_fields: [],
             },
             created: function () {
+                this.list_choose_fields = Object.values(this.moduleData.fields);
+                this.record_choose_fields = Object.values(this.moduleData.fields);
+                // relationships
                 if (this.moduleData.relationships) {
                     if (!Array.isArray(this.moduleData.relationships)) {
                         this.moduleData.relationships = Object.values(this.moduleData.relationships);
@@ -659,10 +662,39 @@
                     }
                 },
 
+                updateLayoutFields() {
+                    this.list_choose_fields = Object.values(this.moduleData.fields);
+                    this.record_choose_fields = Object.values(this.moduleData.fields);
+                    // list_choose_fields
+                    _.forEach(this.list_fields, (field, key) => {
+                        let field_name = field.name || '';
+                        if (field_name) {
+                            let choose_idx = _.findIndex(this.list_choose_fields, {name: field_name});
+                            this.list_choose_fields.splice(choose_idx, 1);
+                        }
+                    });
+                    // record_choose_fields
+                    _.forEach(this.record_fields, (line, key0) => {
+                        _.forEach(line, (field) => {
+                            let field_name = field.name || '';
+                            if (field_name) {
+                                let choose_idx = _.findIndex(this.record_choose_fields, {name: field_name});
+                                this.record_choose_fields.splice(choose_idx, 1);
+                            }
+                        });
+
+                        if (_.size(line) === 1) {
+                            this.record_fields[key0]['zzz'] = {name: '', label: ''};
+                        }
+                    });
+                },
+
                 addField() {
                     if (this.newField.type && this.newField.name && this.newField.label) {
                         let newField = {...this.newField};
                         this.moduleData.fields[this.newField.name] = newField;
+                        this.updateLayoutFields();
+
                         this.newField = {};
                         $('#fieldConfigModal').modal('hide');
                     }
@@ -671,6 +703,7 @@
                 editField(field) {
                     if (field && this.moduleData.fields && this.moduleData.fields[field]) {
                         this.newField = this.moduleData.fields[field];
+                        this.updateLayoutFields();
                     } else {
                         this.newField = {};
                     }
@@ -681,6 +714,7 @@
                 removeField(field) {
                     if (field && this.moduleData.fields && this.moduleData.fields[field]) {
                         this.$delete(this.moduleData.fields, field);
+                        this.updateLayoutFields();
                     }
                 },
 
