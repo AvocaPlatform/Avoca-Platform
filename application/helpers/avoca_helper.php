@@ -44,7 +44,7 @@ function avoca_theme()
     return config_item('view_folder');
 }
 
-function getAppListStrings($name = null, $all = false)
+function get_app_list_strings($name = null, $all = false)
 {
     $app_list_strings = config_item('app_list_strings');
 

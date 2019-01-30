@@ -188,7 +188,7 @@ class Settings extends AvocaAdminController
         }
 
         // app_list_strings
-        $this->data['app_list_strings'] = getAppListStrings(null, true);
+        $this->data['app_list_strings'] = get_app_list_strings(null, true);
         $this->data['types'] = array_merge($types, $dbTypes['default']);
         $this->data['allModules'] = $settingModel->getModules();
     }
@@ -424,7 +424,7 @@ class Settings extends AvocaAdminController
         if ($string) {
             $this->data['string'] = $string;
 
-            $list_strings = getAppListStrings($string);
+            $list_strings = get_app_list_strings($string);
             $this->data['list_strings'] = $list_strings;
         }
 
