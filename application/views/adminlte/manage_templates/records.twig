@@ -45,7 +45,7 @@
                                             <th class="{% if option.nosort %}no{% else %}sortListView{% endif %}{% if sort.field == field %} {{ sort.order }}{% endif %}"
                                                 order_by="{{ field }}"
                                                 order_type="{{ order }}">
-                                                {{ fieldLabel(field, option)|lang }}
+                                                {{ Model.fieldModel().label(field, option)|lang }}
                                             </th>
                                         {% endfor %}
                                         <th class="no">{{ 'Actions'|lang }}</th>
@@ -56,25 +56,25 @@
                                 <tbody>
                                     {% for record in records %}
                                         <tr>
-                                            <td><input type="checkbox" name="ids[]" class="input-check" value="{{ recordFVal(record, 'id') }}"></td>
+                                            <td><input type="checkbox" name="ids[]" class="input-check" value="{{ attribute(record, 'id') }}"></td>
                                             {% for field, option in listdefs.fields %}
-                                                <td>{{ recordVal(record, field, option) }}</td>
+                                                <td>{{ Model.fieldModel().value(field, record, option) }}</td>
                                             {% endfor %}
                                             <td class="list-action">
                                                 {% if not viewdefs.disabled_view %}
-                                                    <a href="{{ recordLink(view_link, record) }}" class="btn btn-sm btn-info">
+                                                    <a href="{{ avoca_url(Model.fieldModel().replace(view_link, record)) }}" class="btn btn-sm btn-info">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
                                                 {% endif %}
 
                                                 {% if not viewdefs.disabled_edit %}
-                                                    <a href="{{ recordLink(edit_link, record) }}" class="btn btn-sm btn-warning">
+                                                    <a href="{{ avoca_url(Model.fieldModel().replace(edit_link, record)) }}" class="btn btn-sm btn-warning">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>
                                                 {% endif %}
 
                                                 {% if not viewdefs.disabled_delete %}
-                                                    <a href="{{ recordLink(delete_link, record) }}" class="btn btn-sm btn-danger DeleteRecord">
+                                                    <a href="{{ avoca_url(Model.fieldModel().replace(delete_link, record)) }}" class="btn btn-sm btn-danger DeleteRecord">
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 {% endif %}

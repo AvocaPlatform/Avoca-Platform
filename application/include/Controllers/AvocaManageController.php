@@ -103,28 +103,8 @@ class AvocaManageController extends AvocaController
             }
         }
 
-        $model = $model ? $model : $this->model;
-        if (strpos($model, '/') === false) {
-            $module = $this->module_name;
-        } else {
-            $arr = explode('/', $model);
-            $module = $arr[0];
-            $model = $arr[1];
-        }
-
-        $uri_viewdef = 'modules/' . $module . '/Config/' . $model . '_viewdefs.php';
-        $layout_path = $this->getFilePath($uri_viewdef);
-        if (file_exists($layout_path)) {
-            $viewdefs = include $layout_path;
-
-            if (!$model) {
-                $this->viewdefs = $viewdefs;
-            }
-
-            return $viewdefs;
-        }
-
-        return [];
+        $modelObject = $this->getModel($model);
+        return $modelObject->getLayoutDefs();
     }
 
     /**
@@ -286,8 +266,9 @@ class AvocaManageController extends AvocaController
         $offset = $this->uri->segment(4);
         $list = $model->getRecords($where, $offset, $orders);
 
-        $this->data['list'] = $list;
+        $this->data['Model'] = $model;
         $this->data['model_name'] = $this->model;
+        $this->data['list'] = $list;
 
         $this->data['records'] = [];
         if ($list && !empty($list['records'])) {
@@ -330,6 +311,7 @@ class AvocaManageController extends AvocaController
             return $this->redirect('/' . $this->controller_name);
         }
 
+        $this->data['Model'] = $model;
         $this->data['record'] = $record;
 
         // viewdefs
@@ -340,7 +322,7 @@ class AvocaManageController extends AvocaController
             $this->data['recorddefs'] = $viewdefs['record'];
         }
 
-        $this->setTitle(recordVal($record, $viewdefs['title']));
+        $this->setTitle($record[$viewdefs['title']]);
         $this->addStatic();
     }
 
@@ -363,9 +345,11 @@ class AvocaManageController extends AvocaController
             $this->data['recorddefs'] = $viewdefs['record'];
         }
 
+        $model = $this->getModel();
+        $this->data['Model'] = $model;
         $this->data['record'] = [];
         if ($id) {
-            $record = $this->getModel()->get($id);
+            $record = $model->get($id);
             $this->data['record'] = $record;
             if (!$this->page_title) {
                 $key_title = (!empty($viewdefs['title'])) ? $viewdefs['title'] : 'id';
@@ -392,9 +376,12 @@ class AvocaManageController extends AvocaController
         }
 
         $page_title = $this->lang->line('Quick create');
+
+        $model = $this->getModel();
+        $this->data['Model'] = $model;
         $this->data['record'] = [];
         if ($id) {
-            $record = $this->getModel()->get($id);
+            $record = $model->get($id);
             $this->data['record'] = $record;
             if (!$this->page_title) {
                 $key_title = (!empty($viewdefs['title'])) ? $viewdefs['title'] : 'id';

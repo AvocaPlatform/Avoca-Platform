@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-sm-12">
             {{ form_open(avoca_url('/' ~ _controller ~ '/save')) }}
-                <input type="hidden" name="id" value="{{ recordFVal(record, 'id') }}">
+                <input type="hidden" name="id" value="{{ attribute(record, 'id') }}">
                 <div class="card">
                     <div class="card-header">
                         {{ title }}
@@ -14,7 +14,7 @@
                                 <i class="fa fa-list"></i>
                             </a>
                             {% if record %}
-                                <a class="card-header-action btn-setting" href="{{ recordLink(view_link, record) }}">
+                                <a class="card-header-action btn-setting" href="{{ avoca_url(Model.fieldModel().replace(view_link, record)) }}">
                                     <i class="fa fa-eye"></i>
                                 </a>
                             {% endif %}
@@ -32,8 +32,8 @@
                                     {% for field, option in group %}
                                         <div class="{{ colclass }}">
                                             <div class="form-group">
-                                                <label>{{ fieldLabel(field, option)|lang }}</label>
-                                                {{ avoca_form(field, recordFVal(record, field), option) }}
+                                                <label>{{ Model.fieldModel().label(field, option)|lang }}</label>
+                                                {{ avoca_form(field, record, option) }}
                                             </div>
                                         </div>
                                     {% endfor %}

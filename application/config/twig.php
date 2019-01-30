@@ -17,8 +17,6 @@ $config['twig'] = [
         'avoca_url',
         'avoca_admin',
         'avoca_currentUrl',
-        'recordLink',
-        'fieldLabel',
         'avoca_GET',
     ],
     'functions_safe' => [
@@ -28,7 +26,5 @@ $config['twig'] = [
         'form_multiselect',
         'form_textarea',
         'avoca_form',
-        'recordFVal',
-        'recordVal',
     ]
 ];

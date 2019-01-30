@@ -20,14 +20,22 @@ namespace Avoca\Models;
  */
 class AvocaModel extends \CI_Model
 {
+    protected $module = '';
     protected $table = '';
     protected $limit = 0;
+
     protected $errors = [];
+
+    protected $field_defs = null;
+    protected $layout_defs = null;
+
+    protected $fieldModel;
 
     public function __construct()
     {
         parent::__construct();
 
+        $this->initModule();
         $this->init();
     }
 
@@ -36,9 +44,49 @@ class AvocaModel extends \CI_Model
 
     }
 
-    public function getName()
+    protected function initModule()
     {
+        $className = $this->getName();
+        $arr = explode('\\', $className);
+        $this->module = $arr[2];
+
+        // set fields defs
+        if (!$this->field_defs) {
+            $path = 'modules/' . $this->module . '/Config/' . $this->getName(true) . '_vardefs.php';
+            if (file_exists(CUSTOMPATH . $path)) {
+                $this->field_defs = include CUSTOMPATH . $path;
+            } else if (file_exists(APPPATH . $path)) {
+                $this->field_defs = include APPPATH . $path;
+            }
+        }
+
+        // set layout defs
+        if (!$this->layout_defs) {
+            $path = 'modules/' . $this->module . '/Config/' . $this->getName(true) . '_viewdefs.php';
+            if (file_exists(CUSTOMPATH . $path)) {
+                $this->layout_defs = include CUSTOMPATH . $path;
+            } else if (file_exists(APPPATH . $path)) {
+                $this->layout_defs = include APPPATH . $path;
+            }
+        }
+
+        // load field model
+        $this->fieldModel = new AvocaModelField($this);
+    }
+
+    public function getName($nonamespace = false)
+    {
+        if ($nonamespace) {
+            $className = basename(str_replace('\\', '/', get_class($this)));
+            return $className;
+        }
+
         return get_class($this);
+    }
+
+    public function getModule()
+    {
+        return $this->module;
     }
 
     public function getTable()
@@ -88,6 +136,21 @@ class AvocaModel extends \CI_Model
         }
 
         return [];
+    }
+
+    public function getFieldDefs()
+    {
+        return $this->field_defs;
+    }
+
+    public function getLayoutDefs()
+    {
+        return $this->layout_defs;
+    }
+
+    public function fieldModel()
+    {
+        return $this->fieldModel;
     }
 
     /**

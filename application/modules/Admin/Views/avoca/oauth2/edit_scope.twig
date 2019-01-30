@@ -11,28 +11,8 @@
 
                     <div class="card-body">
                         <div class="form-group">
-                            <label>{{ __('Client id') }}</label>
-                            {{ form_input('client_id', record.client_id, {class: 'form-control'}) }}
-                        </div>
-
-                        <div class="form-group">
-                            <label>{{ __('Client secret') }}</label>
-                            {{ form_input('client_secret', record.client_secret, {class: 'form-control'}) }}
-                        </div>
-
-                        <div class="form-group">
-                            <label>{{ __('Redirect uri') }}</label>
-                            {{ form_input('redirect_uri', record.redirect_uri, {class: 'form-control'}) }}
-                        </div>
-
-                        <div class="form-group">
-                            <label>{{ __('Grant types') }}</label>
-                            {{ form_multiselect('grant_types[]', _grant_types, record.grant_types_selected, {'class': 'form-control'}) }}
-                        </div>
-
-                        <div class="form-group">
-                            <label>{{ __('Scope') }}</label>
-                            {{ form_multiselect('scope[]', oauth_scopes, record.scope_selected, {'class': 'form-control'}) }}
+                            <label>{{ __('Name') }}</label>
+                            {{ form_input('scope', record.scope, {class: 'form-control'}) }}
                         </div>
                     </div>
 

@@ -61,7 +61,7 @@ return array(
     'relationships' => [
         'user_email' => [
             'field' => 'id',
-            'module' => 'emails',
+            'module' => 'Emails',
             'rfield' => 'id',
         ]
     ],

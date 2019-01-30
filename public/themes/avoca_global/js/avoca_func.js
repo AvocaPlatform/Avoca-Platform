@@ -6,7 +6,7 @@ function avocaAlert(title, content) {
 }
 
 function quickEdit(module, cb) {
-    $.get(manage_url + '/' + module + '/quick_edit', function (html_form) {
+    $.get(base_url + '/' + module + '/quick_edit', function (html_form) {
         // init modal
         $('#modal-application').html(html_form);
         $('#modal-application').modal({});
@@ -47,5 +47,5 @@ function quickEdit(module, cb) {
 
 // send mail popup
 function sendMail() {
-    quickEdit('emails');
+    quickEdit('Emails');
 }

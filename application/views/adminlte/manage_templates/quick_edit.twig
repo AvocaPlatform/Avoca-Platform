@@ -1,7 +1,7 @@
 <div class="modal-dialog modal-lg" role="document" xmlns="http://www.w3.org/1999/html">
     <div class="modal-content">
         {{ form_open(avoca_url('/' ~ _controller ~ '/save/1'), {class: 'QuickEditForm'}) }}
-            <input type="hidden" name="id" value="{{ recordFVal(record, 'id') }}">
+            <input type="hidden" name="id" value="{{ attribute(record, 'id') }}">
             <div class="modal-header">
                 <h4 class="modal-title">{{ title }}</h4>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
@@ -13,8 +13,8 @@
                     {% for group in recorddefs.fields %}
                         {% for field, option in group %}
                             <div class="form-group">
-                                <label>{{ fieldLabel(field, option)|lang }}</label>
-                                {{ avoca_form(field, recordFVal(record, field), option) }}
+                                <label>{{ Model.fieldModel().label(field, option)|lang }}</label>
+                                {{ avoca_form(field, record, option) }}
                             </div>
                         {% endfor %}
                     {% endfor %}

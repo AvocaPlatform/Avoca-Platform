@@ -5,13 +5,13 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    {{ recordVal(record, viewdefs.title) }}
+                    {{ record[viewdefs.title] }}
 
                     <div class="card-header-actions">
                         <a class="card-header-action btn-setting" href="{{ avoca_url(list_link) }}">
                             <i class="fa fa-list"></i>
                         </a>
-                        <a class="card-header-action btn-setting" href="{{ recordLink(edit_link, record) }}">
+                        <a class="card-header-action btn-setting" href="{{ avoca_url(Model.fieldModel().replace(edit_link, record)) }}">
                             <i class="fa fa-pencil"></i>
                         </a>
                     </div>
@@ -23,8 +23,8 @@
                                 {% for group in recorddefs.fields %}
                                     <tr>
                                         {% for field, option in group %}
-                                            <td>{{ fieldLabel(field, option) }}</td>
-                                            <td>{{ recordVal(record, field, option) }}</td>
+                                            <td>{{ Model.fieldModel().label(field, option) }}</td>
+                                            <td>{{ Model.fieldModel().value(field, record, option) }}</td>
                                         {% endfor %}
                                     </tr>
                                 {% endfor %}

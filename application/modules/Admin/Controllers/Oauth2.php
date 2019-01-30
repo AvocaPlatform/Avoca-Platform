@@ -38,7 +38,7 @@ class Oauth2 extends AvocaAdminController
 
             if (!$client_id || !$client_secret) {
                 $this->setError(Avoca\AvocaRequestStatus::$InvalidParams);
-                return $this->admin_redirect('/oauth2');
+                return $this->admin_redirect('/Oauth2');
             }
 
             $data = [
@@ -67,7 +67,7 @@ class Oauth2 extends AvocaAdminController
             }
 
             $this->setSuccess(\Avoca\AvocaRequestStatus::$SaveRecordSuccess);
-            return $this->admin_redirect('/oauth2');
+            return $this->admin_redirect('/Oauth2');
         }
 
         $this->data['records'] = $this->db->get('oauth_clients')->result();
@@ -78,7 +78,7 @@ class Oauth2 extends AvocaAdminController
     {
         $this->data['title'] = 'Create client';
         $this->data['client_id'] = $client_id;
-        $this->data['record'] = new stdClass();
+        $this->data['record'] = new \stdClass();
 
         // get all scopes
         $this->data['oauth_scopes'] = [];
@@ -95,7 +95,7 @@ class Oauth2 extends AvocaAdminController
 
             if (!$record) {
                 $this->setError('Can not found this record');
-                return $this->admin_redirect('/oauth2');
+                return $this->admin_redirect('/Oauth2');
             }
 
             try {
@@ -141,7 +141,7 @@ class Oauth2 extends AvocaAdminController
                 $this->setError(\Avoca\AvocaRequestStatus::$InvalidParams);
             }
 
-            $this->admin_redirect('/oauth2/scopes');
+            $this->admin_redirect('/Oauth2/scopes');
         }
 
         $this->data['records'] = $this->db->get('oauth_scopes')->result();
@@ -152,7 +152,7 @@ class Oauth2 extends AvocaAdminController
     {
         $this->data['title'] = 'Create scope';
         $this->data['scope'] = $scope;
-        $this->data['record'] = new stdClass();
+        $this->data['record'] = new \stdClass();
 
         if ($scope) {
             $this->data['title'] = 'Edit scope';
@@ -204,10 +204,10 @@ class Oauth2 extends AvocaAdminController
                 $this->setError(\Avoca\AvocaRequestStatus::$NotFoundRecord);
             }
 
-            $this->admin_redirect('/oauth2/scopes');
+            $this->admin_redirect('/Oauth2/scopes');
         }
 
-        $this->admin_redirect('/oauth2');
+        $this->admin_redirect('/Oauth2');
     }
 
     // Action
@@ -217,7 +217,7 @@ class Oauth2 extends AvocaAdminController
         $this->db->delete('oauth_access_tokens');
 
         $this->setSuccess('Remove expire tokens successful');
-        return $this->admin_redirect('/oauth2/tokens');
+        return $this->admin_redirect('/Oauth2/tokens');
     }
 
     // Action
@@ -227,6 +227,6 @@ class Oauth2 extends AvocaAdminController
         $this->db->delete('oauth_refresh_tokens');
 
         $this->setSuccess('Remove expire refresh tokens successful');
-        return $this->admin_redirect('/oauth2/refresh_tokens');
+        return $this->admin_redirect('/Oauth2/refresh_tokens');
     }
 }

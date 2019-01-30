@@ -15,8 +15,9 @@ namespace Avoca;
 
 class AvocaField
 {
-    public function format($value, $record, $option = '')
+    public static function format($field, $record, $option = '')
     {
+        $value = isset($record[$field]) ? $record[$field] : '';
         if (!$option) {
             return $value;
         }
@@ -44,15 +45,15 @@ class AvocaField
 
         if (class_exists($class)
             && method_exists($class, 'format')) {
-            $fieldModel = new $class();
-            $fieldModel->format($value, $record, $option);
+            return $class::format($field, $record, $option);
         }
 
         return $value;
     }
 
-    public function form($field, $value, $option = [])
+    public static function form($field, $record, $option = [])
     {
+        $value = isset($record[$field]) ? $record[$field] : '';
         if ($option) {
             if (!is_array($option)) {
                 $type = 'text';
@@ -89,8 +90,7 @@ class AvocaField
 
         if (class_exists($class)
             && method_exists($class, 'form')) {
-            $fieldModel = new $class();
-            return $fieldModel->form($field, $value, $extra);
+            return $class::form($field, $record, $extra);
         }
 
         // default form

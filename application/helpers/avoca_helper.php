@@ -37,7 +37,7 @@ function avoca_theme()
     $CI = &get_instance();
 
     $module = $CI->router->fetch_module();
-    if ($module == 'admin') {
+    if ($module == 'Admin') {
         return 'avoca';
     }
 
@@ -188,88 +188,16 @@ function __($str)
 }
 
 /**
- * get value in object|array
- *
- * @param $record
- * @param $field
- * @return string
- */
-function recordFVal($record, $field)
-{
-    $value = '';
-    if (isset($record->$field)) {
-        $value = $record->$field;
-    } else if (isset($record[$field])) {
-        $value = $record[$field];
-    }
-
-    return $value;
-}
-
-/**
- * format field in record
- *
- * @param $record
- * @param $field
- * @param string $option
- * @param string $default
- * @return mixed
- */
-function recordVal($record, $field, $option = '', $default = '')
-{
-    $value = recordFVal($record, $field);
-
-    if ($value == '') {
-        return $default;
-    }
-
-    $fieldModel = new \Avoca\AvocaField();
-    return $fieldModel->format($value, $record, $option);
-}
-
-/**
- * update link, get data from record
- *
- * @param $uri
- * @param $record
- * @return string
- */
-function recordLink($uri, $record)
-{
-    $id = recordFVal($record, 'id');
-    $uri = str_replace('{ID}', $id, $uri);
-
-    return avoca_url($uri);
-}
-
-/**
- * get field label from viewdefs
- *
- * @param $field
- * @param array $option
- * @return mixed|string
- */
-function fieldLabel($field, $option = [])
-{
-    if (!empty($option['label'])) {
-        return $option['label'];
-    }
-
-    return ucfirst($field);
-}
-
-/**
  * generate form input from viewdefs
  *
  * @param $field
- * @param $value
+ * @param $record
  * @param array $option
  * @return string
  */
-function avoca_form($field, $value, $option = [])
+function avoca_form($field, $record, $option = [])
 {
-    $fieldModel = new \Avoca\AvocaField();
-    return $fieldModel->form($field, $value, $option);
+    return \Avoca\AvocaField::form($field, $record, $option);
 }
 
 /**
