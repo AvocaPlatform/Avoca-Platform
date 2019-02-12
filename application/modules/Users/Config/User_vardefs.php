@@ -9,7 +9,7 @@
  * Git: https://github.com/tdhungit
  */
 
-return array(
+return [
     'module' => 'Users',
     'model' => 'User',
     'table' => 'users',
@@ -56,7 +56,7 @@ return array(
             'fields' => [
                 'username',
             ]
-        ]
+        ],
     ],
     'relationships' => [
         'user_email' => [
@@ -65,4 +65,4 @@ return array(
             'rfield' => 'id',
         ]
     ],
-);
+];

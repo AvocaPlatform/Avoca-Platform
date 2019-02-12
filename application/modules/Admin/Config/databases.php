@@ -42,6 +42,19 @@ $db = [
             'PK id',
         ],
     ],
+    'user_groups' => [
+        'name' => 'user_groups',
+        'ENGINE' => 'InnoDB',
+        'fields' => [
+            'id INT 10 unsigned:true auto_increment:true',
+            'date_created DATETIME',
+            'name VARCHAR 255',
+            'parent_id INT 10',
+        ],
+        'indexes' => [
+            'PK id',
+        ],
+    ],
 ];
 
 $custom = [];

@@ -18,6 +18,10 @@ $module = [
         'module' => 'Emails',
         'model' => 'Email',
     ],
+    'UserGroups' => [
+        'module' => 'UserGroups',
+        'model' => 'UserGroup',
+    ],
 ];
 
 $custom = [];

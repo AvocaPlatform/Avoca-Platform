@@ -218,14 +218,11 @@ class AvocaModel extends \CI_Model
 
         $this->db->set($fields_data);
         $this->db->insert($this->table);
-        $id = $this->db->insert_id();
-
         if ($this->checkErrorDB()) {
             return false;
         }
 
-        // return record id
-        return $id;
+        return $this->db->insert_id();
     }
 
     /**

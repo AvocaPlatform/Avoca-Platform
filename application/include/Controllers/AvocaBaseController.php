@@ -208,13 +208,17 @@ class AvocaBaseController extends \CI_Controller
             }
         }
 
-        $value = isset($post[$name]) ? $post[$name] : '';
+        if ($name) {
+            $value = isset($post[$name]) ? $post[$name] : '';
 
-        if (is_string($value)) {
-            return trim($value);
+            if (is_string($value)) {
+                return trim($value);
+            }
+
+            return $value;
         }
 
-        return $value;
+        return $post;
     }
 
     /**

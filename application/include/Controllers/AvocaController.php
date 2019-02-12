@@ -290,6 +290,7 @@ class AvocaController extends AvocaBaseController
             foreach ($message as $m) {
                 $mes .= $this->lang->line($m) . ' / ';
             }
+            $this->session->set_flashdata($type, $mes);
         } else {
             $this->session->set_flashdata($type, $this->lang->line($message));
         }
