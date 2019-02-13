@@ -16,9 +16,6 @@ return [
             'name' => [
                 'name' => 'name',
             ],
-            'parent_id' => [
-                'name' => 'parent_id',
-            ],
         ]
     ],
     'record' => [
@@ -26,9 +23,6 @@ return [
             [
                 'name' => [
                     'name' => 'name',
-                ],
-                'parent_id' => [
-                    'name' => 'parent_id',
                 ],
             ],
             [

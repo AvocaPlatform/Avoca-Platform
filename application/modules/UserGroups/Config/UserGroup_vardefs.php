@@ -30,6 +30,12 @@ return [
             'type' => 'varchar',
             'constraint' => 255,
         ],
+        'description' => [
+            'name' => 'description',
+            'label' => 'Description',
+            'type' => 'varchar',
+            'constraint' => 255,
+        ],
         'parent_id' => [
             'name' => 'parent_id',
             'label' => 'Parent',

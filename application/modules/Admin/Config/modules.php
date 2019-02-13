@@ -22,6 +22,10 @@ $module = [
         'module' => 'UserGroups',
         'model' => 'UserGroup',
     ],
+    'UserRoles' => [
+        'module' => 'UserRoles',
+        'model' => 'UserRole',
+    ],
 ];
 
 $custom = [];

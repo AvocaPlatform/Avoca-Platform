@@ -10,9 +10,9 @@
  */
 
 return [
-    'module' => 'Users',
-    'model' => 'User',
-    'table' => 'users',
+    'module' => 'UserRoles',
+    'model' => 'UserRole',
+    'table' => 'user_roles',
     'fields' => [
         'id' => [
             'name' => 'id',
@@ -24,24 +24,17 @@ return [
             'label' => 'Date created',
             'type' => 'datetime',
         ],
-        'username' => [
-            'name' => 'username',
-            'label' => 'Username',
+        'name' => [
+            'name' => 'name',
+            'label' => 'Role name',
             'type' => 'varchar',
             'constraint' => 255,
         ],
-        'password' => [
-            'name' => 'password',
-            'label' => 'Password',
-            'type' => 'char',
-            'constraint' => 32,
-        ],
-        'is_admin' => [
-            'name' => 'is_admin',
-            'label' => 'Is admin',
-            'type' => 'tinyint',
-            'constraint' => 1,
-            'default' => 0,
+        'description' => [
+            'name' => 'description',
+            'label' => 'Description',
+            'type' => 'varchar',
+            'constraint' => 255,
         ],
     ],
     'indexes' => [
@@ -50,12 +43,6 @@ return [
             'fields' => [
                 'id',
             ],
-        ],
-        'username' => [
-            'type' => 'UNIQUE',
-            'fields' => [
-                'username',
-            ]
         ],
     ],
 ];
