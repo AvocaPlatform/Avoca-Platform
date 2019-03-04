@@ -441,4 +441,19 @@ class Setting extends AvocaModel
             $this->createAPIController($module, $module, $module_info['model']);
         }
     }
+
+    public function cacheModules()
+    {
+        $modules = [];
+        // scan core modules
+        $module_dirs = scandir(APPPATH . 'modules');
+        foreach ($module_dirs as $dir) {
+            if ($dir != '.' && $dir != '..' && is_dir($dir)) {
+                $config_file = APPPATH . 'modules/' . $dir . '/Config/Config.php';
+                if (file_exists($config_file)) {
+                    $modules[$dir] = include $config_file;
+                }
+            }
+        }
+    }
 }

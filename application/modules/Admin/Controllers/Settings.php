@@ -35,6 +35,7 @@ class Settings extends AvocaAdminController
         /** @var Setting $settingModel */
         $settingModel = $this->getModel($this->model);
         $db_structure = $settingModel->readDatabaseStructure();
+        // create or update database
         foreach ($db_structure as $table => $info) {
 
             if ($this->db->table_exists($table)) {
@@ -193,28 +194,17 @@ class Settings extends AvocaAdminController
         $this->data['allModules'] = $settingModel->getModules();
     }
 
-    // ACTION
     private function _createDraftModule()
     {
         $this->load->helper('file');
         /** @var Setting $settingModel */
         $settingModel = $this->getModel('Admin/Setting');
-        $modules = $settingModel->getModules(true);
 
         $module_name = $controller = $this->getPost('module');
         $model = $this->getPost('model') ? $this->getPost('model') : $module_name;
         $table = $this->getPost('table') ? $this->getPost('table') : $module_name;
 
         if ($module_name) {
-            $module = [
-                'module' => $module_name,
-                'model' => $model,
-            ];
-
-            // write to custom/modules/Admin/Config/modules.php
-            $modules[$controller] = $module;
-            $settingModel->writeConfig('modules.php', $modules);
-
             $var_defs = $settingModel->getModuleVarDefs($module_name, $model);
             $var_defs['module'] = $module_name;
             $var_defs['model'] = $model;

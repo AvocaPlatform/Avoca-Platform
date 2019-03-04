@@ -10,8 +10,6 @@
  */
 
 return [
-    'module' => 'Users',
-    'model' => 'User',
     'table' => 'users',
     'fields' => [
         'id' => [
