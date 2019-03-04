@@ -27,14 +27,17 @@ class Settings extends AvocaAdminController
     }
 
     // ACTION - Create/Update database from modules/Admin/Config/databases.php
-    public function repair_database()
+    public function repair_system()
     {
         $this->disableView();
         $this->load->dbforge();
 
         /** @var Setting $settingModel */
         $settingModel = $this->getModel($this->model);
-        $db_structure = $settingModel->readDatabaseStructure();
+        // cache all modules & databases
+        $data = $settingModel->cacheModules();
+        // load database
+        $db_structure = $settingModel->readDatabaseStructure($data['databases']);
         // create or update database
         foreach ($db_structure as $table => $info) {
 
@@ -84,8 +87,8 @@ class Settings extends AvocaAdminController
                 }
             }
         }
-
-        $this->setSuccess('Repair database success!');
+        // return
+        $this->setSuccess('Repair system success!');
         return $this->admin_redirect('/Settings');
     }
 

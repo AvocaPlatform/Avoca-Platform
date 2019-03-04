@@ -22,11 +22,13 @@ class Setting extends AvocaModel
 
     private $dbParams = ['unsigned', 'auto_increment', 'unique', 'null', 'default'];
 
-    public function readDatabaseStructure()
+    public function readDatabaseStructure($databases = [])
     {
-        $databases = include APPPATH . 'modules/Admin/Config/databases.php';
-        $database_structures = [];
+        if (empty($databases)) {
+            $databases = include APPPATH . 'modules/Admin/Config/databases.php';
+        }
 
+        $database_structures = [];
         foreach ($databases as $table => $options) {
 
             $fields = $this->transferDBFields($options['fields']);
@@ -445,15 +447,41 @@ class Setting extends AvocaModel
     public function cacheModules()
     {
         $modules = [];
+        $databases = [];
         // scan core modules
         $module_dirs = scandir(APPPATH . 'modules');
+        $custom_module_dirs = scandir(CUSTOMPATH . 'modules');
+        $module_dirs = array_merge($module_dirs, $custom_module_dirs);
         foreach ($module_dirs as $dir) {
-            if ($dir != '.' && $dir != '..' && is_dir($dir)) {
-                $config_file = APPPATH . 'modules/' . $dir . '/Config/Config.php';
-                if (file_exists($config_file)) {
-                    $modules[$dir] = include $config_file;
+            if ($dir != '.'
+                && $dir != '..'
+                && (is_dir(APPPATH . 'modules/' . $dir) || is_dir(CUSTOMPATH . 'modules/' . $dir))) {
+                $config_file = 'modules/' . $dir . '/Config/Config.php';
+                $config = null;
+                if (file_exists(CUSTOMPATH . $config_file)) {
+                    $config = include CUSTOMPATH . $config_file;
+                } else if (file_exists(APPPATH . $config_file)) {
+                    $config = include APPPATH . $config_file;
+                }
+                if ($config && $config['module'] && $config['model']) {
+                    $modules[$dir] = [
+                        'module' => $config['module'],
+                        'model' => $config['model'],
+                    ];
+                    if (!empty($config['database']) && !empty($config['database']['name'])) {
+                        $database = $config['database'];
+                        $databases[$database['name']] = $database;
+                    }
                 }
             }
         }
+        // write to config
+        write_array2file('modules/Admin/Config/modules.php', $modules, 2);
+        write_array2file('modules/Admin/Config/databases.php', $databases, 2);
+
+        return [
+            'modules' => $modules,
+            'databases' => $databases,
+        ];
     }
 }
