@@ -23,12 +23,15 @@ class AvocaModel extends \CI_Model
     protected $module = '';
     protected $table = '';
     protected $limit = 0;
-
-    protected $errors = [];
+    protected $relations = [
+        'has_one' => [],
+        'has_many' => [],
+    ];
 
     protected $field_defs = null;
     protected $layout_defs = null;
 
+    protected $errors = [];
     protected $fieldModel;
 
     public function __construct()
@@ -57,6 +60,35 @@ class AvocaModel extends \CI_Model
                 $this->field_defs = include CUSTOMPATH . $path;
             } else if (file_exists(APPPATH . $path)) {
                 $this->field_defs = include APPPATH . $path;
+            }
+        }
+
+        // set relation has one
+        if (!empty($this->field_defs['fields'])) {
+            foreach ($this->field_defs['fields'] as $field) {
+                if ($field['type'] == 'relate') {
+                    $this->relations['has_one'][$field['name']] = [
+                        'local_key' => $field['name'],
+                        'foreign_module' => $field['rmodule'],
+                        'foreign_model' => $field['rmodel'],
+                        'foreign_key' => $field['rfield'],
+                        'foreign_key_name' => $field['rfieldname'],
+                    ];
+                }
+            }
+        }
+        // set relation has many
+        if (!empty($this->field_defs['relationships'])) {
+            foreach ($this->field_defs['relationships'] as $relationship_name => $relationship) {
+                $this->relations['has_many'][$relationship_name] = [
+                    'local_key' => $relationship['field'],
+                    'foreign_module' => $relationship['rmodule'],
+                    'foreign_model' => $relationship['rmodel'],
+                    'foreign_key' => $relationship['rfield'],
+                    'middle_table' => $relationship['middle_table'],
+                    'middle_ida' => $relationship['middle_ida'],
+                    'middle_idb' => $relationship['middle_idb']
+                ];
             }
         }
 

@@ -12,17 +12,19 @@
 return [
     'module' => 'UserRoles',
     'model' => 'UserRole',
-    'database' => [
-        'name' => 'user_roles',
-        'ENGINE' => 'InnoDB',
-        'fields' => [
-            'id INT 10 unsigned:true auto_increment:true',
-            'date_created DATETIME',
-            'name VARCHAR 255',
-            'description TEXT',
-        ],
-        'indexes' => [
-            'PK id',
+    'databases' => [
+        'user_roles' => [
+            'name' => 'user_roles',
+            'ENGINE' => 'InnoDB',
+            'fields' => [
+                'id INT 10 unsigned:true auto_increment:true',
+                'date_created DATETIME',
+                'name VARCHAR 255',
+                'description TEXT',
+            ],
+            'indexes' => [
+                'PK id',
+            ],
         ],
     ],
 ];

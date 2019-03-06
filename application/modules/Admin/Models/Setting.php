@@ -363,8 +363,9 @@ class Setting extends AvocaModel
         }
     }
 
-    public function createTableDefined($table_name, $table_define, $table_index)
+    public function createTableDefined($module, $table_name, $table_define, $table_index)
     {
+        $config_file = "modules/{$module}/Config/Config.php";
         $define = [];
         $define_arr = explode("\n", $table_define);
         foreach ($define_arr as $value) {
@@ -386,10 +387,12 @@ class Setting extends AvocaModel
             'indexes' => $index
         ];
 
-        $tables = include APPPATH . 'modules/Admin/Config/databases.php';
-        $tables[$table_name] = $table;
+        $config = get_file_array($config_file, null);
+        if ($config) {
+            $config['databases'][$table_name] = $table;
+        }
 
-        $this->writeConfig('modules/Admin/Config/databases.php', $tables, false);
+        write_array2file($config_file, $config, 1);
     }
 
     public function createModule($module)
@@ -458,19 +461,24 @@ class Setting extends AvocaModel
                 && (is_dir(APPPATH . 'modules/' . $dir) || is_dir(CUSTOMPATH . 'modules/' . $dir))) {
                 $config_file = 'modules/' . $dir . '/Config/Config.php';
                 $config = null;
+
                 if (file_exists(CUSTOMPATH . $config_file)) {
                     $config = include CUSTOMPATH . $config_file;
                 } else if (file_exists(APPPATH . $config_file)) {
                     $config = include APPPATH . $config_file;
                 }
+
                 if ($config && $config['module'] && $config['model']) {
                     $modules[$dir] = [
                         'module' => $config['module'],
                         'model' => $config['model'],
                     ];
-                    if (!empty($config['database']) && !empty($config['database']['name'])) {
-                        $database = $config['database'];
-                        $databases[$database['name']] = $database;
+                    if (!empty($config['databases'])) {
+                        foreach ($config['databases'] as $database_name => $database) {
+                            if (!isset($databases[$database_name])) {
+                                $databases[$database_name] = $database;
+                            }
+                        }
                     }
                 }
             }

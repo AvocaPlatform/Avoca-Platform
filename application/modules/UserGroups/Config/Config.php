@@ -12,18 +12,20 @@
 return [
     'module' => 'UserGroups',
     'model' => 'UserGroup',
-    'database' => [
-        'name' => 'user_groups',
-        'ENGINE' => 'InnoDB',
-        'fields' => [
-            'id INT 10 unsigned:true auto_increment:true',
-            'date_created DATETIME',
-            'name VARCHAR 255',
-            'description TEXT',
-            'parent_id INT 10',
-        ],
-        'indexes' => [
-            'PK id',
+    'databases' => [
+        'user_groups' => [
+            'name' => 'user_groups',
+            'ENGINE' => 'InnoDB',
+            'fields' => [
+                'id INT 10 unsigned:true auto_increment:true',
+                'date_created DATETIME',
+                'name VARCHAR 255',
+                'description TEXT',
+                'parent_id INT 10',
+            ],
+            'indexes' => [
+                'PK id',
+            ],
         ],
     ],
 ];
