@@ -10,8 +10,6 @@
  */
 
 return [
-    'module' => 'UserRoles',
-    'model' => 'UserRole',
     'table' => 'user_roles',
     'fields' => [
         'id' => [

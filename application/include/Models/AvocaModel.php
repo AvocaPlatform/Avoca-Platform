@@ -85,9 +85,9 @@ class AvocaModel extends \CI_Model
                     'foreign_module' => $relationship['rmodule'],
                     'foreign_model' => $relationship['rmodel'],
                     'foreign_key' => $relationship['rfield'],
-                    'middle_table' => $relationship['middle_table'],
-                    'middle_ida' => $relationship['middle_ida'],
-                    'middle_idb' => $relationship['middle_idb']
+                    'mid_table' => $relationship['mid_table'],
+                    'mid_ida' => $relationship['mid_ida'],
+                    'mid_idb' => $relationship['mid_idb']
                 ];
             }
         }

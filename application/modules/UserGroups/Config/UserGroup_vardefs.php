@@ -10,8 +10,6 @@
  */
 
 return [
-    'module' => 'UserGroups',
-    'model' => 'UserGroup',
     'table' => 'user_groups',
     'fields' => [
         'id' => [

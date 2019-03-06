@@ -387,9 +387,38 @@ class Setting extends AvocaModel
             'indexes' => $index
         ];
 
-        $config = get_file_array($config_file, null);
-        if ($config) {
-            $config['databases'][$table_name] = $table;
+        $config = get_file_array($config_file, []);
+        $config['databases'][$table_name] = $table;
+
+        write_array2file($config_file, $config, 1);
+    }
+
+    public function createRelationShipTable($module, $relationships)
+    {
+        $config_file = "modules/{$module}/Config/Config.php";
+        $config = get_file_array($config_file, []);
+        foreach ($relationships as $name => $relationship) {
+            if (!empty($relationship['field'])
+                && !empty($relationship['module'])
+                && !empty($relationship['rfield'])
+                && !empty($relationship['table'])) {
+                $ida = strtolower($module . '_' . $relationship['field']);
+                $idb = strtolower($relationship['module'] . '_' . $relationship['rfield']);
+                $table = [
+                    'name' => strtolower($relationship['table']),
+                    'ENGINE' => 'InnoDB',
+                    'fields' => [
+                        'id INT 10 unsigned:true auto_increment:true',
+                        'date_created DATETIME',
+                        "$ida INT 10 unsigned:true",
+                        "$idb INT 10 unsigned:true",
+                    ],
+                    'indexes' => [
+                        "UNIQUE $ida,$idb relate_key",
+                    ],
+                ];
+                $config['databases'][strtolower($relationship['table'])] = $table;
+            }
         }
 
         write_array2file($config_file, $config, 1);

@@ -151,6 +151,8 @@ class Settings extends AvocaAdminController
             $this->data['all_fields'] = $settingModel->getModuleFields($module_name, true, true);
 
             $module = $settingModel->getModuleVarDefs($module_name, $model_name);
+            $module['module'] = $module_name;
+            $module['model'] = $model_name;
             $viewdefs = $settingModel->getModuleViewDefs($module_name, $model_name);
 
             // clean up module defined
@@ -292,9 +294,9 @@ class Settings extends AvocaAdminController
             foreach ($data['relationships'] as $relationship) {
                 if (!empty($relationship['field'])
                     && !empty($relationship['module'])
-                    && !empty($relationship['rfield'])) {
-                    $relate_name = $data['module'] . '_' . $relationship['module']
-                        . '_' . $relationship['field'] . '_' . $relationship['rfield'];
+                    && !empty($relationship['rfield'])
+                    && !empty($relationship['table'])) {
+                    $relate_name = $relationship['table'];
                     unset($relationship['fields']);
                     $relationships[$relate_name] = $relationship;
                 }
@@ -342,6 +344,10 @@ class Settings extends AvocaAdminController
             $settingModel->writeConfig("ModuleBuilders/{$data['module']}/viewdefs.php", $viewdefs);
         } else {
             // module created
+            $custom_folder = CUSTOMPATH . "modules/{$data['module']}/Config";
+            if (!is_dir($custom_folder)) {
+                mkdir($custom_folder, 0775, true);
+            }
             $settingModel->writeConfig("modules/{$data['module']}/Config/{$data['model']}_vardefs.php", $data, false);
             $settingModel->writeConfig("modules/{$data['module']}/Config/{$data['model']}_viewdefs.php", $viewdefs, false);
         }
